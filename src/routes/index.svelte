@@ -2,15 +2,15 @@
 	let name = 'Manoonchai';
 	let input;
 	const words = ['นม', 'อา', 'นานา', 'นา', 'มา', 'นอ', 'อม', 'มน', 'มอ', 'นอน', 'ออม', 'มอม', "อาม"];
-  let result = []
-  let currentWordIdx = 0
+  let result
+  let currentWordIdx
+	let sentence
+  let ended
 
-	const sentence = Array(30)
-		.fill(null)
-		.map(() => words[Math.floor(Math.random() * words.length)]);
+  reset()
 
   function onType(e) {
-    // console.log(e)
+    if (ended) { return e.preventDefault(); }
 
     if (e.key === " ") {
       e.preventDefault();
@@ -24,8 +24,26 @@
 
         currentWordIdx += 1
         input = ""
+
+        if (currentWordIdx >= sentence.length) {
+          end()
+        }
       }
     }
+  }
+
+  function reset() {
+    ended = false
+    result = []
+    currentWordIdx = 0
+    sentence = Array(15)
+      .fill(null)
+      .map(() => words[Math.floor(Math.random() * words.length)]);
+  }
+
+  function end() {
+    ended = true
+    alert("Good job!")
   }
 </script>
 
@@ -40,4 +58,5 @@
     {/each}
   </p>
 	<input class="border w-2/6" bind:value={input} on:keypress={onType} />
+  <button class="border px-4 py-1 rounded hover:bg-gray-200" on:click={reset}>Reset</button>
 </main>
