@@ -1,5 +1,5 @@
-import { render, RenderResult } from '@testing-library/svelte';
-import Index from '../../src/routes/index.svelte';
+import { render, RenderResult } from '@testing-library/svelte'
+import Index from '../../src/routes/index.svelte'
 
 /**
  * @jest-environment jsdom
@@ -14,19 +14,15 @@ import Index from '../../src/routes/index.svelte';
  */
 
 describe('Index', () => {
-
-  let renderedComponent: RenderResult;
+  let renderedComponent: RenderResult
 
   beforeEach(() => {
-    renderedComponent = render(Index);
-  });
+    renderedComponent = render(Index)
+  })
 
   describe('once the component has been rendered', () => {
-
     test('shows the title', () => {
-      expect(renderedComponent.getByText(/Manoonchai/)).toBeInTheDocument();
-    });
-
-  });
-
-});
+      expect(renderedComponent.getByText(/Manoonchai/)).toBeInTheDocument()
+    })
+  })
+})

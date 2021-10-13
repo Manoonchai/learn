@@ -16,18 +16,9 @@
       "<rootDir>/.svelte-kit/build/runtime/app$1"
     ]
   },
-  "extensionsToTreatAsEsm": [
-    ".svelte",
-    ".ts"
-  ],
-  "moduleFileExtensions": [
-    "js",
-    "svelte",
-    "ts"
-  ],
-  "setupFilesAfterEnv": [
-    "@testing-library/jest-dom/extend-expect"
-  ],
+  "extensionsToTreatAsEsm": [".svelte", ".ts"],
+  "moduleFileExtensions": ["js", "svelte", "ts"],
+  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
   "globals": {
     "ts-jest": {
       "tsconfig": "tsconfig.spec.json",
