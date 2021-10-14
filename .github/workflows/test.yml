@@ -26,6 +26,7 @@ jobs:
     - name: Build & test
       run: |
         yarn
+        npx playwright install
         yarn test
         yarn dev &
         yarn test:e2e
