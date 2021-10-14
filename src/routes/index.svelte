@@ -1,7 +1,21 @@
 <script lang="ts">
   let name = 'Manoonchai'
   let input
-  const words = ['นม', 'อา', 'นานา', 'นา', 'มา', 'นอ', 'อม', 'มน', 'มอ', 'นอน', 'ออม', 'มอม', 'อาม']
+  export let words = [
+    'นม',
+    'อา',
+    'นานา',
+    'นา',
+    'มา',
+    'นอ',
+    'อม',
+    'มน',
+    'มอ',
+    'นอน',
+    'ออม',
+    'มอม',
+    'อาม',
+  ]
   let result
   let currentWordIdx
   let sentence
@@ -61,6 +75,6 @@
       >
     {/each}
   </p>
-  <input class="border w-2/6" bind:value={input} on:keypress={onType} />
+  <input class="border w-2/6" bind:value={input} on:keypress={onType} data-testid="input" />
   <button class="border px-4 py-1 rounded hover:bg-gray-200" on:click={reset}>Reset</button>
 </main>
