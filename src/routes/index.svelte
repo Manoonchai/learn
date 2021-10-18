@@ -91,7 +91,7 @@
 </script>
 
 <main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center">
-  <h1 class="text-6xl text-green-400 flex flex-col">Hello {name}</h1>
+  <h1 class="text-6xl text-green-400 flex flex-col">Learn {name}</h1>
 
   <!-- <p>Started : {started}</p>
   <p>Ended : {ended}</p> -->
