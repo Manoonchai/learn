@@ -28,6 +28,8 @@
   let correctWords = []
   let interval
 
+  $: wpm = calculateWpm(correctWords, elapsed).toFixed(1)
+
   reset()
 
   function start() {
@@ -37,7 +39,7 @@
 
     interval = setInterval(() => {
       elapsed = (new Date().getTime() - startTime) / 1000
-    }, 1000)
+    }, 500)
 
     started = true
   }
@@ -86,27 +88,29 @@
   function end() {
     ended = true
     clearInterval(interval)
-    alert('Good job!')
+    alert(`Good job! Your speed is ${wpm} wpm`)
   }
 </script>
 
 <main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center">
-  <h1 class="text-6xl text-green-400 flex flex-col">Learn {name}</h1>
+  <h1 class="title text-green-400 flex flex-col">
+    Learn {name}
+  </h1>
 
   <!-- <p>Started : {started}</p>
   <p>Ended : {ended}</p> -->
 
-  <p>{calculateWpm(correctWords, elapsed).toFixed(1)} wpm</p>
-  <p>
+  <p class="stat">{wpm} wpm</p>
+  <p class="sentence">
     {#each sentence as word, idx}
       <span
-        class="mx-1
+        class="sentence-gap
         {idx === currentWordIdx ? 'bg-green-300' : ''}
         {result[idx] === true ? 'text-green-400' : ''}
         {result[idx] === false ? 'text-red-600' : ''}">{word}</span
       >
     {/each}
   </p>
-  <input class="border w-2/6" bind:value={input} on:keypress={onType} data-testid="input" />
-  <button class="border px-4 py-1 rounded hover:bg-gray-200" on:click={reset}>Reset</button>
+  <input class="input border w-2/6" bind:value={input} on:keypress={onType} data-testid="input" />
+  <button class="btn hover:bg-gray-200" on:click={reset}>Reset</button>
 </main>
