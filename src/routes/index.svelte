@@ -1,5 +1,6 @@
 <script lang="ts">
   import { calculateWpm } from '$lib/wpm'
+  import { spellcheck } from '$lib/spellcheck'
 
   let name = 'Manoonchai'
   let input
@@ -27,8 +28,15 @@
   let startTime = new Date().getTime()
   let correctWords = []
   let interval
+  let currentWordSpellCheck = true
 
   $: wpm = calculateWpm(correctWords, elapsed).toFixed(1)
+  $: {
+    const currentWord = sentence[currentWordIdx]
+    const currentInput = input
+
+    currentWordSpellCheck = spellcheck(currentWord, currentInput)
+  }
 
   reset()
 
@@ -44,7 +52,7 @@
     started = true
   }
 
-  function onType(e) {
+  function onType(e: KeyboardEvent) {
     start()
 
     if (ended) {
@@ -83,6 +91,7 @@
       .map(() => words[Math.floor(Math.random() * words.length)])
     startTime = new Date().getTime()
     correctWords = []
+    input = ''
   }
 
   function end() {
@@ -97,9 +106,6 @@
     Learn {name}
   </h1>
 
-  <!-- <p>Started : {started}</p>
-  <p>Ended : {ended}</p> -->
-
   <p class="stat">{wpm} wpm</p>
   <p class="sentence">
     {#each sentence as word, idx}
@@ -111,6 +117,11 @@
       >
     {/each}
   </p>
-  <input class="input border w-2/6" bind:value={input} on:keypress={onType} data-testid="input" />
+  <input
+    class="input border w-2/6 {!currentWordSpellCheck ? 'bg-red-400' : ''}"
+    bind:value={input}
+    on:keydown={onType}
+    data-testid="input"
+  />
   <button class="btn hover:bg-gray-200" on:click={reset}>Reset</button>
 </main>
