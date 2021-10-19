@@ -9,6 +9,10 @@ describe('spellcheck', () => {
     expect(spellcheck('xyz', '')).toEqual(true)
   })
 
+  it('returns true when the word is undefined', () => {
+    expect(spellcheck(undefined, ' ')).toEqual(true)
+  })
+
   it('returns false when the input is not matching the word substring', () => {
     expect(spellcheck('abc', 'aa')).toEqual(false)
   })
