@@ -4,12 +4,14 @@
   export let nextChar: string
 
   const rows = ['ใตหลสปักิบ็ฬฯ'.split(''), 'งเรนมอา่้วื'.split(''), 'ุไทยจคีดะู'.split('')]
+
+  const paddingClasses = ['w-0', 'w-4 md:w-5 lg:w-7 xl:w-10', 'w-8 md:w-10 lg:w-14 xl:w-20']
 </script>
 
 <div class="my-4">
   {#each rows as row, idx}
     <div class="row">
-      <span class="w-{idx * 10}" />
+      <span class={paddingClasses[idx]} />
       {#each row as key}
         <KeymapButton {nextChar}>{key}</KeymapButton>
       {/each}
