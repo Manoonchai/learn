@@ -1,7 +1,18 @@
 /* Write your global styles here, in PostCSS syntax */
+
+@import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-sarabun {
+  font-family: 'Sarabun', sans-serif;
+}
+
+.input:focus {
+  outline: none;
+}
 
 .title {
   @apply text-2xl md:text-3xl lg:text-5xl xl:text-7xl 2xl:text-9xl;
