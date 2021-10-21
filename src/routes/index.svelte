@@ -1,6 +1,7 @@
 <script lang="ts">
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
+  import Keymap from '$lib/components/Keymap.svelte'
 
   let name = 'Manoonchai'
   let input
@@ -256,6 +257,9 @@
     on:keydown={onType}
     data-testid="input"
   />
+
+  <Keymap />
+
   <button class="btn hover:bg-gray-200" on:click={reset}>Reset</button>
 
   <div class="sentence">
