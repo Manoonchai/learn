@@ -1,6 +1,7 @@
 <script lang="ts">
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
+  import { nextchar } from '$lib/nextchar'
   import Keymap from '$lib/components/Keymap.svelte'
 
   let name = 'Manoonchai'
@@ -31,6 +32,7 @@
   let interval
   let currentWordSpellCheck = true
   let selectedLesson
+  let nextChar
   let lessons = [
     {
       name: '1. น ม อ า',
@@ -170,6 +172,7 @@
     const currentInput = input
 
     currentWordSpellCheck = spellcheck(currentWord, currentInput)
+    nextChar = nextchar(currentWord, currentInput)
   }
 
   reset()
