@@ -3,7 +3,13 @@ const config = {
   purge: ['./src/**/*.{html,js,svelte,ts}'],
 
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        50: '12.5rem',
+        70: '17.5rem',
+        100: '25rem',
+      },
+    },
   },
 
   plugins: [],
