@@ -261,7 +261,7 @@
     data-testid="input"
   />
 
-  <Keymap />
+  <Keymap {nextChar} />
 
   <button class="btn hover:bg-gray-200" on:click={reset}>Reset</button>
 

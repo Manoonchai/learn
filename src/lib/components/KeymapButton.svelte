@@ -1,7 +1,21 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
+
+  export let nextChar: string
+
+  let textEl: HTMLSpanElement
+  let text
+
+  onMount(() => {
+    text = textEl.textContent
+    console.log({ text, nextChar })
+  })
 </script>
 
-<span class="button">
+<span
+  class="button {text === nextChar ? 'bg-indigo-400 border-indigo-800' : ''}"
+  bind:this={textEl}
+>
   <slot />
 </span>
 

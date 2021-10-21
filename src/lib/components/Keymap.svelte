@@ -1,6 +1,8 @@
 <script lang="ts">
   import KeymapButton from './KeymapButton.svelte'
 
+  export let nextChar: string
+
   const rows = ['ใตหลสปักิบ็ฬฯ'.split(''), 'งเรนมอา่้วื'.split(''), 'ุไทยจคีดะู'.split('')]
 </script>
 
@@ -9,12 +11,12 @@
     <div class="row">
       <span class="w-{idx * 10}" />
       {#each row as key}
-        <KeymapButton>{key}</KeymapButton>
+        <KeymapButton {nextChar}>{key}</KeymapButton>
       {/each}
     </div>
   {/each}
   <div class="row">
-    <span class="spacebar" />
+    <span class="spacebar {nextChar === ' ' ? 'bg-indigo-400 border-indigo-800' : ''}" />
   </div>
 </div>
 
