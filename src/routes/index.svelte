@@ -30,6 +30,7 @@
   let interval
   let currentWordSpellCheck = true
   let selectedLesson
+  let userType = []
   let lessons = [
     {
       name: '1. น ม อ า',
@@ -185,8 +186,15 @@
     started = true
   }
 
-  function onType(e: KeyboardEvent) {
+  function onType(e: KeyboardEvent) {    
     start()
+
+    if (e.key === "Backspace" || e.key === "Delete") {
+      userType.pop()
+    } else if (e.key.length === 1) {
+      userType.push(e.key)
+    }
+    
 
     if (ended) {
       return e.preventDefault()
@@ -194,6 +202,7 @@
 
     if (e.key === ' ') {
       e.preventDefault()
+      userType = []
 
       if (input) {
         if (sentence[currentWordIdx] === input) {
@@ -217,6 +226,7 @@
   function reset() {
     started = false
     ended = false
+    userType = []
     result = []
     currentWordIdx = 0
     sentence = Array(15)
@@ -235,7 +245,7 @@
 </script>
 
 <main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center">
-  <h1 class="title text-green-400 flex flex-col">
+  <h1 class="title font-sarabun text-green-400 flex flex-col">
     Learn {name}
   </h1>
 
@@ -243,26 +253,29 @@
   <p class="sentence">
     {#each sentence as word, idx}
       <span
-        class="sentence-gap
+        class="sentence-gap font-sarabun transition duration-200 break-word
         {idx === currentWordIdx ? 'bg-green-300' : ''}
         {result[idx] === true ? 'text-green-400' : ''}
-        {result[idx] === false ? 'text-red-600' : ''}">{word}</span
+        {result[idx] === false ? 'text-red-600' : ''}
+        {sentence[currentWordIdx] && userType.join("") !== sentence[currentWordIdx].slice(0, userType.length) && input && idx === currentWordIdx ? 'bg-red-300' : ''}
+        ">{word}</span
       >
     {/each}
   </p>
   <input
-    class="input border w-2/6 {!currentWordSpellCheck ? 'bg-red-400' : ''}"
+    class="input border w-2/6 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2 ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck ? 'bg-red-400 ring-red-400' : ''}"
     bind:value={input}
     on:keydown={onType}
+    placeholder={sentence[currentWordIdx]}
     data-testid="input"
   />
-  <button class="btn hover:bg-gray-200" on:click={reset}>Reset</button>
+  <button class="btn hover:bg-gray-200 rounded-lg transition duration-300" on:click={reset}>Reset</button>
 
-  <div class="sentence">
+  <div class="sentence font-sarabun">
     Lesson:
-    <select class="input mt-4 border" bind:value={selectedLesson}>
+    <select class="input mt-4 border font-sarabun appearance-none border-gray-400 rounded-lg focus:ring-2 ring-offset-2 ring-gray-400 transition duration-200" bind:value={selectedLesson}>
       {#each lessons as lesson, idx}
-        <option value={lesson} selected={!idx}>
+        <option value={lesson} class="text-center" selected={!idx}>
           {lesson.name}
         </option>
       {/each}
