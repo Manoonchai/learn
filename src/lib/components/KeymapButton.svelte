@@ -3,6 +3,16 @@
 
   export let nextChar: string
   export let keys: [string, string] = ['', '']
+
+  let keyClasses
+
+  $: if (nextChar === keys[0]) {
+    keyClasses = 'bg-indigo-400 border-indigo-800'
+  } else if (nextChar === keys[1]) {
+    keyClasses = 'bg-yellow-400 border-yellow-800'
+  } else {
+    keyClasses = ''
+  }
 </script>
 
 <style>
@@ -25,7 +35,7 @@
   }
 </style>
 
-<span class="button {keys.includes(nextChar) ? 'bg-indigo-400 border-indigo-800' : ''}">
+<span class="button {keyClasses}">
   <div class="key-shift">{keys[1]}</div>
   <div class="key">{keys[0]}</div>
 </span>
