@@ -2,22 +2,8 @@
   import { onMount } from 'svelte'
 
   export let nextChar: string
-
-  let textEl: HTMLSpanElement
-  let text
-
-  onMount(() => {
-    text = textEl.textContent
-    console.log({ text, nextChar })
-  })
+  export let keys: [string, string] = ['', '']
 </script>
-
-<span
-  class="button {text === nextChar ? 'bg-indigo-400 border-indigo-800' : ''}"
-  bind:this={textEl}
->
-  <slot />
-</span>
 
 <style>
   .button {
@@ -28,4 +14,17 @@
     @apply lg:text-2xl lg:w-14 lg:h-14 lg:border-2 lg:rounded;
     @apply xl:text-4xl xl:w-20 xl:h-20 xl:border-4 xl:rounded-xl;
   }
+
+  .key {
+    @apply -mt-2;
+  }
+
+  .key-shift {
+    @apply text-gray-400;
+  }
 </style>
+
+<span class="button {keys[0] === nextChar ? 'bg-indigo-400 border-indigo-800' : ''}">
+  <div class="key-shift">{keys[1]}</div>
+  <div class="key">{keys[0]}</div>
+</span>

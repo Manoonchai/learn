@@ -4,23 +4,10 @@
   export let nextChar: string
 
   const rows = ['ใตหลสปักิบ็ฬฯ'.split(''), 'งเรนมอา่้วื'.split(''), 'ุไทยจคีดะู'.split('')]
+  const rowsShift = ['ฒฏซญฟฉึธฐฎฆฑฌ'.split(''), 'ษถแชพผำขโภ"'.split(''), 'ฤฝๆณ๊๋์ศฮ?'.split('')]
 
   const paddingClasses = ['w-0', 'w-4 md:w-5 lg:w-7 xl:w-10', 'w-8 md:w-10 lg:w-14 xl:w-20']
 </script>
-
-<div class="my-4">
-  {#each rows as row, idx}
-    <div class="row">
-      <span class={paddingClasses[idx]} />
-      {#each row as key}
-        <KeymapButton {nextChar}>{key}</KeymapButton>
-      {/each}
-    </div>
-  {/each}
-  <div class="row">
-    <span class="spacebar {nextChar === ' ' ? 'bg-indigo-400 border-indigo-800' : ''}" />
-  </div>
-</div>
 
 <style>
   .row {
@@ -39,3 +26,17 @@
     @apply xl:text-4xl xl:w-100 xl:h-20 xl:border-4 xl:rounded-xl;
   }
 </style>
+
+<div class="my-4">
+  {#each rows as row, idx}
+    <div class="row">
+      <span class={paddingClasses[idx]} />
+      {#each row as key, keyIdx}
+        <KeymapButton {nextChar} keys={[key, rowsShift[idx][keyIdx]]} />
+      {/each}
+    </div>
+  {/each}
+  <div class="row">
+    <span class="spacebar {nextChar === ' ' ? 'bg-indigo-400 border-indigo-800' : ''}" />
+  </div>
+</div>
