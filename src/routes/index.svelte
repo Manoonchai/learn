@@ -4,6 +4,7 @@
   import { nextchar } from '$lib/nextchar'
   import Keymap from '$lib/components/Keymap.svelte'
   import { lessons } from '$lib/lesson'
+  import Manoonchai from '$lib/manoonchai'
 
   let name = 'Manoonchai'
   let input
@@ -63,22 +64,26 @@
     started = true
   }
 
-  function onType(e: KeyboardEvent) {    
-    start()
-
-    if (e.key === "Backspace" || e.key === "Delete") {
-      userType.pop()
-    } else if (e.key.length === 1) {
-      userType.push(e.key)
-    }
-    
+  function onType(e: KeyboardEvent) {
+    e.preventDefault()
 
     if (ended) {
-      return e.preventDefault()
+      return
     }
 
+    const manoonchaiKey = Manoonchai[e.code] || ''
+
+    start()
+
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      userType.pop()
+    } else if (manoonchaiKey.length === 1) {
+      userType.push(manoonchaiKey)
+    }
+
+    input = userType.join('').trimEnd()
+
     if (e.key === ' ') {
-      e.preventDefault()
       userType = []
 
       if (input) {
@@ -122,42 +127,49 @@
 </script>
 
 <main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center">
-  <h1 class="title font-sarabun text-green-400 flex flex-col">
-    Learn {name}
-  </h1>
+  <h1 class="title font-sarabun text-green-400 flex flex-col">Learn {name}</h1>
 
   <p class="stat">{wpm} wpm</p>
   <p class="sentence">
     {#each sentence as word, idx}
       <span
-        class="sentence-gap font-sarabun transition duration-200 break-word
-        {idx === currentWordIdx ? 'bg-green-300' : ''}
+        class="sentence-gap font-sarabun transition duration-200 break-word {idx === currentWordIdx ? 'bg-green-300' : ''}
         {result[idx] === true ? 'text-green-400' : ''}
         {result[idx] === false ? 'text-red-600' : ''}
-        {sentence[currentWordIdx] && userType.join("") !== sentence[currentWordIdx].slice(0, userType.length) && input && idx === currentWordIdx ? 'bg-red-300' : ''}
-        ">{word}</span
-      >
+        {sentence[currentWordIdx] && userType.join('') !== sentence[currentWordIdx].slice(0, userType.length) && input && idx === currentWordIdx ? 'bg-red-300' : ''}
+        ">
+        {word}
+      </span>
     {/each}
   </p>
   <input
-    class="input border w-2/6 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2 ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck ? 'bg-red-400 ring-red-400' : ''}"
-    bind:value={input}
+    class="input border w-2/6 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
+    ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck ? 'bg-red-400 ring-red-400' : ''}"
+    value={input}
     on:keydown={onType}
     placeholder={sentence[currentWordIdx]}
-    data-testid="input"
-  />
-  
+    data-testid="input" />
+
+  <!-- <input
+    class="input border w-2/6 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
+    ring-offset-2 ring-green-400 transition duration-200"
+    value={input}
+    disabled={true} /> -->
+
   <Keymap {nextChar} />
-  
-  <button class="btn hover:bg-gray-200 rounded-lg transition duration-300" on:click={reset}>Reset</button>
+
+  <button class="btn hover:bg-gray-200 rounded-lg transition duration-300" on:click={reset}>
+    Reset
+  </button>
 
   <div class="sentence font-sarabun">
     Lesson:
-    <select class="input mt-4 border font-sarabun appearance-none border-gray-400 rounded-lg focus:ring-2 ring-offset-2 ring-gray-400 transition duration-200" bind:value={selectedLesson}>
+    <select
+      class="input mt-4 border font-sarabun appearance-none border-gray-400 rounded-lg focus:ring-2
+      ring-offset-2 ring-gray-400 transition duration-200"
+      bind:value={selectedLesson}>
       {#each lessons as lesson, idx}
-        <option value={lesson} class="text-center" selected={!idx}>
-          {lesson.name}
-        </option>
+        <option value={lesson} class="text-center" selected={!idx}>{lesson.name}</option>
       {/each}
     </select>
   </div>
