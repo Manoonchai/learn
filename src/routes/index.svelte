@@ -71,7 +71,7 @@
       return
     }
 
-    const manoonchaiKey = Manoonchai[e.code] || ''
+    const manoonchaiKey = Manoonchai[e.code]?.[e.shiftKey ? 1 : 0] || ''
 
     start()
 
