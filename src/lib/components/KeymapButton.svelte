@@ -15,14 +15,19 @@
   }
 </script>
 
+<span class="button {keyClasses}">
+  <div class="key-shift">{keys[1]}</div>
+  <div class="key">{keys[0]}</div>
+</span>
+
 <style>
   .button {
     @apply inline-block border;
     @apply flex flex-col justify-center items-center;
     @apply text-base w-8 h-8 border rounded;
-    @apply md:text-lg md:w-10 md:h-10 md:border-2 md:rounded;
-    @apply lg:text-2xl lg:w-14 lg:h-14 lg:border-2 lg:rounded;
-    @apply xl:text-3xl xl:w-20 xl:h-20 xl:border-4 xl:rounded-xl;
+    @apply md:text-lg md:w-10 md:h-10 md:border md:rounded;
+    @apply lg:text-xl lg:w-12 lg:h-12 lg:border-2 lg:rounded-lg;
+    @apply xl:text-2xl xl:w-16 xl:h-16 xl:border-2 xl:rounded-xl;
   }
 
   .key {
@@ -34,8 +39,3 @@
     @apply text-gray-400;
   }
 </style>
-
-<span class="button {keyClasses}">
-  <div class="key-shift">{keys[1]}</div>
-  <div class="key">{keys[0]}</div>
-</span>

@@ -111,7 +111,7 @@
     userType = []
     result = []
     currentWordIdx = 0
-    sentence = Array(15)
+    sentence = Array(30)
       .fill(null)
       .map(() => words[Math.floor(Math.random() * words.length)])
     startTime = new Date().getTime()
@@ -126,35 +126,40 @@
   }
 </script>
 
-<main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center">
+<main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center py-20">
   <h1 class="title font-sarabun text-green-400 flex flex-col">Learn {name}</h1>
 
   <p class="stat">{wpm} wpm</p>
   <p class="sentence">
     {#each sentence as word, idx}
       <span
-        class="sentence-gap font-sarabun transition duration-200 break-word {idx === currentWordIdx ? 'bg-green-300' : ''}
+        class="sentence-gap font-sarabun transition duration-200 break-word {idx === currentWordIdx
+          ? 'bg-green-300'
+          : ''}
         {result[idx] === true ? 'text-green-400' : ''}
         {result[idx] === false ? 'text-red-600' : ''}
-        {sentence[currentWordIdx] && userType.join('') !== sentence[currentWordIdx].slice(0, userType.length) && input && idx === currentWordIdx ? 'bg-red-300' : ''}
-        ">
+        {sentence[currentWordIdx] &&
+        userType.join('') !== sentence[currentWordIdx].slice(0, userType.length) &&
+        input &&
+        idx === currentWordIdx
+          ? 'bg-red-300'
+          : ''}
+        "
+      >
         {word}
       </span>
     {/each}
   </p>
   <input
-    class="input border w-2/6 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
-    ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck ? 'bg-red-400 ring-red-400' : ''}"
+    class="input border w-32 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
+    ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck
+      ? 'bg-red-400 ring-red-400'
+      : ''}"
     value={input}
     on:keydown={onType}
     placeholder={sentence[currentWordIdx]}
-    data-testid="input" />
-
-  <!-- <input
-    class="input border w-2/6 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
-    ring-offset-2 ring-green-400 transition duration-200"
-    value={input}
-    disabled={true} /> -->
+    data-testid="input"
+  />
 
   <Keymap {nextChar} />
 
@@ -162,12 +167,13 @@
     Reset
   </button>
 
-  <div class="sentence font-sarabun">
+  <div class="lesson font-sarabun">
     Lesson:
     <select
       class="input mt-4 border font-sarabun appearance-none border-gray-400 rounded-lg focus:ring-2
       ring-offset-2 ring-gray-400 transition duration-200"
-      bind:value={selectedLesson}>
+      bind:value={selectedLesson}
+    >
       {#each lessons as lesson, idx}
         <option value={lesson} class="text-center" selected={!idx}>{lesson.name}</option>
       {/each}
