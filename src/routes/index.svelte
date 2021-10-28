@@ -1,4 +1,5 @@
 <script lang="ts">
+  // import { onMount } from 'svelte'
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
   import { nextchar } from '$lib/nextchar'
@@ -8,6 +9,8 @@
 
   let name = 'Manoonchai'
   let input
+  let typingInput: HTMLInputElement
+
   export let words = [
     'นม',
     'อา',
@@ -50,7 +53,9 @@
     nextChar = nextchar(currentWord, currentInput)
   }
 
+  // onMount(() => {
   reset()
+  // })
 
   function start() {
     if (started) {
@@ -117,6 +122,7 @@
     startTime = new Date().getTime()
     correctWords = []
     input = ''
+    typingInput?.focus()
   }
 
   function end() {
@@ -150,6 +156,7 @@
       </span>
     {/each}
   </p>
+
   <input
     autofocus
     class="input border w-32 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
@@ -160,6 +167,7 @@
     on:keydown={onType}
     placeholder={sentence[currentWordIdx]}
     data-testid="input"
+    bind:this={typingInput}
   />
 
   <Keymap {nextChar} />
