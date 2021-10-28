@@ -133,6 +133,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Learn Manoonchai</title>
+</svelte:head>
+
 <main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center py-20">
   <h1 class="title font-sarabun text-green-400 flex flex-col">Learn {name}</h1>
 
