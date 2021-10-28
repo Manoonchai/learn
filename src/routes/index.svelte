@@ -13,6 +13,8 @@
   let typingInput: HTMLInputElement
 
   export let words = []
+  export let testMode = false
+
   let currentLesson = lessons[0]
   let result
   let currentWordIdx
@@ -101,12 +103,16 @@
   }
 
   function reset() {
+    if (!testMode) {
+      words = currentLesson.words
+    }
+
     started = false
     ended = false
     userType = []
     result = []
     currentWordIdx = 0
-    words = currentLesson.words
+
     sentence = Array(30)
       .fill(null)
       .map(() => words[Math.floor(Math.random() * words.length)] || '')

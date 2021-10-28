@@ -19,7 +19,7 @@ describe('Index', () => {
   let renderedComponent: RenderResult
 
   beforeEach(() => {
-    renderedComponent = render(Index, { words: ['foo'] })
+    renderedComponent = render(Index, { testMode: true, words: ['งเรน'] })
   })
 
   describe('once the component has been rendered', () => {
@@ -28,24 +28,24 @@ describe('Index', () => {
     })
 
     it('renders the randomized words', () => {
-      expect(renderedComponent.getAllByText('foo').length).toBeGreaterThan(0)
+      expect(renderedComponent.getAllByText('งเรน').length).toBeGreaterThan(0)
     })
 
     it('highlights the first word green color', () => {
-      const firstWordElement = renderedComponent.getAllByText('foo')[0]
+      const firstWordElement = renderedComponent.getAllByText('งเรน')[0]
 
       expect(firstWordElement).toHaveClass('bg-green-300')
     })
   })
 
   describe('when the word is typed correctly', () => {
-    it('renders the word as green color (correct)', async () => {
+    fit('renders the word as green color (correct)', async () => {
       const input = renderedComponent.getByTestId('input') as HTMLInputElement
       expect(input).toBeInTheDocument()
 
-      await userEvent.type(input, 'foo{space}')
+      await userEvent.type(input, 'asdf{space}')
 
-      const firstWordElement = renderedComponent.getAllByText('foo')[0]
+      const firstWordElement = renderedComponent.getAllByText('งเรน')[0]
 
       expect(firstWordElement).toHaveClass('text-green-400')
     })
@@ -56,9 +56,9 @@ describe('Index', () => {
       const input = renderedComponent.getByTestId('input') as HTMLInputElement
       expect(input).toBeInTheDocument()
 
-      await userEvent.type(input, 'bar{space}')
+      await userEvent.type(input, 'zxcd{space}')
 
-      const firstWordElement = renderedComponent.getAllByText('foo')[0]
+      const firstWordElement = renderedComponent.getAllByText('งเรน')[0]
 
       expect(firstWordElement).toHaveClass('text-red-600')
     })
