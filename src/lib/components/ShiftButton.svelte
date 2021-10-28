@@ -1,5 +1,4 @@
 <script lang="ts">
-  export let nextChar: string
   export let highlight: boolean
 </script>
 
@@ -20,9 +19,5 @@
   .key {
     @apply -mt-2;
     @apply xl:mt-0;
-  }
-
-  .key-shift {
-    @apply text-gray-400;
   }
 </style>

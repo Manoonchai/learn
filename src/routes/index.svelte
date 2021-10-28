@@ -4,7 +4,7 @@
   import { spellcheck } from '$lib/spellcheck'
   import { nextchar } from '$lib/nextchar'
   import Keymap from '$lib/components/Keymap.svelte'
-  import Kofi from '$lib/components/Kofi.svelte'
+  // import Kofi from '$lib/components/Kofi.svelte'
   import { lessons } from '$lib/lesson'
   import Manoonchai from '$lib/manoonchai'
 
@@ -195,4 +195,4 @@
   </div>
 </main>
 
-<Kofi name="narze" />
+<!-- <Kofi name="narze" /> -->
