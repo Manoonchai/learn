@@ -14,6 +14,7 @@
     @apply md:text-lg md:w-20 md:h-10 md:border md:rounded;
     @apply lg:text-2xl lg:w-24 lg:h-12 lg:border-2 lg:rounded-lg;
     @apply xl:text-3xl xl:w-32 xl:h-16 xl:border-2 xl:rounded-xl;
+    @apply transition duration-200;
   }
 
   .key {

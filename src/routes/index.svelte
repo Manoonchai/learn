@@ -15,7 +15,7 @@
   export let words = []
   export let testMode = false
 
-  let currentLesson = lessons[0]
+  let currentLesson
   let result
   let currentWordIdx
   let sentence
@@ -43,9 +43,8 @@
     currentWordSpellCheck = spellcheck(currentWord, currentInput)
     nextChar = nextchar(currentWord, currentInput)
   }
-
-  function changeLesson(lesson) {
-    words = lesson.words || []
+  $: {
+    words = currentLesson.words
     reset()
   }
 
@@ -104,6 +103,10 @@
 
   function reset() {
     if (!testMode) {
+      if (!currentLesson) {
+        currentLesson = lessons[0]
+      }
+
       words = currentLesson.words
     }
 
@@ -181,9 +184,8 @@
     <select
       class="input mt-4 border font-sarabun appearance-none border-gray-400 rounded-lg focus:ring-2
       ring-offset-2 ring-gray-400 transition duration-200"
+      bind:value={currentLesson}
     >
-      on:change={(e) => changeLesson(e.currentTarget.value)}
-      > >
       {#each lessons as lesson, idx}
         <option value={lesson} class="text-center" selected={!idx}>{lesson.name}</option>
       {/each}
