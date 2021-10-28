@@ -3,6 +3,15 @@ import { render, RenderResult } from '@testing-library/svelte'
 
 import Index from '../../src/routes/index.svelte'
 
+jest.mock('$lib/lesson.ts', () => ({
+  lessons: [
+    {
+      name: 'Test',
+      words: ['งเรน', 'งเรน'],
+    },
+  ],
+}))
+
 /**
  * @jest-environment jsdom
  */
@@ -19,7 +28,7 @@ describe('Index', () => {
   let renderedComponent: RenderResult
 
   beforeEach(() => {
-    renderedComponent = render(Index, { testMode: true, words: ['งเรน'] })
+    renderedComponent = render(Index, {})
   })
 
   describe('once the component has been rendered', () => {
@@ -39,7 +48,7 @@ describe('Index', () => {
   })
 
   describe('when the word is typed correctly', () => {
-    fit('renders the word as green color (correct)', async () => {
+    it('renders the word as green color (correct)', async () => {
       const input = renderedComponent.getByTestId('input') as HTMLInputElement
       expect(input).toBeInTheDocument()
 

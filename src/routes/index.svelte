@@ -12,9 +12,7 @@
   let input
   let typingInput: HTMLInputElement
 
-  export let words = []
-  export let testMode = false
-
+  let words = []
   let currentLesson
   let result
   let currentWordIdx
@@ -44,7 +42,7 @@
     nextChar = nextchar(currentWord, currentInput)
   }
   $: {
-    words = currentLesson.words
+    words = currentLesson?.words || []
     reset()
   }
 
@@ -102,13 +100,11 @@
   }
 
   function reset() {
-    if (!testMode) {
-      if (!currentLesson) {
-        currentLesson = lessons[0]
-      }
-
-      words = currentLesson.words
+    if (!currentLesson) {
+      currentLesson = lessons[0]
     }
+
+    words = currentLesson.words
 
     started = false
     ended = false
