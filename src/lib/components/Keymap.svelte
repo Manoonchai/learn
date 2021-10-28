@@ -15,14 +15,14 @@
     <div class="row">
       <span class={paddingClasses[idx]}>
         {#if idx === 2}
-          <ShiftButton {nextChar} highlight={rowsShift.join('').includes(nextChar)} />
+          <ShiftButton highlight={rowsShift.join('').includes(nextChar)} />
         {/if}
       </span>
       {#each row as key, keyIdx}
         <KeymapButton {nextChar} keys={[key, rowsShift[idx][keyIdx]]} />
       {/each}
       {#if idx === 2}
-        <ShiftButton {nextChar} highlight={rowsShift.join('').includes(nextChar)} />
+        <ShiftButton highlight={rowsShift.join('').includes(nextChar)} />
       {/if}
     </div>
   {/each}

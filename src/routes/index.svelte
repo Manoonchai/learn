@@ -1,32 +1,19 @@
 <script lang="ts">
-  // import { onMount } from 'svelte'
+  import { onMount } from 'svelte'
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
   import { nextchar } from '$lib/nextchar'
-  import Keymap from '$lib/components/Keymap.svelte'
-  // import Kofi from '$lib/components/Kofi.svelte'
   import { lessons } from '$lib/lesson'
   import Manoonchai from '$lib/manoonchai'
+  import Keymap from '$lib/components/Keymap.svelte'
+  import Kofi from '$lib/components/Kofi.svelte'
 
   let name = 'Manoonchai'
   let input
   let typingInput: HTMLInputElement
 
-  export let words = [
-    'นม',
-    'อา',
-    'นานา',
-    'นา',
-    'มา',
-    'นอ',
-    'อม',
-    'มน',
-    'มอ',
-    'นอน',
-    'ออม',
-    'มอม',
-    'อาม',
-  ]
+  let words = []
+  let currentLesson
   let result
   let currentWordIdx
   let sentence
@@ -37,26 +24,27 @@
   let correctWords = []
   let interval
   let currentWordSpellCheck = true
-  let selectedLesson
   let userType = []
   let nextChar
 
-  $: if (selectedLesson?.words) {
-    words = selectedLesson.words
-    reset()
-  }
+  reset()
+
+  onMount(() => {
+    typingInput.focus()
+  })
+
   $: wpm = calculateWpm(correctWords, elapsed).toFixed(1)
-  $: {
+  $: if (sentence) {
     const currentWord = sentence[currentWordIdx]
     const currentInput = input
 
     currentWordSpellCheck = spellcheck(currentWord, currentInput)
     nextChar = nextchar(currentWord, currentInput)
   }
-
-  // onMount(() => {
-  reset()
-  // })
+  $: {
+    words = currentLesson?.words || []
+    reset()
+  }
 
   function start() {
     if (started) {
@@ -112,14 +100,21 @@
   }
 
   function reset() {
+    if (!currentLesson) {
+      currentLesson = lessons[0]
+    }
+
+    words = currentLesson.words
+
     started = false
     ended = false
     userType = []
     result = []
     currentWordIdx = 0
+
     sentence = Array(30)
       .fill(null)
-      .map(() => words[Math.floor(Math.random() * words.length)])
+      .map(() => words[Math.floor(Math.random() * words.length)] || '')
     startTime = new Date().getTime()
     correctWords = []
     input = ''
@@ -142,7 +137,7 @@
 
   <p class="stat">{wpm} wpm</p>
   <p class="sentence">
-    {#each sentence as word, idx}
+    {#each sentence as word, idx (idx)}
       <span
         class="sentence-gap font-sarabun transition duration-200 break-word {idx === currentWordIdx
           ? 'bg-green-300'
@@ -163,7 +158,6 @@
   </p>
 
   <input
-    autofocus
     class="input border w-32 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
     ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck
       ? 'bg-red-400 ring-red-400'
@@ -186,7 +180,7 @@
     <select
       class="input mt-4 border font-sarabun appearance-none border-gray-400 rounded-lg focus:ring-2
       ring-offset-2 ring-gray-400 transition duration-200"
-      bind:value={selectedLesson}
+      bind:value={currentLesson}
     >
       {#each lessons as lesson, idx}
         <option value={lesson} class="text-center" selected={!idx}>{lesson.name}</option>
@@ -195,4 +189,4 @@
   </div>
 </main>
 
-<!-- <Kofi name="narze" /> -->
+<Kofi name="narze" />
