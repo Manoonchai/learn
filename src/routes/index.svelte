@@ -151,6 +151,7 @@
     {/each}
   </p>
   <input
+    autofocus
     class="input border w-32 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
     ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck
       ? 'bg-red-400 ring-red-400'
