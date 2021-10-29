@@ -7,6 +7,7 @@
   import Manoonchai from '$lib/manoonchai'
   import Keymap from '$lib/components/Keymap.svelte'
   import Kofi from '$lib/components/Kofi.svelte'
+  import Footer from '$lib/components/Footer.svelte'
 
   let name = 'Manoonchai'
   let input
@@ -130,6 +131,19 @@
 
 <svelte:head>
   <title>Learn Manoonchai</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:url" content="https:/learn.manoonchai.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Learn manoonchai" />
+    <meta property="og:description" content="เรียนรู้แป้นพิมพ์มนูญชัยแบบง่ายๆ"/>
+    <meta name="twitter:title" content="Learn manoonchai" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#607D8B" id="metaThemeColor" />
+    <meta
+      name="keywords"
+      content="manoonchai , learn-manoonchai , learn manoonchai , manoonchai layout , manoonchai keyboard layout , thai manoonchai layout , th manoonchai layout , มนูญชัย , แป้นพิมพ์มนูญชัย , เรียนมนูญชัย , ฝึกมนูญชัย , ฝึกพิมพ์มนูญชัย"
+    /> 
 </svelte:head>
 
 <main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center py-20">
@@ -187,6 +201,7 @@
       {/each}
     </select>
   </div>
+  <Footer />
 </main>
 
 <Kofi name="narze" />
