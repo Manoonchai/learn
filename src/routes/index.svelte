@@ -7,6 +7,7 @@
   import Manoonchai from '$lib/manoonchai'
   import Keymap from '$lib/components/Keymap.svelte'
   import Kofi from '$lib/components/Kofi.svelte'
+  import Footer from '$lib/components/Footer.svelte'
 
   let name = 'Manoonchai'
   let input
@@ -187,6 +188,7 @@
       {/each}
     </select>
   </div>
+  <Footer />
 </main>
 
 <Kofi name="narze" />
