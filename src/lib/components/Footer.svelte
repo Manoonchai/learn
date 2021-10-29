@@ -18,7 +18,7 @@
         <i class="bi bi-discord"></i>
         Discord
     </a>
-    <a href="#" class="float-right hover:text-green-400" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Disabled popover">
+    <a href="#" class="float-right hover:text-green-400">
         Version
     </a>
     </div>
