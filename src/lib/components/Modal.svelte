@@ -1,6 +1,6 @@
 <script lang="ts">
   export let closeModal
-  let showKeymap
+  export let showKeymap
 </script>
 
 <div
@@ -30,7 +30,7 @@
               <input
                 type="checkbox"
                 class="scale-150 checked:bg-blue-600 checked:border-transparent"
-                bind:value={showKeymap}
+                bind:checked={showKeymap}
               />
             </div>
           </div>

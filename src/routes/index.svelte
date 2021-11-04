@@ -29,6 +29,7 @@
   let userType = []
   let nextChar
   let showModal = false
+  let showKeymap = true
 
   reset()
 
@@ -185,7 +186,9 @@
     bind:this={typingInput}
   />
 
-  <Keymap {nextChar} />
+  {#if showKeymap}
+    <Keymap {nextChar} />
+  {/if}
 
   <button class="btn hover:bg-gray-200 rounded-lg transition duration-300" on:click={reset}>
     Reset
@@ -206,7 +209,7 @@
   <Footer bind:showModal />
 
   {#if showModal}
-    <Modal closeModal={() => (showModal = false)} />
+    <Modal closeModal={() => (showModal = false)} bind:showKeymap />
   {/if}
 </main>
 
