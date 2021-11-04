@@ -1,9 +1,10 @@
 import { writable } from 'svelte/store'
+import { browser } from '$app/env'
 
-export const showKeymap = writable<boolean>(localStorage.showKeymap === 'true')
+export const showKeymap = writable<boolean>((browser && localStorage.showKeymap) === 'true')
+export const currentLessonName = writable(browser && localStorage.currentLessonName)
 
-showKeymap.subscribe((value) => (localStorage.showKeymap = String(value)))
-
-export const currentLessonName = writable<string>(localStorage.currentLessonName)
-
-currentLessonName.subscribe((value) => (localStorage.currentLessonName = value))
+if (browser) {
+  showKeymap.subscribe((value) => (localStorage.showKeymap = String(value)))
+  currentLessonName.subscribe((value) => (localStorage.currentLessonName = value))
+}
