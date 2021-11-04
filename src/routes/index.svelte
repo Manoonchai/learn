@@ -9,7 +9,7 @@
   import Kofi from '$lib/components/Kofi.svelte'
   import Footer from '$lib/components/Footer.svelte'
   import Modal from '$lib/components/Modal.svelte'
-  import { showKeymap } from '$lib/store'
+  import { showKeymap, currentLessonName } from '$lib/store'
 
   let name = 'Manoonchai'
   let input
@@ -47,6 +47,7 @@
   }
   $: {
     words = currentLesson?.words || []
+    $currentLessonName = currentLesson?.name || ''
     reset()
   }
 
@@ -105,7 +106,11 @@
 
   function reset() {
     if (!currentLesson) {
-      currentLesson = lessons[0]
+      if ($currentLessonName) {
+        currentLesson = lessons.find((l) => l.name === $currentLessonName) || lessons[0]
+      } else {
+        currentLesson = lessons[0]
+      }
     }
 
     words = currentLesson.words
@@ -202,7 +207,9 @@
       bind:value={currentLesson}
     >
       {#each lessons as lesson, idx}
-        <option value={lesson} class="text-center" selected={!idx}>{lesson.name}</option>
+        <option value={lesson} class="text-center" selected={lesson.name === $currentLessonName}
+          >{lesson.name}</option
+        >
       {/each}
     </select>
   </div>
