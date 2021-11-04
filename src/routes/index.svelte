@@ -9,6 +9,7 @@
   import Kofi from '$lib/components/Kofi.svelte'
   import Footer from '$lib/components/Footer.svelte'
   import Modal from '$lib/components/Modal.svelte'
+  import { showKeymap } from '$lib/store'
 
   let name = 'Manoonchai'
   let input
@@ -29,7 +30,6 @@
   let userType = []
   let nextChar
   let showModal = false
-  let showKeymap = true
 
   reset()
 
@@ -186,7 +186,7 @@
     bind:this={typingInput}
   />
 
-  {#if showKeymap}
+  {#if $showKeymap}
     <Keymap {nextChar} />
   {/if}
 
@@ -209,7 +209,7 @@
   <Footer bind:showModal />
 
   {#if showModal}
-    <Modal closeModal={() => (showModal = false)} bind:showKeymap />
+    <Modal closeModal={() => (showModal = false)} bind:showKeymap={$showKeymap} />
   {/if}
 </main>
 
