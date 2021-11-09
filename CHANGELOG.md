@@ -4,3 +4,9 @@
 ### Bug Fixes
 
 * Bump version, update readme ([dd04f90](https://github.com/Manoonchai/learn/commit/dd04f901cefc26584dd276264ffe6a0fd4d80cc7))
+
+## [1.0.0](https://github.com/Manoonchai/learn/compare/v1.0.0) (2021-11-09)
+
+### Features
+
+* Setup semantic release (23c6172)
