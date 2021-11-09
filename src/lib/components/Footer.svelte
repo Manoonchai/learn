@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import 'bootstrap-icons/font/bootstrap-icons.css'
 
-  export let showModal = false
+  export let showModal: boolean = false
 </script>
 
 <footer
