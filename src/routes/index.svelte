@@ -9,6 +9,7 @@
   import Kofi from '$lib/components/Kofi.svelte'
   import Footer from '$lib/components/Footer.svelte'
   import Modal from '$lib/components/Modal.svelte'
+  import Changelog from '$lib/components/Changelog.svelte'
   import { showKeymap, currentLessonName } from '$lib/store'
 
   let name = 'Manoonchai'
@@ -29,7 +30,8 @@
   let currentWordSpellCheck = true
   let userType = []
   let nextChar
-  let showModal = false
+  let showMenu = false
+  let showChangelog = false
 
   reset()
 
@@ -213,10 +215,14 @@
       {/each}
     </select>
   </div>
-  <Footer bind:showModal />
+  <Footer bind:showMenu bind:showChangelog />
 
-  {#if showModal}
-    <Modal closeModal={() => (showModal = false)} bind:showKeymap={$showKeymap} />
+  {#if showMenu}
+    <Modal closeModal={() => (showMenu = false)} bind:showKeymap={$showKeymap} />
+  {/if}
+
+  {#if showChangelog}
+    <Changelog closeModal={() => (showChangelog = false)} />
   {/if}
 </main>
 
