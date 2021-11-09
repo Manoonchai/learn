@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import userEvent from '@testing-library/user-event'
 import { render, RenderResult } from '@testing-library/svelte'
 
@@ -11,10 +15,6 @@ jest.mock('$lib/lesson.ts', () => ({
     },
   ],
 }))
-
-/**
- * @jest-environment jsdom
- */
 
 /**
  * An example test suite outlining the usage of
