@@ -10,9 +10,9 @@
   const paddingClasses = ['w-0', 'w-4 md:w-5 lg:w-6 xl:w-8', '-ml-8 md:-ml-10 lg:-ml-12 xl:-ml-16']
 </script>
 
-<div class="my-4">
+<div class="my-4 font-sarabun">
   {#each rows as row, idx}
-    <div class="row">
+    <div class="row text-black dark:text-white">
       <span class={paddingClasses[idx]}>
         {#if idx === 2}
           <ShiftButton highlight={rowsShift.join('').includes(nextChar)} />

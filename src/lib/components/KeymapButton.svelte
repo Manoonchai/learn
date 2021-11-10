@@ -7,9 +7,9 @@
   let keyClasses
 
   $: if (nextChar === keys[0]) {
-    keyClasses = 'bg-indigo-400 border-indigo-800'
+    keyClasses = 'bg-indigo-400 border-indigo-800 dark:bg-indigo-600 border-indigo-900 text-black dark:text-white'
   } else if (nextChar === keys[1]) {
-    keyClasses = 'bg-yellow-400 border-yellow-800'
+    keyClasses = 'bg-yellow-400 border-yellow-800 text-black dark:text-white'
   } else {
     keyClasses = ''
   }

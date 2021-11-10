@@ -1,9 +1,7 @@
 <script lang="ts">
-  export let closeModal
-  export let showKeymap
-  export let showPrevOrNextWord
-  export let TabToRestart
-  export let DarkMode
+  export let closeModal: () => void
+  import { lessons } from '$lib/lesson'
+  import { currentLessonName } from '$lib/store'
 </script>
 
 <div
@@ -26,41 +24,15 @@
     >
       <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Settings</h3>
+          <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Lessons</h3>
           <div class="flex flex-col mt-4 w-full justify-between">
             <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Show Keymap</span>
-              <input
-                type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
-                bind:checked={showKeymap}
-              />
+              {#each lessons as lesson, idx}
+              <p class="text-center border-t border-b py-2 hover:bg-gray-200 active:bg-gray-400 border-gray-400 rounded-md cursor-pointer" on:click={() => { $currentLessonName = lesson.name; closeModal(); }}
+                >{lesson.name}</p>
+              {/each}      
             </div>
-            <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Show Previous or Next word</span>
-              <input
-                type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
-                bind:checked={showPrevOrNextWord}
-              />
             </div>
-            <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Press Tab to Restart</span>
-              <input
-                type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
-                bind:checked={TabToRestart}
-              />
-            </div>
-            <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Enable Dark mode</span>
-              <input
-                type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
-                bind:checked={DarkMode}
-              />
-            </div>
-          </div>
         </div>
       </div>
       <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
