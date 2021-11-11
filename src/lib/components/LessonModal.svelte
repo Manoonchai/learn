@@ -22,23 +22,25 @@
     <div
       class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
     >
-      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Lessons</h3>
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">Lessons</h3>
+          <!-- Close button at top right -->
+          <h3 class="absolute top-0 right-0 m-6 text-lg leading-6 font-medium text-white font-bold bg-red-500 px-2 py-1 cursor-pointer rounded-lg" on:click={() => closeModal()}>x</h3>
           <div class="flex flex-col mt-4 w-full justify-between">
             <div class="text-sm text-gray-500">
               {#each lessons as lesson, idx}
-              <p class="text-center border-t border-b py-2 hover:bg-gray-200 active:bg-gray-400 border-gray-400 rounded-md cursor-pointer" on:click={() => { $currentLessonName = lesson.name; closeModal(); }}
+              <p class="text-center dark:text-white border-t border-b py-2 hover:bg-gray-200 dark:hover:bg-gray-500 active:bg-gray-400 border-gray-400 dark:active:bg-gray-800 rounded-md cursor-pointer" on:click={() => { $currentLessonName = lesson.name; closeModal(); }}
                 >{lesson.name}</p>
               {/each}      
             </div>
             </div>
         </div>
       </div>
-      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+      <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
         <button
           type="button"
-          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 sm:ml-3 sm:w-auto sm:text-sm"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 dark:ring-offset-black sm:ml-3 sm:w-auto sm:text-sm"
           on:click={() => {
             closeModal()
           }}

@@ -1,8 +1,9 @@
 <script lang="ts">
   export let highlight: boolean
+  export let glow: boolean
 </script>
 
-<span class="button {highlight ? 'bg-yellow-400 border-yellow-800' : ''}">
+<span class="button {highlight ? `${glow ? 'shift-next' : ''} bg-yellow-400 border-yellow-800` : ''}">
   <div class="key">Shift</div>
 </span>
 
@@ -20,5 +21,9 @@
   .key {
     @apply -mt-2;
     @apply xl:mt-0;
+  }
+
+  .shift-next {
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e3e700, 0 0 40px #e4e000, 0 0 50px #c8ff00, 0 0 60px #c8ff00, 0 0 70px #c8ff00;
   }
 </style>

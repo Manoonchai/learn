@@ -28,8 +28,8 @@
 }
 
 .sentence {
-  @apply text-base md:text-lg lg:text-2xl xl:text-3xl 2xl:text-5xl;
-  @apply lg:leading-tight;
+  @apply text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-4xl;
+  @apply leading-relaxed break-words;
   @apply mt-4;
 }
 
@@ -50,6 +50,11 @@
   @apply border px-2 py-1 rounded;
   @apply text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl;
 }
+
+.dark .shadow-white {
+  box-shadow: 0px 10px 20px #fcfcfc5d;
+}
+
 html .dark {
   background-color: black;
 }

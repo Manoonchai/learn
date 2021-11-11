@@ -3,13 +3,14 @@
 
   export let nextChar: string
   export let keys: [string, string] = ['', '']
+  export let glow
 
   let keyClasses
 
   $: if (nextChar === keys[0]) {
-    keyClasses = 'bg-indigo-400 border-indigo-800 dark:bg-indigo-600 border-indigo-900 text-black dark:text-white'
+    keyClasses = `${glow ? 'key-glow' : ''} bg-indigo-400 border-indigo-800 dark:bg-indigo-600 border-indigo-900 text-black dark:text-white`
   } else if (nextChar === keys[1]) {
-    keyClasses = 'bg-yellow-400 border-yellow-800 text-black dark:text-white'
+    keyClasses = `${glow ? 'key-shift-glow' : ''} key-shiftHighlight bg-yellow-400 border-yellow-800 text-black dark:text-white`
   } else {
     keyClasses = ''
   }
@@ -36,7 +37,15 @@
     @apply xl:mt-0;
   }
 
+  .key-glow {
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6100b6, 0 0 40px #760094, 0 0 50px #a500e6, 0 0 60px #a500e6, 0 0 70px #a500e6;
+  }
+
   .key-shift {
-    @apply text-gray-400;
+    @apply text-gray-500;
+  }
+
+  .key-shift-glow {
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e3e700, 0 0 40px #e4e000, 0 0 50px #c8ff00, 0 0 60px #c8ff00, 0 0 70px #c8ff00;
   }
 </style>

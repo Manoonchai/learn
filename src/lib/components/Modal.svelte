@@ -4,6 +4,7 @@
   export let showPrevOrNextWord
   export let TabToRestart
   export let DarkMode
+  export let GlowKey
 </script>
 
 <div
@@ -24,12 +25,12 @@
     <div
       class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
     >
-      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Settings</h3>
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" id="modal-title">Settings</h3>
           <div class="flex flex-col mt-4 w-full justify-between">
-            <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Show Keymap</span>
+            <div class="text-sm text-gray-500 dark:text-white">
+              <span class="text-sm text-gray-500 dark:text-white">Show Keymap</span>
               <input
                 type="checkbox"
                 class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
@@ -37,7 +38,7 @@
               />
             </div>
             <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Show Previous or Next word</span>
+              <span class="text-sm text-gray-500 dark:text-white">Show Previous or Next word</span>
               <input
                 type="checkbox"
                 class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
@@ -45,7 +46,7 @@
               />
             </div>
             <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Press Tab to Restart</span>
+              <span class="text-sm text-gray-500 dark:text-white">Press Tab to Restart</span>
               <input
                 type="checkbox"
                 class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
@@ -53,20 +54,28 @@
               />
             </div>
             <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500">Enable Dark mode</span>
+              <span class="text-sm text-gray-500 dark:text-white">Enable Dark mode</span>
               <input
                 type="checkbox"
                 class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={DarkMode}
               />
             </div>
+            <div class="text-sm text-gray-500">
+              <span class="text-sm text-gray-500 dark:text-white">Glowing keys</span>
+              <input
+                type="checkbox"
+                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
+                bind:checked={GlowKey}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+      <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
         <button
           type="button"
-          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 sm:ml-3 sm:w-auto sm:text-sm"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-black focus:ring-green-300 sm:ml-3 sm:w-auto sm:text-sm"
           on:click={() => {
             closeModal()
           }}

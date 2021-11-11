@@ -11,7 +11,7 @@
   import Modal from '$lib/components/Modal.svelte'
   import LessonModal from '$lib/components/LessonModal.svelte'
   import Changelog from '$lib/components/Changelog.svelte'
-  import { showKeymap, showPrevOrNextWord, currentLessonName, TabToRestart, DarkMode } from '$lib/store'
+  import { showKeymap, showPrevOrNextWord, currentLessonName, TabToRestart, DarkMode, GlowKey } from '$lib/store'
 
   let name = 'Manoonchai'
   let input
@@ -168,7 +168,7 @@
 </svelte:head>
 
 <body class="{$DarkMode ? 'dark' : ''}">
-<main class="main container min-h-screen  mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20">
+<main class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20">
   <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold"><img src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75" class="align-middle" width={64} height={64} alt="logo" /><span>Learn {name}</span></div>
 
   <p class="stat">{wpm} wpm</p>
@@ -198,7 +198,7 @@
     <p class="flex-none word-next text-gray-200 dark:text-gray-600 w-32 text-xl pt-4 pl-6 font-sarabun">{sentence[currentWordIdx - 1] ?? ''}</p> 
     {/if}
     <input
-    class="input dark:ring-offset-black border w-full font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
+    class="input shadow-white dark:ring-offset-black border w-full font-sarabun shadow-lg rounded-lg border-gray-400 dark:border-gray-600 focus:ring-2
     ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck
       ? 'bg-red-400 ring-red-400'
       : ''}"
@@ -230,7 +230,7 @@
   <Footer bind:showMenu bind:showChangelog />
 
   {#if showMenu}
-    <Modal closeModal={() => (showMenu = false)} bind:showKeymap={$showKeymap} bind:showPrevOrNextWord={$showPrevOrNextWord} bind:TabToRestart={$TabToRestart} bind:DarkMode={$DarkMode} />
+    <Modal closeModal={() => (showMenu = false)} bind:showKeymap={$showKeymap} bind:showPrevOrNextWord={$showPrevOrNextWord} bind:TabToRestart={$TabToRestart} bind:DarkMode={$DarkMode} bind:GlowKey={$GlowKey} />
   {/if} 
 
   {#if showChangelog}
