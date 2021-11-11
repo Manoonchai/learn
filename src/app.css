@@ -1,6 +1,7 @@
 /* Write your global styles here, in PostCSS syntax */
 
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,6 +9,10 @@
 
 .font-sarabun {
   font-family: 'Sarabun', sans-serif;
+}
+
+.font-marker {
+  font-family: 'Permanent Marker', cursive;
 }
 
 .input:focus {
@@ -19,12 +24,12 @@
 }
 
 .stat {
-  @apply text-base md:text-base lg:text-xl xl:text-2xl 2xl:text-3xl;
+  @apply text-base md:text-base lg:text-xl xl:text-2xl 2xl:text-3xl dark:text-white;
 }
 
 .sentence {
-  @apply text-base md:text-lg lg:text-2xl xl:text-3xl 2xl:text-5xl;
-  @apply lg:leading-tight;
+  @apply text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-4xl;
+  @apply leading-relaxed break-words;
   @apply mt-4;
 }
 
@@ -44,4 +49,16 @@
 .btn {
   @apply border px-2 py-1 rounded;
   @apply text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl;
+}
+
+.dark .shadow-white {
+  box-shadow: 0px 10px 20px #fcfcfc5d;
+}
+
+html .dark {
+  background-color: black;
+}
+
+::-webkit-scrollbar {
+  width: 0;
 }

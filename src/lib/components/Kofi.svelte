@@ -2,8 +2,7 @@
   import LibLoader from './LibLoader.svelte'
 
   export let name: string
-  export let label = 'Support me'
-
+  export let label = 'Give me a tip!'
   function loadKofiWidget() {
     window.kofiWidgetOverlay?.draw(
       name,

@@ -9,17 +9,25 @@
   import Kofi from '$lib/components/Kofi.svelte'
   import Footer from '$lib/components/Footer.svelte'
   import Modal from '$lib/components/Modal.svelte'
+  import LessonModal from '$lib/components/LessonModal.svelte'
   import Changelog from '$lib/components/Changelog.svelte'
-  import { showKeymap, currentLessonName } from '$lib/store'
+  import {
+    showKeymap,
+    showPrevOrNextWord,
+    currentLessonName,
+    TabToRestart,
+    DarkMode,
+    GlowKey,
+  } from '$lib/store'
 
   let name = 'Manoonchai'
   let input
   let typingInput: HTMLInputElement
 
   let words = []
-  let currentLesson
   let result
   let currentWordIdx
+  let currentLesson
   let sentence
   let ended
   let started
@@ -31,6 +39,7 @@
   let userType = []
   let nextChar
   let showMenu = false
+  let showLesson = false
   let showChangelog = false
 
   reset()
@@ -56,6 +65,10 @@
   function start() {
     if (started) {
       return
+    }
+
+    if (interval) {
+      clearInterval(interval)
     }
 
     interval = setInterval(() => {
@@ -107,12 +120,10 @@
   }
 
   function reset() {
-    if (!currentLesson) {
-      if ($currentLessonName) {
-        currentLesson = lessons.find((l) => l.name === $currentLessonName) || lessons[0]
-      } else {
-        currentLesson = lessons[0]
-      }
+    if ($currentLessonName) {
+      currentLesson = lessons.find((l) => l.name === $currentLessonName) || lessons[0]
+    } else {
+      currentLesson = lessons[0]
     }
 
     words = currentLesson.words
@@ -130,6 +141,17 @@
     correctWords = []
     input = ''
     typingInput?.focus()
+  }
+
+  window.onkeydown = (e) => {
+    e.preventDefault()
+    if (e.key === 'Tab') {
+      if ($TabToRestart === true) {
+        reset()
+      } else {
+        return
+      }
+    }
   }
 
   function end() {
@@ -156,74 +178,113 @@
   />
 </svelte:head>
 
-<main class="container min-h-screen mx-auto flex flex-col gap-2 justify-center items-center py-20">
-  <h1 class="title font-sarabun text-green-400 flex flex-col">Learn {name}</h1>
+<body class={$DarkMode ? 'dark' : ''}>
+  <main
+    class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
+  >
+    <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
+      <img
+        src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
+        class="align-middle"
+        width={64}
+        height={64}
+        alt="logo"
+      /><span>Learn {name}</span>
+    </div>
 
-  <p class="stat">{wpm} wpm</p>
-  <p class="sentence">
-    {#each sentence as word, idx (idx)}
-      <span
-        class="sentence-gap font-sarabun transition duration-200 break-word {idx === currentWordIdx
-          ? 'bg-green-300'
-          : ''}
-        {result[idx] === true ? 'text-green-400' : ''}
-        {result[idx] === false ? 'text-red-600' : ''}
+    <p class="stat">{wpm} wpm</p>
+    <p class="sentence">
+      {#each sentence as word, idx (idx)}
+        <span
+          class="sentence-gap font-sarabun dark:text-white transition duration-200 break-word {idx ===
+          currentWordIdx
+            ? 'bg-green-300 dark:bg-green-500'
+            : ''}
+        {result[idx] === true ? 'text-green-400 dark:text-green-600' : ''}
+        {result[idx] === false ? 'text-red-600 dark:text-red-600' : ''}
         {sentence[currentWordIdx] &&
-        userType.join('') !== sentence[currentWordIdx].slice(0, userType.length) &&
-        input &&
-        idx === currentWordIdx
-          ? 'bg-red-300'
-          : ''}
+          userType.join('') !== sentence[currentWordIdx].slice(0, userType.length) &&
+          input &&
+          idx === currentWordIdx
+            ? 'bg-red-400 dark:bg-red-600'
+            : ''}
         "
-      >
-        {word}
-      </span>
-    {/each}
-  </p>
-
-  <input
-    class="input border w-32 font-sarabun shadow-lg rounded-lg border-gray-400 focus:ring-2
-    ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck
-      ? 'bg-red-400 ring-red-400'
-      : ''}"
-    value={input}
-    on:keydown={onType}
-    placeholder={sentence[currentWordIdx]}
-    data-testid="input"
-    bind:this={typingInput}
-  />
-
-  {#if $showKeymap}
-    <Keymap {nextChar} />
-  {/if}
-
-  <button class="btn hover:bg-gray-200 rounded-lg transition duration-300" on:click={reset}>
-    Reset
-  </button>
-
-  <div class="lesson font-sarabun">
-    Lesson:
-    <select
-      class="input mt-4 border font-sarabun appearance-none border-gray-400 rounded-lg focus:ring-2
-      ring-offset-2 ring-gray-400 transition duration-200"
-      bind:value={currentLesson}
-    >
-      {#each lessons as lesson, idx}
-        <option value={lesson} class="text-center" selected={lesson.name === $currentLessonName}
-          >{lesson.name}</option
         >
+          {word}
+        </span>
       {/each}
-    </select>
-  </div>
-  <Footer bind:showMenu bind:showChangelog />
+    </p>
 
-  {#if showMenu}
-    <Modal closeModal={() => (showMenu = false)} bind:showKeymap={$showKeymap} />
-  {/if}
+    <div class="flex items-center">
+      {#if $showPrevOrNextWord}
+        <p
+          class="flex-none word-next text-gray-200 dark:text-gray-600 w-32 text-xl pt-4 pl-6 font-sarabun"
+        >
+          {sentence[currentWordIdx - 1] ?? ''}
+        </p>
+      {/if}
+      <input
+        class="input shadow-white dark:ring-offset-black border w-full font-sarabun shadow-lg rounded-lg border-gray-400 dark:border-gray-600 focus:ring-2
+    ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck
+          ? 'bg-red-400 ring-red-400'
+          : ''}"
+        value={input}
+        on:keydown={onType}
+        placeholder={sentence[currentWordIdx]}
+        data-testid="input"
+        bind:this={typingInput}
+      />
+      {#if $showPrevOrNextWord}
+        <p
+          class="flex-none word-next text-gray-400 dark:text-gray-200 w-32 text-xl pt-4 pl-6 font-sarabun"
+        >
+          {sentence[currentWordIdx + 1] ?? ''}
+        </p>
+      {/if}
+    </div>
 
-  {#if showChangelog}
-    <Changelog closeModal={() => (showChangelog = false)} />
-  {/if}
-</main>
+    {#if $showKeymap}
+      <Keymap {nextChar} />
+    {/if}
+
+    <button
+      class="btn hover:bg-gray-600 rounded-lg transition duration-300 m-2 dark:text-white"
+      on:click={reset}
+    >
+      Reset
+    </button>
+
+    <div class="lesson dark:text-white font-sarabun">
+      Lesson: <span
+        class="p-2 cursor-pointer border border-gray-400 dark:text-white rounded-lg"
+        on:click={() => (showLesson = true)}>{$currentLessonName}</span
+      >
+      {#if showLesson}
+        <LessonModal
+          closeModal={() => {
+            showLesson = false
+            reset()
+          }}
+        />
+      {/if}
+    </div>
+    <Footer bind:showMenu bind:showChangelog />
+
+    {#if showMenu}
+      <Modal
+        closeModal={() => (showMenu = false)}
+        bind:showKeymap={$showKeymap}
+        bind:showPrevOrNextWord={$showPrevOrNextWord}
+        bind:TabToRestart={$TabToRestart}
+        bind:DarkMode={$DarkMode}
+        bind:GlowKey={$GlowKey}
+      />
+    {/if}
+
+    {#if showChangelog}
+      <Changelog closeModal={() => (showChangelog = false)} />
+    {/if}
+  </main>
+</body>
 
 <Kofi name="narze" />
