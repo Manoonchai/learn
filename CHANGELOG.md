@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Manoonchai/learn/compare/v1.0.1...v1.1.0) (2021-11-11)
+
+
+### Features
+
+* Add dark mode and new features ([#8](https://github.com/Manoonchai/learn/issues/8)) ([3a56194](https://github.com/Manoonchai/learn/commit/3a561944321ea99aa08879255426fc00b3822f4e))
+
 ## [1.0.1](https://github.com/Manoonchai/learn/compare/v1.0.0...v1.0.1) (2021-11-09)
 
 
