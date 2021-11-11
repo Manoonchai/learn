@@ -20,9 +20,43 @@
     <div
       class="popin inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
     >
-      <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-        <div class="text-center sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">v1.0.0</h3>
+    <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <div class="flex flex-col gap-6 text-center sm:text-left">
+        <div>
+          <h3
+            class="text-lg leading-6 font-medium text-gray-900 dark:text-white"
+            id="modal-title"
+          >
+            v1.1.0
+          </h3>
+          <div class="flex flex-col mt-4 w-full justify-between">
+            <p class="text-sm text-gray-500 dark:text-white" />
+            <div class="text-sm text-gray-500 dark:text-white">
+              <ul class="list-disc pl-4">
+                <li>Dark Mode</li>
+                <li>Show Previous or Next word</li>
+                <li>Press Tab to Restart</li>
+                <li>Enable Dark mode</li>
+                <li>Glowing keys</li>
+              </ul>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-white">
+              Thanks <a
+                href="https://github.com/tinvv"
+                target="_blank"
+                rel="noreferrer"
+                class="underline">@tinvv</a
+              >!
+            </p>
+          </div>
+        </div>
+        <div>
+          <h3
+            class="text-lg leading-6 font-medium text-gray-900 dark:text-white"
+            id="modal-title"
+          >
+            v1.0.0
+          </h3>
           <div class="flex flex-col mt-4 w-full justify-between">
             <p class="text-sm text-gray-500 dark:text-white">First version ever! 🎉</p>
             <div class="text-sm text-gray-500 dark:text-white">

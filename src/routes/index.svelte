@@ -188,7 +188,8 @@
         width={64}
         height={64}
         alt="logo"
-      /><span>Learn {name}</span>
+      />
+      <span>Learn {name}</span>
     </div>
 
     <p class="stat">{wpm} wpm</p>
