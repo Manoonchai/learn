@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/Manoonchai/learn/compare/v1.1.0...v1.1.1) (2021-11-11)
+
+
+### Bug Fixes
+
+* Build before test ([b46690c](https://github.com/Manoonchai/learn/commit/b46690cdab231fb7c13f7344cf269c6da8f28253))
+
 # [1.1.0](https://github.com/Manoonchai/learn/compare/v1.0.1...v1.1.0) (2021-11-11)
 
 
