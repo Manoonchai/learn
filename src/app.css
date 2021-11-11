@@ -23,7 +23,7 @@ html .dark {
 }
 
 .fadein {
-  animation: fadein 0.4s cubic-bezier(0.65, 0, 0.35, 1); 
+  animation: fadein 0.4s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @keyframes fadein {
@@ -50,10 +50,10 @@ html .dark {
 }
 
 ::-webkit-scrollbar-track {
-  background: #b8b8b8; 
+  background: #b8b8b8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
   border-radius: 20px;
 }

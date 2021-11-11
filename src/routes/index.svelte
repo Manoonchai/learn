@@ -28,7 +28,7 @@
   let result
   let currentWordIdx
   let currentLesson
-  let sentence;
+  let sentence
   let ended
   let started
   let elapsed
