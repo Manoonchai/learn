@@ -67,6 +67,7 @@
                 type="checkbox"
                 class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={GlowKey}
+                disabled={showKeymap ? false : true}
               />
             </div>
           </div>
