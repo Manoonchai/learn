@@ -28,12 +28,12 @@
       <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
           <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" id="modal-title">Settings</h3>
-          <div class="flex flex-col mt-4 w-full justify-between">
+          <div class="flex flex-col gap-3 mt-4 w-full justify-between">
             <div class="text-sm text-gray-500 dark:text-white">
               <span class="text-sm text-gray-500 dark:text-white">Show Keymap</span>
               <input
                 type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={showKeymap}
               />
             </div>
@@ -41,7 +41,7 @@
               <span class="text-sm text-gray-500 dark:text-white">Show Previous or Next word</span>
               <input
                 type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={showPrevOrNextWord}
               />
             </div>
@@ -49,7 +49,7 @@
               <span class="text-sm text-gray-500 dark:text-white">Press Tab to Restart</span>
               <input
                 type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={TabToRestart}
               />
             </div>
@@ -57,7 +57,7 @@
               <span class="text-sm text-gray-500 dark:text-white">Enable Dark mode</span>
               <input
                 type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={DarkMode}
               />
             </div>
@@ -65,7 +65,7 @@
               <span class="text-sm text-gray-500 dark:text-white">Glowing keys</span>
               <input
                 type="checkbox"
-                class="scale-150 checked:bg-blue-600 ml-2 checked:border-transparent"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={GlowKey}
               />
             </div>
