@@ -3,11 +3,13 @@
   export let glow: boolean
 </script>
 
-<span class="button {highlight ? `${glow ? 'shift-next' : ''} bg-yellow-400 border-yellow-800` : ''}">
+<span
+  class="button {highlight ? `${glow ? 'shift-next' : ''} bg-yellow-400 border-yellow-800` : ''}"
+>
   <div class="key">Shift</div>
 </span>
 
-<style>
+<style lang="postcss">
   .button {
     @apply inline-block border;
     @apply flex flex-col justify-center items-center;
@@ -24,6 +26,7 @@
   }
 
   .shift-next {
-    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e3e700, 0 0 40px #e4e000, 0 0 50px #c8ff00, 0 0 60px #c8ff00, 0 0 70px #c8ff00;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e3e700, 0 0 40px #e4e000, 0 0 50px #c8ff00,
+      0 0 60px #c8ff00, 0 0 70px #c8ff00;
   }
 </style>

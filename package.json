@@ -46,7 +46,7 @@
     "svelte-fa": "^2.3.3",
     "svelte-jester": "^2.0.1",
     "svelte-preprocess": "^4.9.8",
-    "tailwindcss": "^2.2.17",
+    "tailwindcss": "^2.2.16",
     "ts-jest": "^27.0.7",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"

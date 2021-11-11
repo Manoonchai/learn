@@ -8,9 +8,13 @@
   let keyClasses
 
   $: if (nextChar === keys[0]) {
-    keyClasses = `${glow ? 'key-glow' : ''} bg-indigo-400 border-indigo-800 dark:bg-indigo-600 border-indigo-900 text-black dark:text-white`
+    keyClasses = `${
+      glow ? 'key-glow' : ''
+    } bg-indigo-400 border-indigo-800 dark:bg-indigo-600 border-indigo-900 text-black dark:text-white`
   } else if (nextChar === keys[1]) {
-    keyClasses = `${glow ? 'key-shift-glow' : ''} key-shiftHighlight bg-yellow-400 border-yellow-800 text-black dark:text-white`
+    keyClasses = `${
+      glow ? 'key-shift-glow' : ''
+    } key-shiftHighlight bg-yellow-400 border-yellow-800 text-black dark:text-white`
   } else {
     keyClasses = ''
   }
@@ -21,7 +25,7 @@
   <div class="key">{keys[0]}</div>
 </span>
 
-<style>
+<style lang="postcss">
   .button {
     @apply inline-block border;
     @apply flex flex-col justify-center items-center;
@@ -38,7 +42,8 @@
   }
 
   .key-glow {
-  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6100b6, 0 0 40px #760094, 0 0 50px #a500e6, 0 0 60px #a500e6, 0 0 70px #a500e6;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6100b6, 0 0 40px #760094, 0 0 50px #a500e6,
+      0 0 60px #a500e6, 0 0 70px #a500e6;
   }
 
   .key-shift {
@@ -46,6 +51,7 @@
   }
 
   .key-shift-glow {
-  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e3e700, 0 0 40px #e4e000, 0 0 50px #c8ff00, 0 0 60px #c8ff00, 0 0 70px #c8ff00;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e3e700, 0 0 40px #e4e000, 0 0 50px #c8ff00,
+      0 0 60px #c8ff00, 0 0 70px #c8ff00;
   }
 </style>

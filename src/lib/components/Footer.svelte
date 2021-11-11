@@ -9,7 +9,7 @@
 <footer
   class="justify-center items-center text-center container text-xl inline bottom-0 p-3 object-bottom fixed mb-4 space-x-4"
 >
-    <div class="relative">
+  <div class="relative">
     <div class="flex gap-3 justify-center">
       <a
         href="https://github.com/manoonchai/learn"
@@ -38,7 +38,10 @@
       <button on:click={() => (showChangelog = !showChangelog)} class="hover:text-green-400">
         📝
       </button>
-      <button on:click={() => (showMenu = !showMenu)} class="hover:text-green-400 transfrom transition duration-200 hover:rotate-180">⚙</button>
+      <button
+        on:click={() => (showMenu = !showMenu)}
+        class="hover:text-green-400 transfrom transition duration-200 hover:rotate-180">⚙</button
+      >
     </div>
   </div>
 </footer>

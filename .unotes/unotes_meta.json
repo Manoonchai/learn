@@ -1,0 +1,34 @@
+{
+  "name": "",
+  "isOrdered": true,
+  "folders": {
+    "e2e": {
+      "name": "e2e",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "src": {
+      "name": "src",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "static": {
+      "name": "static",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    },
+    "test": {
+      "name": "test",
+      "isOrdered": true,
+      "folders": {},
+      "files": {}
+    }
+  },
+  "files": {
+    "README": 0,
+    "CHANGELOG": 1
+  }
+}

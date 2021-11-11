@@ -2,48 +2,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .font-sarabun {
   font-family: 'Sarabun', sans-serif;
 }
 
 .input:focus {
   outline: none;
-}
-
-.title {
-  @apply text-xl md:text-2xl lg:text-3xl xl:text-5xl 2xl:text-7xl;
-}
-
-.stat {
-  @apply text-base md:text-base lg:text-xl xl:text-2xl 2xl:text-3xl dark:text-white;
-}
-
-.sentence {
-  @apply text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-4xl;
-  @apply leading-relaxed break-words;
-  @apply mt-4;
-}
-
-.lesson {
-  @apply text-base lg:text-lg xl:text-xl 2xl:text-2xl;
-}
-
-.sentence-gap {
-  @apply mx-1 lg:mx-2 xl:mx-3 2xl:mx-4;
-}
-
-.input {
-  @apply text-base lg:text-lg xl:text-xl 2xl:text-2xl;
-  @apply mt-4 px-2 lg:px-4 lg:py-1 xl:py-2 text-center;
-}
-
-.btn {
-  @apply border px-2 py-1 rounded;
-  @apply text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl;
 }
 
 .dark .shadow-white {
