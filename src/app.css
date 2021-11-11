@@ -82,5 +82,14 @@ html .dark {
 }
 
 ::-webkit-scrollbar {
-  width: 0;
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #b8b8b8; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 20px;
 }
