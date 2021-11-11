@@ -27,7 +27,12 @@
     >
       <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" id="modal-title">Settings</h3>
+          <h3
+            class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
+            id="modal-title"
+          >
+            Settings
+          </h3>
           <div class="flex flex-col gap-3 mt-4 w-full justify-between">
             <div class="text-sm text-gray-500 dark:text-white">
               <span class="text-sm text-gray-500 dark:text-white">Show Keymap</span>
