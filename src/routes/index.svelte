@@ -189,7 +189,7 @@
         height={64}
         alt="logo"
       />
-      <span>Learn {name}</span>
+      <h1>Learn {name}</h1>
     </div>
 
     <p class="stat">{wpm} wpm</p>
