@@ -1,6 +1,5 @@
 <script lang="ts">
   export let closeModal
-  export let showKeymap
 </script>
 
 <div
@@ -23,7 +22,9 @@
     >
       <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">v1.0.0</h3>
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">
+            v1.0.0
+          </h3>
           <div class="flex flex-col mt-4 w-full justify-between">
             <p class="text-sm text-gray-500 dark:text-white">First version ever! 🎉</p>
             <div class="text-sm text-gray-500 dark:text-white">

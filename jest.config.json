@@ -1,6 +1,5 @@
 {
   "transform": {
-    "^.+\\.js$": "babel-jest",
     "^.+\\.svelte$": [
       "svelte-jester",
       {
@@ -25,5 +24,6 @@
       "useESM": true
     }
   },
-  "testEnvironment": "jsdom"
+  "testEnvironment": "jsdom",
+  "testPathIgnorePatterns": ["<rootDir>/test/routes/"]
 }

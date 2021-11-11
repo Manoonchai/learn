@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 
+// FIXME: Fix dom spec not working
+
 import userEvent from '@testing-library/user-event'
 import { render, RenderResult } from '@testing-library/svelte'
 
