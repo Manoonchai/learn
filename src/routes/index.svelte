@@ -28,7 +28,7 @@
   let result
   let currentWordIdx
   let currentLesson
-  let sentence
+  let sentence;
   let ended
   let started
   let elapsed
@@ -59,7 +59,6 @@
   $: {
     words = currentLesson?.words || []
     $currentLessonName = currentLesson?.name || ''
-    reset()
   }
 
   function start() {
@@ -178,7 +177,7 @@
   />
 </svelte:head>
 
-<body class={$DarkMode ? 'dark' : ''}>
+<body class={$DarkMode === true ? 'dark' : ''}>
   <main
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
