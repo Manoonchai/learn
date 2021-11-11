@@ -24,16 +24,30 @@
     >
       <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
-          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">Lessons</h3>
-          <h3 class="absolute top-0 right-0 m-6 text-lg leading-6 font-medium text-white font-bold bg-red-500 px-3 py-1 cursor-pointer rounded-lg hover:bg-red-700" on:click={() => closeModal()}>x</h3>
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">
+            Lessons
+          </h3>
+          <h3
+            class="absolute top-0 right-0 m-6 text-lg leading-6 font-medium text-white font-bold bg-red-500 px-3 py-1 cursor-pointer rounded-lg hover:bg-red-700"
+            on:click={() => closeModal()}
+          >
+            x
+          </h3>
           <div class="flex flex-col mt-4 w-full justify-between">
             <div class="text-sm text-gray-500">
               {#each lessons as lesson, idx}
-              <p class="text-center dark:text-white border-t border-b py-2 hover:bg-gray-200 dark:hover:bg-gray-500 active:bg-gray-400 border-gray-400 dark:active:bg-gray-800 rounded-md cursor-pointer" on:click={() => { $currentLessonName = lesson.name; closeModal(); }}
-                >{lesson.name}</p>
-              {/each}      
+                <p
+                  class="text-center dark:text-white border-t border-b py-2 hover:bg-gray-200 dark:hover:bg-gray-500 active:bg-gray-400 border-gray-400 dark:active:bg-gray-800 rounded-md cursor-pointer"
+                  on:click={() => {
+                    $currentLessonName = lesson.name
+                    closeModal()
+                  }}
+                >
+                  {lesson.name}
+                </p>
+              {/each}
             </div>
-            </div>
+          </div>
         </div>
       </div>
       <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
