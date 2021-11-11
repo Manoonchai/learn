@@ -1,13 +1,11 @@
 {
   "transform": {
-    "^.+\\.svelte$": [
-      "svelte-jester",
-      {
-        "preprocess": true
-      }
-    ],
-    "^.+\\.ts$": "ts-jest"
+    "^.+\\.svelte$": ["svelte-jester", { "preprocess": true }],
+    "^.+\\.ts$": "ts-jest",
+    "^.+\\.js$": "ts-jest"
   },
+  "transformIgnorePatterns": ["node_modules/(?!(svelte-jester|svelte-fa)/)"],
+  "moduleFileExtensions": ["js", "ts", "svelte"],
   "moduleNameMapper": {
     "^\\$lib(.*)$": "<rootDir>/src/lib$1",
     "^\\$app(.*)$": [
@@ -15,15 +13,14 @@
       "<rootDir>/.svelte-kit/build/runtime/app$1"
     ]
   },
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.ts"],
+  "collectCoverageFrom": ["src/**/*.{ts,tsx,svelte,js,jsx}"],
   "extensionsToTreatAsEsm": [".svelte", ".ts"],
-  "moduleFileExtensions": ["js", "svelte", "ts"],
-  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
   "globals": {
     "ts-jest": {
       "tsconfig": "tsconfig.spec.json",
       "useESM": true
     }
   },
-  "testEnvironment": "jsdom",
-  "testPathIgnorePatterns": ["<rootDir>/test/routes/"]
+  "testEnvironment": "jsdom"
 }

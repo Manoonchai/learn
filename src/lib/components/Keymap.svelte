@@ -28,11 +28,15 @@
     </div>
   {/each}
   <div class="flex mt-1">
-    <span class="spacebar {nextChar === ' ' ? `bg-indigo-400 border-indigo-800 ${$glow ? "spacebar-next" : ""}` : ''}" />
+    <span
+      class="spacebar {nextChar === ' '
+        ? `bg-indigo-400 border-indigo-800 ${$glow ? 'spacebar-next' : ''}`
+        : ''}"
+    />
   </div>
 </div>
 
-<style>
+<style lang="postcss">
   .row {
     @apply flex;
     @apply gap-0.5 mt-0.5;
@@ -49,9 +53,9 @@
     @apply lg:text-xl lg:w-70 lg:h-12 lg:border-2 lg:rounded-lg;
     @apply xl:text-2xl xl:w-100 xl:h-16 xl:border-2 xl:rounded-xl;
   }
-  
-  .spacebar-next {
-    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6100b6, 0 0 40px #760094, 0 0 50px #a500e6, 0 0 60px #a500e6, 0 0 70px #a500e6;
-  }
 
+  .spacebar-next {
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6100b6, 0 0 40px #760094, 0 0 50px #a500e6,
+      0 0 60px #a500e6, 0 0 70px #a500e6;
+  }
 </style>
