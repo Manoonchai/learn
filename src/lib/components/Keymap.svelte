@@ -11,7 +11,7 @@
   const paddingClasses = ['w-0', 'w-4 md:w-5 lg:w-6 xl:w-8', '-ml-8 md:-ml-10 lg:-ml-12 xl:-ml-16']
 </script>
 
-<div class="my-4 font-sarabun {$glow ? 'grow' : ''}">
+<div class="my-4 font-sarabun">
   {#each rows as row, idx}
     <div class="row text-black dark:text-white">
       <span class={paddingClasses[idx]}>
@@ -28,7 +28,7 @@
     </div>
   {/each}
   <div class="flex mt-1">
-    <span class="spacebar {nextChar === ' ' ? 'bg-indigo-400 border-indigo-800 spacebar-next' : ''}" />
+    <span class="spacebar {nextChar === ' ' ? `bg-indigo-400 border-indigo-800 ${$glow ? "spacebar-next" : ""}` : ''}" />
   </div>
 </div>
 
