@@ -5,9 +5,9 @@ const storage = browser ? window.localStorage : ({} as Record<string, unknown>)
 
 export const showKeymap = writable<boolean>(storage.showKeymap !== 'false')
 export const showPrevOrNextWord = writable<boolean>(storage.showPrevOrNextWord !== 'false')
-export const TabToRestart = writable<boolean>(storage.TabToRestart === 'false')
-export const DarkMode = writable<boolean>(storage.DarkMode === 'false')
-export const GlowKey = writable<boolean>(storage.GlowKey === 'false')
+export const TabToRestart = writable<boolean>(storage.TabToRestart === 'true')
+export const DarkMode = writable<boolean>(storage.DarkMode === 'true')
+export const GlowKey = writable<boolean>(storage.GlowKey === 'true')
 export const currentLessonName = writable(storage.currentLessonName)
 
 showKeymap.subscribe((value) => (storage.showKeymap = String(value)))

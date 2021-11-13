@@ -1,10 +1,10 @@
 <script lang="ts">
-  export let closeModal
-  export let showKeymap
-  export let showPrevOrNextWord
-  export let TabToRestart
-  export let DarkMode
-  export let GlowKey
+  export let closeModal: () => void
+  export let showKeymap: boolean
+  export let showPrevOrNextWord: boolean
+  export let TabToRestart: boolean
+  export let DarkMode: boolean
+  export let GlowKey: boolean
 </script>
 
 <div
@@ -16,14 +16,18 @@
   <div
     class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
   >
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" />
+    <div
+      class="fixed fadein inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      aria-hidden="true"
+      on:click={() => closeModal()}
+    />
 
     <!-- This element is to trick the browser into centering the modal contents. -->
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
       >&#8203;</span
     >
     <div
-      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      class="popin inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
     >
       <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
@@ -72,7 +76,6 @@
                 type="checkbox"
                 class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={GlowKey}
-                disabled={showKeymap ? false : true}
               />
             </div>
           </div>

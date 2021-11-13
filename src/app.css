@@ -1,14 +1,9 @@
 /* Write your global styles here, in PostCSS syntax */
 
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 .font-sarabun {
   font-family: 'Sarabun', sans-serif;
-}
-
-.font-marker {
-  font-family: 'Permanent Marker', cursive;
 }
 
 .input:focus {
@@ -23,6 +18,42 @@ html .dark {
   background-color: black;
 }
 
+.popin {
+  animation: popin 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.fadein {
+  animation: fadein 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes popin {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 ::-webkit-scrollbar {
-  width: 0;
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #b8b8b8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 20px;
 }
