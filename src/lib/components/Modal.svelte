@@ -5,6 +5,7 @@
   export let TabToRestart: boolean
   export let DarkMode: boolean
   export let GlowKey: boolean
+  export let EscToSetting: boolean
 </script>
 
 <div
@@ -52,6 +53,14 @@
                 type="checkbox"
                 class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={showPrevOrNextWord}
+              />
+            </div>
+            <div class="text-sm text-gray-500">
+              <span class="text-sm text-gray-500 dark:text-white">Press Esc to show setting</span>
+              <input
+                type="checkbox"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
+                bind:checked={EscToSetting}
               />
             </div>
             <div class="text-sm text-gray-500">

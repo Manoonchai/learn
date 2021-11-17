@@ -5,6 +5,7 @@ const storage = browser ? window.localStorage : ({} as Record<string, unknown>)
 
 export const showKeymap = writable<boolean>(storage.showKeymap !== 'false')
 export const showPrevOrNextWord = writable<boolean>(storage.showPrevOrNextWord !== 'false')
+export const EscToSetting = writable<boolean>(storage.EscToSetting !== 'false')
 export const TabToRestart = writable<boolean>(storage.TabToRestart === 'true')
 export const DarkMode = writable<boolean>(storage.DarkMode === 'true')
 export const GlowKey = writable<boolean>(storage.GlowKey === 'true')
