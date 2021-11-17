@@ -157,6 +157,7 @@
   function end() {
     ended = true
     showWpm = true
+    clearInterval(interval)
   }
 
   function close() {
