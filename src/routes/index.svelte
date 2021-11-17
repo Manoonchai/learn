@@ -283,14 +283,16 @@
                 <h1 class="text-4xl leading-6 font-medium text-gray-900 dark:text-gray-100 text-center" id="modal-title">
                   You get {wpm} wpm
                 </h1>
-                <p class="mt-4">Lesson : {$currentLessonName}</p>
-                <button
-                type="button"
-                class="w-full float-right mt-4 mb-4 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-black focus:ring-green-300 sm:ml-3 sm:w-auto sm:text-sm"
-                on:click={close}
-              >
-                Close
-              </button>
+                <p class="mt-4 dark:text-gray-100">Lesson : {$currentLessonName}</p>
+                <div class="bg-white dark:bg-black px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-black focus:ring-green-300 sm:ml-3 sm:w-auto sm:text-sm"
+                    on:click={close}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>
