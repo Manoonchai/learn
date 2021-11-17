@@ -184,7 +184,7 @@
 
 <body class={$DarkMode === true ? 'dark' : ''}>
   <main
-    class="main container min-h-screen mx-auto flex dark:bg-green flex-col gap-2 justify-center items-center py-20"
+    class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
     <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
       <img
