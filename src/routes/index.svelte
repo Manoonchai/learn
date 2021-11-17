@@ -18,6 +18,7 @@
     TabToRestart,
     DarkMode,
     GlowKey,
+    EscToSetting,
   } from '$lib/store'
 
   let name = 'Manoonchai'
@@ -151,7 +152,12 @@
       } else {
         return
       }
-    }
+    } 
+    if ($EscToSetting === true) {
+      if (e.which == 27) {
+        showMenu = true
+      } 
+    } 
   }
 
   function end() {
@@ -312,6 +318,7 @@
         bind:TabToRestart={$TabToRestart}
         bind:DarkMode={$DarkMode}
         bind:GlowKey={$GlowKey}
+        bind:EscToSetting={$EscToSetting}
       />
     {/if}
 
