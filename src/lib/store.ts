@@ -17,3 +17,13 @@ TabToRestart.subscribe((value) => (storage.TabToRestart = String(value)))
 DarkMode.subscribe((value) => (storage.DarkMode = String(value)))
 GlowKey.subscribe((value) => (storage.GlowKey = String(value)))
 currentLessonName.subscribe((value) => (storage.currentLessonName = value))
+
+export default {
+  showKeymap,
+  showPrevOrNextWord,
+  EscToSetting,
+  TabToRestart,
+  DarkMode,
+  GlowKey,
+  currentLessonName,
+}
