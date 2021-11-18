@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/Manoonchai/learn/compare/v1.1.1...v1.1.2) (2021-11-18)
+
+
+### Bug Fixes
+
+* Allow pressing modifier keys e.g. refresh page ([b72db43](https://github.com/Manoonchai/learn/commit/b72db439dc76451143356c9e76cf5551764f1f7c))
+
 ## [1.1.1](https://github.com/Manoonchai/learn/compare/v1.1.0...v1.1.1) (2021-11-11)
 
 
