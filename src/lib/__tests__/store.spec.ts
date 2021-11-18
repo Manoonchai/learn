@@ -43,7 +43,7 @@ describe('store', () => {
   describe('TabToRestart', () => {
     it('has default value', (done) => {
       store.TabToRestart.subscribe((value) => {
-        expect(value).toEqual(false)
+        expect(value).toEqual(true)
         done()
       })
     })
