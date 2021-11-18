@@ -3,7 +3,7 @@
 
   export let nextChar: string
   export let keys: [string, string] = ['', '']
-  export let glow: boolean
+  export let glow: boolean = false
 
   let keyClasses
 
