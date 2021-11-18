@@ -1,4 +1,4 @@
-import { nextchar } from '../../src/lib/nextchar'
+import { nextchar } from '../nextchar'
 
 describe('nextchar', () => {
   it('returns the first char if the input is blank', () => {

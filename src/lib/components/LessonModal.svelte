@@ -1,6 +1,6 @@
 <script lang="ts">
   export let closeModal: () => void
-  import { lessons } from '$lib/lesson'
+  import { lessons } from '$lib/lessons'
   import { currentLessonName } from '$lib/store'
 </script>
 
