@@ -80,7 +80,9 @@
   }
 
   function onType(e: KeyboardEvent) {
-    e.preventDefault()
+    if (!e.altKey && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault()
+    }
 
     if (ended) {
       return
@@ -145,7 +147,6 @@
   }
 
   window.onkeydown = (e) => {
-    e.preventDefault()
     if (e.key === 'Tab') {
       if ($TabToRestart === true) {
         reset()
