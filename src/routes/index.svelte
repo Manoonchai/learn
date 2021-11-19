@@ -14,10 +14,12 @@
   import {
     showKeymap,
     showPrevOrNextWord,
+    showLogo,
     currentLessonName,
     TabToRestart,
     DarkMode,
     GlowKey,
+    userModeSelected,
   } from '$lib/store'
 
   let name = 'Manoonchai'
@@ -80,9 +82,7 @@
   function onType(e: KeyboardEvent) {
     e.preventDefault()
 
-    if (ended) {
-      return
-    }
+    if (ended) return;
 
     const manoonchaiKey = Manoonchai[e.code]?.[e.shiftKey ? 1 : 0] || ''
 
@@ -181,6 +181,7 @@
   <main
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
+  {#if $showLogo}
     <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
       <img
         src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
@@ -191,6 +192,7 @@
       />
       <h1>Learn {name}</h1>
     </div>
+    {/if}
 
     <p class="stat">{wpm} wpm</p>
     <p class="sentence">
@@ -248,7 +250,7 @@
     {/if}
 
     <button
-      class="btn hover:bg-gray-600 rounded-lg transition duration-300 m-2 dark:text-white"
+      class="btn hover:bg-gray-300 active:bg-gray-400 ring-offset-white ring-gray-300 dark:hover:bg-gray-600 hover:ring-2 dark:ring-white ring-offset-2 dark:ring-offset-black rounded-lg transition duration-300 m-2 dark:text-white"
       on:click={reset}
     >
       Reset
@@ -256,7 +258,7 @@
 
     <div class="lesson dark:text-white font-sarabun">
       Lesson: <span
-        class="p-2 cursor-pointer border border-gray-400 dark:text-white rounded-lg"
+        class="transition duration-200 hover:bg-gray-300 dark:hover:bg-gray-600 hover:ring-2 ring-offset-2 ring-offset-white ring-gray-300 dark:ring-white dark:ring-offset-black  p-2 cursor-pointer border border-gray-400 dark:text-white rounded-lg"
         on:click={() => (showLesson = true)}>{$currentLessonName}</span
       >
       {#if showLesson}
@@ -278,6 +280,8 @@
         bind:TabToRestart={$TabToRestart}
         bind:DarkMode={$DarkMode}
         bind:GlowKey={$GlowKey}
+        bind:showLogo={$showLogo}
+        bind:userModeSelected={$userModeSelected}
       />
     {/if}
 

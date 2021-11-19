@@ -2,9 +2,11 @@
   export let closeModal: () => void
   export let showKeymap: boolean
   export let showPrevOrNextWord: boolean
+  export let showLogo: boolean
   export let TabToRestart: boolean
   export let DarkMode: boolean
   export let GlowKey: boolean
+  export let userModeSelected: string
 </script>
 
 <div
@@ -35,7 +37,7 @@
             class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
             id="modal-title"
           >
-            Settings
+            ⚙Settings
           </h3>
           <div class="flex flex-col gap-3 mt-4 w-full justify-between">
             <div class="text-sm text-gray-500 dark:text-white">
@@ -55,6 +57,14 @@
               />
             </div>
             <div class="text-sm text-gray-500">
+              <span class="text-sm text-gray-500 dark:text-white">Show Manoonchai Logo</span>
+              <input
+                type="checkbox"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
+                bind:checked={showLogo}
+              />
+            </div>
+            <div class="text-sm text-gray-500">
               <span class="text-sm text-gray-500 dark:text-white">Press Tab to Restart</span>
               <input
                 type="checkbox"
@@ -71,12 +81,22 @@
               />
             </div>
             <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500 dark:text-white">Glowing keys</span>
+              <span class="text-sm text-gray-500 dark:text-white">Glowing keys (Better with dark mode)</span>
               <input
                 type="checkbox"
                 class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={GlowKey}
               />
+            </div>
+           <div class="text-sm text-gray-500">
+              <span class="text-sm text-gray-500 dark:text-white">Typing Mode</span>
+              <select
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
+                bind:value={userModeSelected}
+              >
+                <option value="input-box">Input Box</option>
+                <option value="typeland">Typeland</option>
+              </select>
             </div>
           </div>
         </div>
