@@ -17,9 +17,9 @@ const DEFAULT: ISetting = {
   showPrevOrNextWord: true,
   EscToSetting: true,
   TabToRestart: true,
+  ShowLogo: true,
   DarkMode: false,
   GlowKey: false,
-  ShowLogo: false,
   currentLessonName: undefined,
 }
 
