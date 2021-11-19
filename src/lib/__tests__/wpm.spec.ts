@@ -1,4 +1,4 @@
-import { calculateWpm } from '../../src/lib/wpm'
+import { calculateWpm } from '../wpm'
 
 it('works', () => {
   expect(calculateWpm).toBeDefined()

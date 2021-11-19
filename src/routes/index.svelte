@@ -3,7 +3,7 @@
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
   import { nextchar } from '$lib/nextchar'
-  import { lessons } from '$lib/lesson'
+  import { lessons } from '$lib/lessons'
   import Manoonchai from '$lib/manoonchai'
   import Keymap from '$lib/components/Keymap.svelte'
   import Kofi from '$lib/components/Kofi.svelte'
@@ -14,12 +14,12 @@
   import {
     showKeymap,
     showPrevOrNextWord,
-    showLogo,
+    ShowLogo,
     currentLessonName,
     TabToRestart,
     DarkMode,
     GlowKey,
-    userModeSelected,
+    EscToSetting,
   } from '$lib/store'
 
   let name = 'Manoonchai'
@@ -43,6 +43,7 @@
   let showMenu = false
   let showLesson = false
   let showChangelog = false
+  let showWpm = false
 
   reset()
 
@@ -80,7 +81,9 @@
   }
 
   function onType(e: KeyboardEvent) {
-    e.preventDefault()
+    if (!e.altKey && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault()
+    }
 
     if (ended) return;
 
@@ -143,7 +146,6 @@
   }
 
   window.onkeydown = (e) => {
-    e.preventDefault()
     if (e.key === 'Tab') {
       if ($TabToRestart === true) {
         reset()
@@ -151,12 +153,22 @@
         return
       }
     }
+    if ($EscToSetting === true) {
+      if (e.which == 27) {
+        showMenu = true
+      }
+    }
   }
 
   function end() {
     ended = true
+    showWpm = true
     clearInterval(interval)
-    alert(`Good job! Your speed is ${wpm} wpm`)
+  }
+
+  function close() {
+    showWpm = false
+    reset()
   }
 </script>
 
@@ -181,7 +193,7 @@
   <main
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
-  {#if $showLogo}
+  {#if $ShowLogo}
     <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
       <img
         src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
@@ -270,6 +282,52 @@
         />
       {/if}
     </div>
+    {#if showWpm}
+      <div
+        class="fixed z-10 inset-0 overflow-y-auto"
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-"
+        >
+          <div
+            class="fixed fadein inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            aria-hidden="true"
+            on:click={close}
+          >
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+              >&#8203;</span
+            >
+            <div
+              class="popin inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+            >
+              <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="text-center sm:text-left">
+                  <h1
+                    class="text-4xl leading-6 font-medium text-gray-900 dark:text-gray-100 text-center"
+                    id="modal-title"
+                  >
+                    You get {wpm} wpm
+                  </h1>
+                  <p class="mt-4 dark:text-gray-100">Lesson : {$currentLessonName}</p>
+                  <div class="bg-white dark:bg-black px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="button"
+                      class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-black focus:ring-green-300 sm:ml-3 sm:w-auto sm:text-sm"
+                      on:click={close}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {/if}
     <Footer bind:showMenu bind:showChangelog />
 
     {#if showMenu}
@@ -280,8 +338,8 @@
         bind:TabToRestart={$TabToRestart}
         bind:DarkMode={$DarkMode}
         bind:GlowKey={$GlowKey}
-        bind:showLogo={$showLogo}
-        bind:userModeSelected={$userModeSelected}
+        bind:showLogo={$ShowLogo}
+        bind:EscToSetting={$EscToSetting}
       />
     {/if}
 

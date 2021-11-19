@@ -6,7 +6,7 @@
   export let TabToRestart: boolean
   export let DarkMode: boolean
   export let GlowKey: boolean
-  export let userModeSelected: string
+  export let EscToSetting: boolean
 </script>
 
 <div
@@ -62,6 +62,14 @@
                 type="checkbox"
                 class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={showLogo}
+              >
+            </div>
+           <div class="text-sm text-gray-500">
+              <span class="text-sm text-gray-500 dark:text-white">Press Esc to show setting</span>
+              <input
+                type="checkbox"
+                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
+                bind:checked={EscToSetting}
               />
             </div>
             <div class="text-sm text-gray-500">
@@ -87,16 +95,6 @@
                 class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 bind:checked={GlowKey}
               />
-            </div>
-           <div class="text-sm text-gray-500">
-              <span class="text-sm text-gray-500 dark:text-white">Typing Mode</span>
-              <select
-                class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
-                bind:value={userModeSelected}
-              >
-                <option value="input-box">Input Box</option>
-                <option value="typeland">Typeland</option>
-              </select>
             </div>
           </div>
         </div>

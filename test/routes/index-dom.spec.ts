@@ -2,14 +2,12 @@
  * @jest-environment jsdom
  */
 
-// FIXME: Fix dom spec not working
-
 import userEvent from '@testing-library/user-event'
 import { render, RenderResult } from '@testing-library/svelte'
 
 import Index from '../../src/routes/index.svelte'
 
-jest.mock('$lib/lesson.ts', () => ({
+jest.mock('$lib/lessons.ts', () => ({
   lessons: [
     {
       name: 'Test',

@@ -1,4 +1,4 @@
-import { spellcheck } from '../../src/lib/spellcheck'
+import { spellcheck } from '../spellcheck'
 
 describe('spellcheck', () => {
   it('returns true when the input is abc and the word is abcd', () => {

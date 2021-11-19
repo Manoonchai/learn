@@ -1,22 +1,95 @@
 import { writable } from 'svelte/store'
 import { browser } from '$app/env'
 
-const storage = browser ? window.localStorage : ({} as Record<string, unknown>)
+interface ISetting {
+  showKeymap: boolean
+  showPrevOrNextWord: boolean
+  EscToSetting: boolean
+  TabToRestart: boolean
+  DarkMode: boolean
+  GlowKey: boolean
+  ShowLogo: boolean
+  currentLessonName?: string
+}
 
-export const showKeymap = writable<boolean>(storage.showKeymap !== 'false')
-export const showPrevOrNextWord = writable<boolean>(storage.showPrevOrNextWord !== 'false')
-export const showLogo = writable<boolean>(storage.showLogo !== 'false')
-export const TabToRestart = writable<boolean>(storage.TabToRestart === 'true')
-export const DarkMode = writable<boolean>(storage.DarkMode === 'true')
-export const GlowKey = writable<boolean>(storage.GlowKey === 'true')
-export const currentLessonName = writable(storage.currentLessonName)
-export const userModeSelected = writable<string>(String(storage.userSelectedMode) || 'input-box')
+const DEFAULT: ISetting = {
+  showKeymap: true,
+  showPrevOrNextWord: true,
+  EscToSetting: true,
+  TabToRestart: true,
+  DarkMode: false,
+  GlowKey: false,
+  ShowLogo: false,
+  currentLessonName: undefined,
+}
 
-showKeymap.subscribe((value) => (storage.showKeymap = String(value)))
-showPrevOrNextWord.subscribe((value) => (storage.showPrevOrNextWord = String(value)))
-showLogo.subscribe((value) => (storage.showLogo = String(value)))
-TabToRestart.subscribe((value) => (storage.TabToRestart = String(value)))
-DarkMode.subscribe((value) => (storage.DarkMode = String(value)))
-GlowKey.subscribe((value) => (storage.GlowKey = String(value)))
-currentLessonName.subscribe((value) => (storage.currentLessonName = value))
-userModeSelected.subscribe((value) => (storage.userSelectedMode = String(value)))
+const storage: ISetting = browser
+  ? JSON.parse(window.localStorage['learn-manoonchai-settings'] || '{}') || {}
+  : {}
+
+function storeSettings() {
+  if (browser) {
+    window.localStorage['learn-manoonchai-settings'] = JSON.stringify(storage)
+  }
+}
+
+export const showKeymap = writable<boolean>(storage.showKeymap ?? DEFAULT['showKeymap'])
+export const showPrevOrNextWord = writable<boolean>(
+  storage.showPrevOrNextWord ?? DEFAULT['showPrevOrNextWord'],
+)
+export const EscToSetting = writable<boolean>(storage.EscToSetting ?? DEFAULT['EscToSetting'])
+export const TabToRestart = writable<boolean>(storage.TabToRestart ?? DEFAULT['TabToRestart'])
+export const DarkMode = writable<boolean>(storage.DarkMode ?? DEFAULT['DarkMode'])
+export const GlowKey = writable<boolean>(storage.GlowKey ?? DEFAULT['GlowKey'])
+export const ShowLogo = writable<boolean>(storage.ShowLogo ?? DEFAULT['ShowLogo'])
+export const currentLessonName = writable(storage.currentLessonName ?? DEFAULT['currentLessonName'])
+
+showKeymap.subscribe((value) => {
+  storage.showKeymap = value
+  storeSettings()
+})
+
+EscToSetting.subscribe((value) => {
+  storage.EscToSetting = value
+  storeSettings()
+})
+
+showPrevOrNextWord.subscribe((value) => {
+  storage.showPrevOrNextWord = value
+  storeSettings()
+})
+
+TabToRestart.subscribe((value) => {
+  storage.TabToRestart = value
+  storeSettings()
+})
+
+DarkMode.subscribe((value) => {
+  storage.DarkMode = value
+  storeSettings()
+})
+
+GlowKey.subscribe((value) => {
+  storage.GlowKey = value
+  storeSettings()
+})
+
+ShowLogo.subscribe((value) => {
+  storage.ShowLogo = value
+  storeSettings()
+})
+
+currentLessonName.subscribe((value) => {
+  storage.currentLessonName = value
+  storeSettings()
+})
+
+export default {
+  showKeymap,
+  showPrevOrNextWord,
+  EscToSetting,
+  TabToRestart,
+  DarkMode,
+  GlowKey,
+  currentLessonName,
+}

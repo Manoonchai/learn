@@ -1,7 +1,7 @@
 <script lang="ts">
   export let nextChar: string
   export let keys: [string, string] = ['', '']
-  export let glow: boolean
+  export let glow: boolean = false
 
   let keyClasses
   let isHomeCharacter = keys[0] === 'น' || keys[0] === 'า' ? 'text-blue-700 dark:text-blue-400' : ''
