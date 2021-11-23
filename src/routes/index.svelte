@@ -160,8 +160,8 @@
       }
     }
     if (e.key === 'Tab') {
-      if (showWpm = true){
-        showWpm = false
+      if (showWpm === true){
+        showWpm === false
         reset()
       }
     }
