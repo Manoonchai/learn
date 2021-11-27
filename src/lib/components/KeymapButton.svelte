@@ -1,22 +1,22 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-
   export let nextChar: string
   export let keys: [string, string] = ['', '']
   export let glow: boolean = false
 
   let keyClasses
+  let isHomeCharacter = keys[0] === 'น' || keys[0] === 'า' ? 'text-blue-700 dark:text-blue-400' : ''
 
   $: if (nextChar === keys[0]) {
     keyClasses = `${
       glow ? 'key-glow' : ''
-    } bg-indigo-400 border-indigo-800 dark:bg-indigo-600 border-indigo-900 text-black dark:text-white`
+    } bg-indigo-400 border-indigo-800 dark:bg-indigo-600 border-indigo-900 text-black dark:text-white  ${isHomeCharacter}`
   } else if (nextChar === keys[1]) {
     keyClasses = `${
       glow ? 'key-shift-glow' : ''
-    } key-shiftHighlight bg-yellow-400 border-yellow-800 text-black dark:text-white`
+    } key-shiftHighlight bg-yellow-400 border-yellow-800 text-black dark:text-white
+     ${isHomeCharacter}`
   } else {
-    keyClasses = ''
+    keyClasses = `${isHomeCharacter}`
   }
 </script>
 
@@ -42,8 +42,8 @@
   }
 
   .key-glow {
-    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6100b6, 0 0 40px #760094, 0 0 50px #a500e6,
-      0 0 60px #a500e6, 0 0 70px #a500e6;
+    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #6100b6, 0 0 20px #760094, 0 0 25px #a500e6,
+      0 0 30px #a500e6, 0 0 35px #a500e6;
   }
 
   .key-shift {

@@ -19,11 +19,11 @@ html .dark {
 }
 
 .popin {
-  animation: popin 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+  animation: popin 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
 .fadein {
-  animation: fadein 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+  animation: fadein 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
 @keyframes fadein {
@@ -46,14 +46,10 @@ html .dark {
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 0px;
 }
 
-::-webkit-scrollbar-track {
-  background: #b8b8b8;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 20px;
+::selection {
+  background-color: #05d616;
+  color: #fff;
 }

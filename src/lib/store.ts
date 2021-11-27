@@ -8,6 +8,7 @@ interface ISetting {
   TabToRestart: boolean
   DarkMode: boolean
   GlowKey: boolean
+  ShowLogo: boolean
   currentLessonName?: string
 }
 
@@ -16,6 +17,7 @@ const DEFAULT: ISetting = {
   showPrevOrNextWord: true,
   EscToSetting: true,
   TabToRestart: true,
+  ShowLogo: true,
   DarkMode: false,
   GlowKey: false,
   currentLessonName: undefined,
@@ -39,6 +41,7 @@ export const EscToSetting = writable<boolean>(storage.EscToSetting ?? DEFAULT['E
 export const TabToRestart = writable<boolean>(storage.TabToRestart ?? DEFAULT['TabToRestart'])
 export const DarkMode = writable<boolean>(storage.DarkMode ?? DEFAULT['DarkMode'])
 export const GlowKey = writable<boolean>(storage.GlowKey ?? DEFAULT['GlowKey'])
+export const ShowLogo = writable<boolean>(storage.ShowLogo ?? DEFAULT['ShowLogo'])
 export const currentLessonName = writable(storage.currentLessonName ?? DEFAULT['currentLessonName'])
 
 showKeymap.subscribe((value) => {
@@ -68,6 +71,11 @@ DarkMode.subscribe((value) => {
 
 GlowKey.subscribe((value) => {
   storage.GlowKey = value
+  storeSettings()
+})
+
+ShowLogo.subscribe((value) => {
+  storage.ShowLogo = value
   storeSettings()
 })
 

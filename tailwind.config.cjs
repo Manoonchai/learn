@@ -9,6 +9,7 @@ const config = {
         70: '17.5rem',
         100: '25rem',
       },
+      ringWidth: ['hover', 'active'],
     },
   },
 
