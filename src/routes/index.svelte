@@ -161,7 +161,7 @@
     }
     if (e.key === 'Tab') {
       if (showWpm === true){
-        showWpm === false
+        showWpm = false
         reset()
       }
     }
