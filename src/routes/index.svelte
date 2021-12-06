@@ -158,6 +158,12 @@
         showMenu = true
       }
     }
+    if (e.key === 'Tab') {
+      if (showWpm === true){
+        showWpm = false
+        reset()
+      }
+    }
   }
 
   function end() {
