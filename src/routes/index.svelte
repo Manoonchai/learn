@@ -250,27 +250,6 @@
           intersect: false,
           mode: 'index',
         },
-        scales: {
-          yAxes: [
-            {
-              id: 'wpm',
-              display: true,
-              scaleLabel: {
-                display: true,
-                labelString: 'Words per Minute',
-              },
-              ticks: {
-                beginAtZero: true,
-                min: 0,
-                autoSkip: true,
-                autoSkipPadding: 40,
-              },
-              gridLines: {
-                display: true,
-              },
-            },
-          ],
-        },
       },
     }
     new Chart(ctx, chart)
