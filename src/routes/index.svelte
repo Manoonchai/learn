@@ -21,9 +21,7 @@
     TabToRestart,
     wordCount,
   } from '$lib/store'
-  import { Chart, registerables } from 'chart.js'
-
-  Chart.register(...registerables)
+  import Chart from 'chart.js/auto/auto.esm'
 
   let name = 'Manoonchai'
   let input
