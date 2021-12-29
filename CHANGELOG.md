@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/Manoonchai/learn/compare/v1.1.2...v1.2.0) (2021-11-27)
+
+
+### Features
+
+* Hide/Show Logo ([#11](https://github.com/Manoonchai/learn/issues/11)) ([caa0215](https://github.com/Manoonchai/learn/commit/caa02156b0e9b678294457369cefe827f011f119))
+
 ## [1.1.2](https://github.com/Manoonchai/learn/compare/v1.1.1...v1.1.2) (2021-11-18)
 
 ### Bug Fixes

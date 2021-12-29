@@ -11,12 +11,12 @@
   import LessonModal from '$lib/components/LessonModal.svelte'
   import Changelog from '$lib/components/Changelog.svelte'
   import {
+    ShowLogo,
     currentLessonName,
     DarkMode,
-    EscToSetting,
     GlowKey,
     showKeymap,
-    ShowLogo,
+    EscToSetting,
     showPrevOrNextWord,
     TabToRestart,
     wordCount,
@@ -207,6 +207,12 @@
         showMenu = true
       }
     }
+    if (e.key === 'Tab') {
+      if (showWpm === true){
+        showWpm = false
+        reset()
+      }
+    }
   }
 
   function end() {
@@ -293,17 +299,17 @@
   <main
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
-    {#if $ShowLogo}
-      <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
-        <img
-          src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
-          class="align-middle"
-          width={64}
-          height={64}
-          alt="logo"
-        />
-        <h1>Learn {name}</h1>
-      </div>
+  {#if $ShowLogo}
+    <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
+      <img
+        src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
+        class="align-middle"
+        width={64}
+        height={64}
+        alt="logo"
+      />
+      <h1>Learn {name}</h1>
+    </div>
     {/if}
 
     {#if !showWpm}
