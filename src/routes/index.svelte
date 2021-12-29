@@ -374,8 +374,8 @@
     {:else if showWpm}
       <div class="flex flex-row gap-x-4">
         <div class="flex-col self-center">
-          <h3 class="text-gray-500 text-md">WPM:</h3>
-          <h1 class="text-3xl">{wpm}</h1>
+          <h3 class="text-gray-500 dark:text-gray-400 text-md">WPM:</h3>
+          <h1 class="text-3xl dark:text-white text-black">{wpm}</h1>
         </div>
         <div class="relative">
           <canvas use:createCanvas height="400" width="400" />
