@@ -2,6 +2,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
 
+* {
+  scroll-behavior: smooth;
+}
+
 .font-sarabun {
   font-family: 'Sarabun', sans-serif;
 }
@@ -34,6 +38,7 @@ html .dark {
     opacity: 1;
   }
 }
+
 @keyframes popin {
   0% {
     opacity: 0;

@@ -3,6 +3,7 @@
 
   export let name: string
   export let label = 'Give me a tip!'
+
   function loadKofiWidget() {
     window.kofiWidgetOverlay?.draw(
       name,

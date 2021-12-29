@@ -1,6 +1,6 @@
 <script lang="ts">
   import Fa from 'svelte-fa'
-  import { faGithub, faFacebook, faDiscord } from '@fortawesome/free-brands-svg-icons'
+  import { faDiscord, faFacebook, faGithub } from '@fortawesome/free-brands-svg-icons'
 
   export let showChangelog: boolean = false
   export let showMenu: boolean = false
@@ -12,36 +12,37 @@
   <div class="relative">
     <div class="flex gap-3 justify-center">
       <a
+        class="flex items-center gap-1 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
         href="https://github.com/manoonchai/learn"
         target="_blank"
-        class="flex items-center gap-1 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
       >
-        <Fa icon={faGithub} size="2x" class="max-h-5" />
+        <Fa class="max-h-5" icon={faGithub} size="2x" />
       </a>
       <a
+        class="flex items-center gap-1 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-600"
         href="https://www.facebook.com/Manoonchai.layout"
         target="_blank"
-        class="flex items-center gap-1 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-600"
       >
-        <Fa icon={faFacebook} size="2x" class="max-h-5" />
+        <Fa class="max-h-5" icon={faFacebook} size="2x" />
       </a>
       <a
+        class="flex items-center gap-1 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-500"
         href="https://discord.com/invite/HxHDxEHxXc"
         target="_blank"
-        class="flex items-center gap-1 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-500"
       >
-        <Fa icon={faDiscord} size="2x" class="max-h-5" />
+        <Fa class="max-h-5" icon={faDiscord} size="2x" />
       </a>
     </div>
 
     <div class="absolute right-0 top-0 flex gap-4">
-      <button on:click={() => (showChangelog = !showChangelog)} class="hover:text-green-400">
+      <button class="hover:text-green-400" on:click={() => (showChangelog = !showChangelog)}>
         📝
       </button>
       <button
+        class="hover:text-green-400 transfrom transition duration-200 hover:rotate-180"
         on:click={() => (showMenu = !showMenu)}
-        class="hover:text-green-400 transfrom transition duration-200 hover:rotate-180">⚙</button
-      >
+        >⚙
+      </button>
     </div>
   </div>
 </footer>

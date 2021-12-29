@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
   import { nextchar } from '$lib/nextchar'
@@ -12,34 +11,44 @@
   import LessonModal from '$lib/components/LessonModal.svelte'
   import Changelog from '$lib/components/Changelog.svelte'
   import {
-    showKeymap,
-    showPrevOrNextWord,
-    ShowLogo,
     currentLessonName,
-    TabToRestart,
     DarkMode,
-    GlowKey,
     EscToSetting,
+    GlowKey,
+    showKeymap,
+    ShowLogo,
+    showPrevOrNextWord,
+    TabToRestart,
+    wordCount,
   } from '$lib/store'
+  import { Chart, registerables } from 'chart.js'
+
+  Chart.register(...registerables)
 
   let name = 'Manoonchai'
   let input
-  let typingInput: HTMLInputElement
 
-  let words = []
   let result
+  let nextChar
   let currentWordIdx
+  let currentCharIdx
   let currentLesson
   let sentence
   let ended
   let started
   let elapsed
-  let startTime = new Date().getTime()
-  let correctWords = []
+  let startTime
   let interval
-  let currentWordSpellCheck = true
+  let typeInterval
+  let chart
+  let ctx
+  let chartCanvas: HTMLCanvasElement
+  let keyGraph = {}
+  let correctWords = []
   let userType = []
-  let nextChar
+  let userCharInput = []
+  let words = []
+  let currentWordSpellCheck = true
   let showMenu = false
   let showLesson = false
   let showChangelog = false
@@ -47,11 +56,8 @@
 
   reset()
 
-  onMount(() => {
-    typingInput.focus()
-  })
-
   $: wpm = calculateWpm(correctWords, elapsed).toFixed(1)
+
   $: if (sentence) {
     const currentWord = sentence[currentWordIdx]
     const currentInput = input
@@ -67,6 +73,8 @@
   function start() {
     if (started) {
       return
+    } else {
+      startTime = new Date().getTime()
     }
 
     if (interval) {
@@ -77,15 +85,25 @@
       elapsed = (new Date().getTime() - startTime) / 1000
     }, 500)
 
+    typeInterval = setInterval(() => {
+      keyGraph[Math.trunc(elapsed).toString() + ` second${elapsed <= 2 ? '' : 's'}`] = {
+        input: userCharInput,
+        wpm: wpm,
+      }
+      userCharInput = []
+    }, 1000)
+
     started = true
   }
 
   function onType(e: KeyboardEvent) {
+    !result[currentWordIdx] ? (result[currentWordIdx] = []) : ''
+
     if (!e.altKey && !e.ctrlKey && !e.metaKey) {
       e.preventDefault()
     }
 
-    if (ended) return;
+    if (ended) return
 
     const manoonchaiKey = Manoonchai[e.code]?.[e.shiftKey ? 1 : 0] || ''
 
@@ -93,25 +111,52 @@
 
     if (e.key === 'Backspace' || e.key === 'Delete') {
       userType.pop()
+      currentCharIdx -= 1
+      result[currentWordIdx].pop()
     } else if (manoonchaiKey.length === 1) {
       userType.push(manoonchaiKey)
     }
 
     input = userType.join('').trimEnd()
 
+    if (currentCharIdx < sentence[currentWordIdx].length && currentCharIdx < input.length) {
+      currentCharIdx += 1
+    }
+
+    userCharInput.push(e.key)
+
+    if (
+      sentence[currentWordIdx][currentCharIdx - 1] === input[currentCharIdx - 1] &&
+      e.key !== 'Backspace' &&
+      e.key !== 'Delete' &&
+      e.key !== ' '
+    ) {
+      result[currentWordIdx].push(true)
+    } else if (
+      sentence[currentWordIdx][currentCharIdx - 1] !== input[currentCharIdx - 1] &&
+      e.key !== 'Backspace' &&
+      e.key !== 'Delete' &&
+      e.key !== ' '
+    ) {
+      result[currentWordIdx].push(false)
+    }
+
     if (e.key === ' ') {
       userType = []
+      userCharInput = []
 
       if (input) {
         if (sentence[currentWordIdx] === input) {
           correctWords = correctWords.concat(input)
-          result = result.concat(true)
         } else {
           correctWords = correctWords.concat('')
-          result = result.concat(false)
+        }
+        if (currentWordIdx + 1 < sentence.length) {
+          document.getElementById((currentWordIdx + 1).toString()).scrollIntoView()
         }
 
         currentWordIdx += 1
+        currentCharIdx = 0
         input = ''
 
         if (currentWordIdx >= sentence.length) {
@@ -132,20 +177,24 @@
 
     started = false
     ended = false
+    showWpm = false
     userType = []
     result = []
     currentWordIdx = 0
+    currentCharIdx = 0
 
-    sentence = Array(30)
+    sentence = Array($wordCount)
       .fill(null)
       .map(() => words[Math.floor(Math.random() * words.length)] || '')
     startTime = new Date().getTime()
     correctWords = []
     input = ''
-    typingInput?.focus()
+    clearInterval(typeInterval)
   }
 
   window.onkeydown = (e) => {
+    onType(e)
+
     if (e.key === 'Tab') {
       if ($TabToRestart === true) {
         reset()
@@ -163,29 +212,80 @@
   function end() {
     ended = true
     showWpm = true
+
     clearInterval(interval)
+    clearInterval(typeInterval)
   }
 
-  function close() {
-    showWpm = false
-    reset()
+  function createCanvas(node) {
+    chartCanvas = node
+    ctx = chartCanvas.getContext('2d')
+    chart = {
+      type: 'line',
+      data: {
+        labels: [...Object.keys(keyGraph)],
+        datasets: [
+          {
+            label: 'Wpm',
+            data: [...Object.values(keyGraph).map((v) => Number(v.wpm))],
+            lineTension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: 'blue',
+            backgroundColor: '',
+            borderColor: 'blue',
+            yAxisID: 'wpm',
+            order: 2,
+            radius: 2,
+          },
+        ],
+      },
+      options: {
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          yAxes: [
+            {
+              id: 'wpm',
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Words per Minute',
+              },
+              ticks: {
+                beginAtZero: true,
+                min: 0,
+                autoSkip: true,
+                autoSkipPadding: 40,
+              },
+              gridLines: {
+                display: true,
+              },
+            },
+          ],
+        },
+      },
+    }
+    new Chart(ctx, chart)
+    return
   }
 </script>
 
 <svelte:head>
   <title>Learn Manoonchai</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-  <meta property="og:url" content="https:/learn.manoonchai.com/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Learn manoonchai" />
-  <meta property="og:description" content="เรียนรู้แป้นพิมพ์มนูญชัยแบบง่ายๆ" />
-  <meta name="twitter:title" content="Learn manoonchai" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="theme-color" content="#607D8B" id="metaThemeColor" />
+  <meta content="https:/learn.manoonchai.com/" property="og:url" />
+  <meta content="website" property="og:type" />
+  <meta content="Learn manoonchai" property="og:title" />
+  <meta content="เรียนรู้แป้นพิมพ์มนูญชัยแบบง่ายๆ" property="og:description" />
+  <meta content="Learn manoonchai" name="twitter:title" />
+  <meta content="summary_large_image" name="twitter:card" />
+  <meta content="#607D8B" id="metaThemeColor" name="theme-color" />
   <meta
-    name="keywords"
     content="manoonchai , learn-manoonchai , learn manoonchai , manoonchai layout , manoonchai keyboard layout , thai manoonchai layout , th manoonchai layout , มนูญชัย , แป้นพิมพ์มนูญชัย , เรียนมนูญชัย , ฝึกมนูญชัย , ฝึกพิมพ์มนูญชัย"
+    name="keywords"
   />
 </svelte:head>
 
@@ -193,72 +293,88 @@
   <main
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
-  {#if $ShowLogo}
-    <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
-      <img
-        src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
-        class="align-middle"
-        width={64}
-        height={64}
-        alt="logo"
-      />
-      <h1>Learn {name}</h1>
-    </div>
+    {#if $ShowLogo}
+      <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
+        <img
+          src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
+          class="align-middle"
+          width={64}
+          height={64}
+          alt="logo"
+        />
+        <h1>Learn {name}</h1>
+      </div>
     {/if}
 
-    <p class="stat">{wpm} wpm</p>
-    <p class="sentence">
-      {#each sentence as word, idx (idx)}
-        <span
-          class="sentence-gap font-sarabun dark:text-white transition duration-200 break-word {idx ===
-          currentWordIdx
-            ? 'bg-green-300 dark:bg-green-500'
-            : ''}
-        {result[idx] === true ? 'text-green-400 dark:text-green-600' : ''}
-        {result[idx] === false ? 'text-red-600 dark:text-red-600' : ''}
-        {sentence[currentWordIdx] &&
-          userType.join('') !== sentence[currentWordIdx].slice(0, userType.length) &&
-          input &&
-          idx === currentWordIdx
-            ? 'bg-red-400 dark:bg-red-600'
-            : ''}
-        "
-        >
-          {word}
-        </span>
-      {/each}
-    </p>
+    {#if !showWpm}
+      <p class="stat">{wpm} wpm</p>
+      <p class="sentence overflow-y-scroll max-h-64">
+        {#each sentence as word, wordIdx}
+          <span
+            class="sentence-gap font-sarabun dark:text-white transition duration-200 break-word {currentWordIdx +
+              1 <=
+              sentence.length &&
+            userType[userType.length - 1] !== sentence[currentWordIdx][userType.length - 1]
+              ? 'text-red-500'
+              : ''}"
+            id={wordIdx}
+          >
+            {#each word.split('') as letter, idx (idx)}
+              <span
+                class="
+            {idx === currentCharIdx && wordIdx === currentWordIdx
+                  ? 'underline underline-offset-4 decoration-2'
+                  : ''}
+            {result[wordIdx] && currentWordIdx + 1 <= sentence.length
+                  ? result[wordIdx][idx] === true
+                    ? 'text-green-500'
+                    : ''
+                  : ''}
+            {result[wordIdx] && currentWordIdx + 1 <= sentence.length
+                  ? result[wordIdx][idx] === false
+                    ? 'text-red-500'
+                    : ''
+                  : ''}
+            "
+              >
+                {letter}
+              </span>
+            {/each}
+          </span>
+        {/each}
+      </p>
 
-    <div class="flex items-center">
-      {#if $showPrevOrNextWord}
-        <p
-          class="flex-none word-next text-gray-200 dark:text-gray-600 w-32 text-xl pt-4 pl-6 font-sarabun"
-        >
-          {sentence[currentWordIdx - 1] ?? ''}
-        </p>
-      {/if}
-      <input
-        class="input shadow-white dark:ring-offset-black border w-full font-sarabun shadow-lg rounded-lg border-gray-400 dark:border-gray-600 focus:ring-2
-    ring-offset-2 ring-green-400 transition duration-200 {!currentWordSpellCheck
-          ? 'bg-red-400 ring-red-400'
-          : ''}"
-        value={input}
-        on:keydown={onType}
-        placeholder={sentence[currentWordIdx]}
-        data-testid="input"
-        bind:this={typingInput}
-      />
-      {#if $showPrevOrNextWord}
-        <p
-          class="flex-none word-next text-gray-400 dark:text-gray-200 w-32 text-xl pt-4 pl-6 font-sarabun"
-        >
-          {sentence[currentWordIdx + 1] ?? ''}
-        </p>
-      {/if}
-    </div>
+      <div class="flex items-center">
+        {#if $showPrevOrNextWord}
+          <p
+            class="flex-none word-next text-gray-200 dark:text-gray-600 w-32 text-xl pt-4 pl-6 font-sarabun"
+          >
+            {sentence[currentWordIdx - 1] ?? ''}
+          </p>
+        {/if}
 
-    {#if $showKeymap}
-      <Keymap {nextChar} />
+        {#if $showPrevOrNextWord}
+          <p
+            class="flex-none word-next text-gray-400 dark:text-gray-200 w-32 text-xl pt-4 pl-6 font-sarabun"
+          >
+            {sentence[currentWordIdx + 1] ?? ''}
+          </p>
+        {/if}
+      </div>
+
+      {#if $showKeymap}
+        <Keymap {nextChar} />
+      {/if}
+    {:else if showWpm}
+      <div class="flex flex-row gap-x-4">
+        <div class="flex-col self-center">
+          <h3 class="text-gray-500 text-md">WPM:</h3>
+          <h1 class="text-3xl">{wpm}</h1>
+        </div>
+        <div class="relative">
+          <canvas use:createCanvas height="400" width="400" />
+        </div>
+      </div>
     {/if}
 
     <button
@@ -282,53 +398,7 @@
         />
       {/if}
     </div>
-    {#if showWpm}
-      <div
-        class="fixed z-10 inset-0 overflow-y-auto"
-        aria-labelledby="modal-title"
-        role="dialog"
-        aria-modal="true"
-      >
-        <div
-          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-"
-        >
-          <div
-            class="fixed fadein inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-            aria-hidden="true"
-            on:click={close}
-          >
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
-              >&#8203;</span
-            >
-            <div
-              class="popin inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-            >
-              <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div class="text-center sm:text-left">
-                  <h1
-                    class="text-4xl leading-6 font-medium text-gray-900 dark:text-gray-100 text-center"
-                    id="modal-title"
-                  >
-                    You get {wpm} wpm
-                  </h1>
-                  <p class="mt-4 dark:text-gray-100">Lesson : {$currentLessonName}</p>
-                  <div class="bg-white dark:bg-black px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button
-                      type="button"
-                      class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-400 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-black focus:ring-green-300 sm:ml-3 sm:w-auto sm:text-sm"
-                      on:click={close}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    {/if}
-    <Footer bind:showMenu bind:showChangelog />
+    <Footer bind:showChangelog bind:showMenu />
 
     {#if showMenu}
       <Modal
@@ -340,6 +410,7 @@
         bind:GlowKey={$GlowKey}
         bind:showLogo={$ShowLogo}
         bind:EscToSetting={$EscToSetting}
+        bind:wordCount={$wordCount}
       />
     {/if}
 
