@@ -48,7 +48,9 @@
   reset()
 
   onMount(() => {
-    typingInput.focus()
+    setTimeout(() => {
+      typingInput.focus()
+    }, 500)
   })
 
   $: wpm = calculateWpm(correctWords, elapsed).toFixed(1)
