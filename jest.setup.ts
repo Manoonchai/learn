@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
 import '@testing-library/jest-dom/extend-expect'
+import 'jest-canvas-mock'
 
 // Sveltekit Mocks
 jest.mock('$app/env.js', () => ({
@@ -40,3 +41,9 @@ jest.mock('svelte', () => {
   return mockedSvelteKit
 })
 // End Sveltekit mocks
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}))
