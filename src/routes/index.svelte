@@ -113,6 +113,8 @@
       userType = []
 
       if (input) {
+        stats.addKeystroke(e.key, Math.round(performance.now()))
+
         if (sentence[currentWordIdx] === input) {
           correctWords = correctWords.concat(input)
           result = result.concat(true)

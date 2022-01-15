@@ -1,7 +1,8 @@
 export default class Stats {
   private keystrokes: string[] = []
   private timestamps: number[] = []
-  private wpmBySecond: number[] = []
+  private wpmBySecond: Record<number, number> = {}
+  private wpmStats: number[] = []
   private startTimestamp = 0
 
   constructor() {}
@@ -16,30 +17,62 @@ export default class Stats {
     this.timestamps.push(timestamp - this.startTimestamp)
   }
 
-  public calculateRawWpmBySecond() {
+  private calculateRawWpmBySecond() {
     if (!this.timestamps.length) {
-      return 0
+      return
     }
 
-    const seconds = Math.ceil(this.timestamps.slice(-1)[0] / 1000)
-    const wpmBySecond: number[] = new Array(seconds).fill(0)
+    const startSecond = Object.keys(this.wpmBySecond).length - 1
 
-    this.timestamps.forEach((timestamp) => {
-      // 0 - 999 > index 0
-      // 1000 - 1999 > index 1
-      // and so on...
+    const calculatingTimestamps = []
+
+    for (let i = this.timestamps.length - 1; i >= 0; i--) {
+      const timestamp = this.timestamps[i]
+
+      if (timestamp >= startSecond * 1000) {
+        const secondIdx = Math.floor(timestamp / 1000)
+        delete this.wpmBySecond[secondIdx]
+
+        calculatingTimestamps.push(timestamp)
+      } else {
+        break
+      }
+    }
+
+    calculatingTimestamps.forEach((timestamp) => {
       const secondIdx = Math.floor(timestamp / 1000)
-      wpmBySecond[secondIdx] += 1
+      this.wpmBySecond[secondIdx] ||= 0
+      this.wpmBySecond[secondIdx] += 12 // c * 60 / 5
     })
 
-    return wpmBySecond.map((k) => (k * 60) / 5)
+    return this.wpmBySecond
+  }
+
+  private calculateWpmStats() {
+    if (!this.timestamps.length) {
+      return
+    }
+
+    let i = Math.max(this.wpmStats.length - 1, 0)
+    const end = Math.floor(this.timestamps.slice(-1)[0] / 1000)
+
+    for (; i <= end; i++) {
+      const wpmUntilLastSecond = this.wpmStats[i - 1] || 0
+      const wpmCurrentSecond = this.wpmBySecond[i] || 0
+
+      this.wpmStats[i] = (wpmUntilLastSecond * i + wpmCurrentSecond) / (i + 1)
+    }
   }
 
   public data() {
+    this.calculateRawWpmBySecond()
+    this.calculateWpmStats()
+
     return {
       keystrokes: this.keystrokes,
       timestamps: this.timestamps,
-      wpmBySecond: this.calculateRawWpmBySecond(),
+      wpmBySecond: this.wpmBySecond,
+      wpmStats: this.wpmStats,
     }
   }
 }
