@@ -33,3 +33,29 @@ it('calculates wpm history for each second of typing', () => {
   const data = stats.data()
   expect(data.wpmBySecond).toEqual([60, 12, 0, 120])
 })
+
+it('calculates with startTimestamp as offset', () => {
+  const stats = new Stats()
+
+  const offset = 1234
+
+  stats.start(offset)
+
+  // 0: 1 wps -> 60 wpm
+  stats.addKeystroke('a', 0 + offset)
+  stats.addKeystroke('b', 100 + offset)
+  stats.addKeystroke('c', 500 + offset)
+  stats.addKeystroke('d', 998 + offset)
+  stats.addKeystroke('e', 999 + offset)
+
+  // 1: 0.2 wps -> 12 wpm
+  stats.addKeystroke('f', 1000 + offset)
+
+  // 3: 2 wps -> 120 wpm
+  new Array(10).fill(3500).forEach((ms) => {
+    stats.addKeystroke('f', ms + offset)
+  })
+
+  const data = stats.data()
+  expect(data.wpmBySecond).toEqual([60, 12, 0, 120])
+})

@@ -21,6 +21,10 @@
     GlowKey,
     EscToSetting,
   } from '$lib/store'
+  import Stats from '$lib/stats'
+
+  const stats = new Stats()
+  let statsData = stats.data()
 
   let name = 'Manoonchai'
   let input
@@ -77,9 +81,11 @@
 
     interval = setInterval(() => {
       elapsed = (new Date().getTime() - startTime) / 1000
+      statsData = stats.data()
     }, 500)
 
     started = true
+    stats.start(Math.round(performance.now()))
   }
 
   function onType(e: KeyboardEvent) {
@@ -87,7 +93,7 @@
       e.preventDefault()
     }
 
-    if (ended) return;
+    if (ended) return
 
     const manoonchaiKey = Manoonchai[e.code]?.[e.shiftKey ? 1 : 0] || ''
 
@@ -97,6 +103,8 @@
       userType.pop()
     } else if (manoonchaiKey.length === 1) {
       userType.push(manoonchaiKey)
+
+      stats.addKeystroke(manoonchaiKey, Math.round(performance.now()))
     }
 
     input = userType.join('').trimEnd()
@@ -161,7 +169,7 @@
       }
     }
     if (e.key === 'Tab') {
-      if (showWpm === true){
+      if (showWpm === true) {
         showWpm = false
         reset()
       }
@@ -201,17 +209,17 @@
   <main
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
-  {#if $ShowLogo}
-    <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
-      <img
-        src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
-        class="align-middle"
-        width={64}
-        height={64}
-        alt="logo"
-      />
-      <h1>Learn {name}</h1>
-    </div>
+    {#if $ShowLogo}
+      <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
+        <img
+          src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
+          class="align-middle"
+          width={64}
+          height={64}
+          alt="logo"
+        />
+        <h1>Learn {name}</h1>
+      </div>
     {/if}
 
     <p class="stat">{wpm} wpm</p>

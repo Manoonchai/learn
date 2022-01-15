@@ -2,16 +2,25 @@ export default class Stats {
   private keystrokes: string[] = []
   private timestamps: number[] = []
   private wpmBySecond: number[] = []
+  private startTimestamp = 0
 
   constructor() {}
+
+  public start(startTimestamp: number) {
+    this.startTimestamp = startTimestamp
+  }
 
   // Add keystroke & timestamp array
   public addKeystroke(keystroke, timestamp) {
     this.keystrokes.push(keystroke)
-    this.timestamps.push(timestamp)
+    this.timestamps.push(timestamp - this.startTimestamp)
   }
 
   public calculateRawWpmBySecond() {
+    if (!this.timestamps.length) {
+      return 0
+    }
+
     const seconds = Math.ceil(this.timestamps.slice(-1)[0] / 1000)
     const wpmBySecond: number[] = new Array(seconds).fill(0)
 
