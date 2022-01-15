@@ -168,6 +168,10 @@
     typingInput?.focus()
 
     stats = new Stats()
+
+    setTimeout(() => {
+      clearChart()
+    }, 0)
   }
 
   window.onkeydown = (e) => {
@@ -212,6 +216,46 @@
           {
             label: 'Raw WPM',
             data: Object.values(statsData.wpmStats),
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: 'blue',
+            backgroundColor: '',
+            borderColor: 'blue',
+            yAxisID: 'wpm',
+            order: 2,
+            radius: 2,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        animation: {
+          duration: 0,
+        },
+
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+      },
+    }
+
+    if (chart) {
+      chart.destroy()
+    }
+    chart = new Chart(ctx, chartData)
+  }
+
+  function clearChart() {
+    ctx = chartCanvas.getContext('2d')
+    const chartData: ChartConfiguration = {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Raw WPM',
+            data: [],
             tension: 0.4,
             pointRadius: 3,
             pointBackgroundColor: 'blue',
