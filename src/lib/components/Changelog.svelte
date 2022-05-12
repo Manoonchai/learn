@@ -46,10 +46,10 @@
               </div>
               <p class="text-sm text-gray-500 dark:text-white">
                 Thanks <a
-                  href="https://github.com/tinvv"
+                  href="https://github.com/tinarskii"
                   target="_blank"
                   rel="noreferrer"
-                  class="underline">@tinvv</a
+                  class="underline">@tinarskii</a
                 >!
               </p>
             </div>
