@@ -87,7 +87,7 @@
       e.preventDefault()
     }
 
-    if (ended) return;
+    if (ended) return
 
     const manoonchaiKey = Manoonchai[e.code]?.[e.shiftKey ? 1 : 0] || ''
 
@@ -161,7 +161,7 @@
       }
     }
     if (e.key === 'Tab') {
-      if (showWpm === true){
+      if (showWpm === true) {
         showWpm = false
         reset()
       }
@@ -201,17 +201,17 @@
   <main
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
-  {#if $ShowLogo}
-    <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
-      <img
-        src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
-        class="align-middle"
-        width={64}
-        height={64}
-        alt="logo"
-      />
-      <h1>Learn {name}</h1>
-    </div>
+    {#if $ShowLogo}
+      <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold gap-4">
+        <img
+          src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
+          class="align-middle"
+          width={64}
+          height={64}
+          alt="logo"
+        />
+        <h1>Learn {name}</h1>
+      </div>
     {/if}
 
     <p class="stat">{wpm} wpm</p>

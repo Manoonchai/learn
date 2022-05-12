@@ -83,13 +83,3 @@ currentLessonName.subscribe((value) => {
   storage.currentLessonName = value
   storeSettings()
 })
-
-export default {
-  showKeymap,
-  showPrevOrNextWord,
-  EscToSetting,
-  TabToRestart,
-  DarkMode,
-  GlowKey,
-  currentLessonName,
-}

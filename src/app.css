@@ -2,6 +2,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
 
+* {
+  transition: all 0.3s cubic-bezier(0, 0.55, 0.45, 1);
+}
+
 .font-sarabun {
   font-family: 'Sarabun', sans-serif;
 }
