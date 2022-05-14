@@ -1,5 +1,6 @@
 <script lang="ts">
   export let closeModal: () => void
+  import { fade, slide } from "svelte/transition";
   import { lessons } from '$lib/lessons'
   import { currentLessonName } from '$lib/store'
 </script>
@@ -14,17 +15,19 @@
     class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
   >
     <div
-      class="fixed fadein inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
       aria-hidden="true"
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      transition:fade
       on:click={() => closeModal()}
     />
 
     <!-- This element is to trick the browser into centering the modal contents. -->
-    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
-      >&#8203;</span
+    <span aria-hidden="true" class="hidden sm:inline-block sm:align-middle sm:h-screen"
+    >&#8203;</span
     >
     <div
-      class="popin inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      transition:slide
     >
       <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">

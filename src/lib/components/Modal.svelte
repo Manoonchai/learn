@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade, slide } from "svelte/transition";
   export let closeModal: () => void
   export let showKeymap: boolean
   export let showPrevOrNextWord: boolean
@@ -20,7 +21,8 @@
   >
     <div
       aria-hidden="true"
-      class="fixed fadein inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      transition:fade
       on:click={() => closeModal()}
     />
 
@@ -29,7 +31,8 @@
       >&#8203;</span
     >
     <div
-      class="popin inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      transition:slide
     >
       <div class="bg-white dark:bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="text-center sm:text-left">
