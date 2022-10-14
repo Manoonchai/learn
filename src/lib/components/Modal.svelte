@@ -75,7 +75,7 @@
             <div class="text-sm text-gray-500">
               <span class="text-sm text-gray-500 dark:text-white">Press Esc to show setting</span>
               <input
-                bind:checked={showLogo}
+                bind:checked={EscToSetting}
                 class="scale-150 absolute right-4 checked:bg-blue-600 ml-2 checked:border-transparent"
                 type="checkbox"
               />
