@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/Manoonchai/learn/compare/v1.2.0...v1.2.1) (2022-10-21)
+
+
+### Bug Fixes
+
+* duplicate settings ([#19](https://github.com/Manoonchai/learn/issues/19)) ([3d92776](https://github.com/Manoonchai/learn/commit/3d927767743eb0b1c58c8e0b36192232de4522ee))
+
 # [1.2.0](https://github.com/Manoonchai/learn/compare/v1.1.2...v1.2.0) (2021-11-27)
 
 
