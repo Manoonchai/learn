@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import Chart, { ChartConfiguration, ChartTypeRegistry } from 'chart.js/auto/auto.esm'
+  import { browser } from '$app/environment';
+  import type { ChartConfiguration, ChartTypeRegistry } from 'chart.js'
+  import Chart from "chart.js/auto"
 
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
@@ -174,6 +176,7 @@
     }, 0)
   }
 
+  if (browser) {
   window.onkeydown = (e) => {
     if (e.key === 'Tab') {
       if ($TabToRestart === true) {
@@ -194,6 +197,7 @@
       }
     }
   }
+  }
 
   function end() {
     ended = true
@@ -207,7 +211,7 @@
   }
 
   function renderChart() {
-    ctx = chartCanvas.getContext('2d')
+    ctx = chartCanvas?.getContext('2d')
     const chartData: ChartConfiguration = {
       type: 'line',
       data: {
@@ -247,7 +251,7 @@
   }
 
   function clearChart() {
-    ctx = chartCanvas.getContext('2d')
+    ctx = chartCanvas?.getContext('2d')
     const chartData: ChartConfiguration = {
       type: 'line',
       data: {
@@ -283,7 +287,9 @@
     if (chart) {
       chart.destroy()
     }
+    if (ctx) {
     chart = new Chart(ctx, chartData)
+    }
   }
 </script>
 
