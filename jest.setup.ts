@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 import 'jest-canvas-mock'
 
 // Sveltekit Mocks
-jest.mock('$app/env.js', () => ({
+jest.mock('$app/environment.js', () => ({
   amp: false,
   browser: false,
   dev: true,
