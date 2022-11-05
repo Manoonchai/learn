@@ -2069,6 +2069,11 @@ char-regex@^1.0.2:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
+chart.js@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.7.0.tgz#7a19c93035341df801d613993c2170a1fcf1d882"
+  integrity sha512-31gVuqqKp3lDIFmzpKIrBeum4OpZsQjSIAqlOpgjosHDJZlULtvwLEZKtEhIAZc7JMPaHlYMys40Qy9Mf+1AAg==
+
 cheap-watch@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/cheap-watch/-/cheap-watch-1.0.4.tgz#0bcb4a3a8fbd9d5327936493f6b56baa668d8fef"
@@ -2401,6 +2406,11 @@ cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
+
+cssfontparser@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/cssfontparser/-/cssfontparser-1.2.1.tgz#f4022fc8f9700c68029d542084afbaf425a3f3e3"
+  integrity sha1-9AIvyPlwDGgCnVQghK+69CWj8+M=
 
 cssnano-preset-default@^5.1.6:
   version "5.1.6"
@@ -3993,6 +4003,14 @@ java-properties@^1.0.0:
   resolved "https://registry.yarnpkg.com/java-properties/-/java-properties-1.0.2.tgz#ccd1fa73907438a5b5c38982269d0e771fe78211"
   integrity sha512-qjdpeo2yKlYTH7nFdK0vbZWuTCesk4o63v5iVOlhMQPfuIZQfW/HI35SjfhA+4qpg36rnFSvUK5b1m+ckIblQQ==
 
+jest-canvas-mock@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/jest-canvas-mock/-/jest-canvas-mock-2.3.1.tgz#9535d14bc18ccf1493be36ac37dd349928387826"
+  integrity sha512-5FnSZPrX3Q2ZfsbYNE3wqKR3+XorN8qFzDzB5o0golWgt6EOX1+emBnpOc9IAQ+NXFj8Nzm3h7ZdE/9H0ylBcg==
+  dependencies:
+    cssfontparser "^1.2.1"
+    moo-color "^1.0.2"
+
 jest-changed-files@^27.3.0:
   version "27.3.0"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-27.3.0.tgz#22a02cc2b34583fc66e443171dc271c0529d263c"
@@ -5055,6 +5073,13 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
+
+moo-color@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/moo-color/-/moo-color-1.0.2.tgz#837c40758d2d58763825d1359a84e330531eca64"
+  integrity sha512-5iXz5n9LWQzx/C2WesGFfpE6RLamzdHwsn3KpfzShwbfIqs7stnoEpaNErf/7+3mbxwZ4s8Foq7I0tPxw7BWHg==
+  dependencies:
+    color-name "^1.1.4"
 
 mri@^1.1.0:
   version "1.2.0"

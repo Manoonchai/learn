@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import Chart, { ChartConfiguration, ChartTypeRegistry } from 'chart.js/auto/auto.esm'
+
   import { calculateWpm } from '$lib/wpm'
   import { spellcheck } from '$lib/spellcheck'
   import { nextchar } from '$lib/nextchar'
@@ -21,6 +23,10 @@
     GlowKey,
     EscToSetting,
   } from '$lib/store'
+  import Stats from '$lib/stats'
+
+  let stats = new Stats()
+  let statsData = stats.data()
 
   let name = 'Manoonchai'
   let input
@@ -45,6 +51,10 @@
   let showChangelog = false
   let showWpm = false
 
+  let ctx
+  let chartCanvas
+  let chart: Chart
+
   reset()
 
   onMount(() => {
@@ -65,6 +75,9 @@
     words = currentLesson?.words || []
     $currentLessonName = currentLesson?.name || ''
   }
+  $: {
+    console.log(statsData)
+  }
 
   function start() {
     if (started) {
@@ -77,9 +90,11 @@
 
     interval = setInterval(() => {
       elapsed = (new Date().getTime() - startTime) / 1000
+      statsData = stats.data()
     }, 500)
 
     started = true
+    stats.start(Math.round(performance.now()))
   }
 
   function onType(e: KeyboardEvent) {
@@ -97,6 +112,8 @@
       userType.pop()
     } else if (manoonchaiKey.length === 1) {
       userType.push(manoonchaiKey)
+
+      stats.addKeystroke(manoonchaiKey, Math.round(performance.now()))
     }
 
     input = userType.join('').trimEnd()
@@ -105,6 +122,8 @@
       userType = []
 
       if (input) {
+        stats.addKeystroke(e.key, Math.round(performance.now()))
+
         if (sentence[currentWordIdx] === input) {
           correctWords = correctWords.concat(input)
           result = result.concat(true)
@@ -119,6 +138,8 @@
         if (currentWordIdx >= sentence.length) {
           end()
         }
+
+        renderChart()
       }
     }
   }
@@ -145,6 +166,12 @@
     correctWords = []
     input = ''
     typingInput?.focus()
+
+    stats = new Stats()
+
+    setTimeout(() => {
+      clearChart()
+    }, 0)
   }
 
   window.onkeydown = (e) => {
@@ -177,6 +204,86 @@
   function close() {
     showWpm = false
     reset()
+  }
+
+  function renderChart() {
+    ctx = chartCanvas.getContext('2d')
+    const chartData: ChartConfiguration = {
+      type: 'line',
+      data: {
+        labels: Object.keys(statsData.wpmStats).map((n) => +n + 1),
+        datasets: [
+          {
+            label: 'Raw WPM',
+            data: Object.values(statsData.wpmStats),
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: 'blue',
+            backgroundColor: '',
+            borderColor: 'blue',
+            yAxisID: 'wpm',
+            order: 2,
+            radius: 2,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        animation: {
+          duration: 0,
+        },
+
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+      },
+    }
+
+    if (chart) {
+      chart.destroy()
+    }
+    chart = new Chart(ctx, chartData)
+  }
+
+  function clearChart() {
+    ctx = chartCanvas.getContext('2d')
+    const chartData: ChartConfiguration = {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Raw WPM',
+            data: [],
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: 'blue',
+            backgroundColor: '',
+            borderColor: 'blue',
+            yAxisID: 'wpm',
+            order: 2,
+            radius: 2,
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        animation: {
+          duration: 0,
+        },
+
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+      },
+    }
+
+    if (chart) {
+      chart.destroy()
+    }
+    chart = new Chart(ctx, chartData)
   }
 </script>
 
@@ -268,6 +375,10 @@
     {#if $showKeymap}
       <Keymap {nextChar} />
     {/if}
+
+    <div class="chart-container" style="position: relative; height:30vh; width:80vw">
+      <canvas bind:this={chartCanvas} id="myChart" />
+    </div>
 
     <button
       class="btn hover:bg-gray-300 active:bg-gray-400 ring-offset-white ring-gray-300 dark:hover:bg-gray-600 hover:ring-2 dark:ring-white ring-offset-2 dark:ring-offset-black rounded-lg transition duration-300 m-2 dark:text-white"
