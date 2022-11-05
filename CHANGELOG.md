@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Manoonchai/learn/compare/v1.2.1...v1.3.0) (2022-11-05)
+
+
+### Features
+
+* Upgrade SvelteKit (while tests are broken) ([#20](https://github.com/Manoonchai/learn/issues/20)) ([d95a55f](https://github.com/Manoonchai/learn/commit/d95a55faf54b1dfb99ac2aa5627fb78d47ab17f3))
+
 ## [1.2.1](https://github.com/Manoonchai/learn/compare/v1.2.0...v1.2.1) (2022-10-21)
 
 
