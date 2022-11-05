@@ -34,6 +34,47 @@
               class="text-lg leading-6 font-medium text-gray-900 dark:text-white"
               id="modal-title"
             >
+              v1.3.0
+            </h3>
+            <div class="flex flex-col mt-4 w-full justify-between">
+              <p class="text-sm text-gray-500 dark:text-white" />
+              <div class="text-sm text-gray-500 dark:text-white">
+                <ul class="list-disc pl-4">
+                  <li>Add Chart.js on type</li>
+                  <li>Upgrade SvelteKit</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="text-lg leading-6 font-medium text-gray-900 dark:text-white"
+              id="modal-title"
+            >
+              v1.2.0
+            </h3>
+            <div class="flex flex-col mt-4 w-full justify-between">
+              <p class="text-sm text-gray-500 dark:text-white" />
+              <div class="text-sm text-gray-500 dark:text-white">
+                <ul class="list-disc pl-4">
+                  <li>Fix duplicate settings</li>
+                </ul>
+              </div>
+              <p class="text-sm text-gray-500 dark:text-white">
+                Thanks <a
+                  href="https://github.com/tinarskii"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="underline">@tinarskii</a
+                >!
+              </p>
+            </div>
+          </div>
+          <div>
+            <h3
+              class="text-lg leading-6 font-medium text-gray-900 dark:text-white"
+              id="modal-title"
+            >
               v1.1.0
             </h3>
             <div class="flex flex-col mt-4 w-full justify-between">
