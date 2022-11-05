@@ -309,7 +309,7 @@
     class="main container min-h-screen mx-auto flex dark:bg-black flex-col gap-2 justify-center items-center py-20"
   >
     {#if $ShowLogo}
-      <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold">
+      <div class="title dark:text-white font-sarabun text-black flex flex-row font-bold gap-4">
         <img
           src="https://manoonchai.com/_next/image?url=%2Fmanoonchai.png&w=64&q=75"
           class="align-middle"
