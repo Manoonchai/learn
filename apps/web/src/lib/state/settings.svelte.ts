@@ -6,6 +6,9 @@ export type Theme = "light" | "dark" | "system";
 /** How the live caret is drawn in the typing flow (Monkeytype-style options). */
 export type CaretStyle = "line" | "block" | "underline" | "off";
 
+/** Which activity is active: lesson practice or a timed speed run. */
+export type Mode = "lesson" | "timeAttack";
+
 const KEY = "learn-manoonchai:v2";
 
 interface Persisted {
@@ -14,6 +17,7 @@ interface Persisted {
   caretStyle: CaretStyle;
   theme: Theme;
   drillLength: DrillLength;
+  mode: Mode;
   currentLessonName?: string;
 }
 
@@ -23,6 +27,7 @@ const DEFAULTS: Persisted = {
   caretStyle: "line",
   theme: "system",
   drillLength: 25,
+  mode: "lesson",
   currentLessonName: undefined,
 };
 
@@ -46,6 +51,7 @@ class Settings {
   caretStyle = $state<CaretStyle>("line");
   theme = $state<Theme>("system");
   drillLength = $state<DrillLength>(25);
+  mode = $state<Mode>("lesson");
   currentLessonName = $state<string | undefined>(undefined);
 
   #systemDark = $state(false);
@@ -67,6 +73,7 @@ class Settings {
     this.caretStyle = p.caretStyle;
     this.theme = p.theme;
     this.drillLength = p.drillLength;
+    this.mode = p.mode;
     this.currentLessonName = p.currentLessonName;
 
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
@@ -83,6 +90,7 @@ class Settings {
           caretStyle: this.caretStyle,
           theme: this.theme,
           drillLength: this.drillLength,
+          mode: this.mode,
           currentLessonName: this.currentLessonName,
         };
         localStorage.setItem(KEY, JSON.stringify(data));
