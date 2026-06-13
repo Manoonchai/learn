@@ -35,6 +35,20 @@ describe("StatsTracker", () => {
     expect(r.samples).toEqual([{ second: 1, raw: 36, net: 24, errors: 1 }]);
   });
 
+  it("reports consistency derived from per-second raw samples", () => {
+    const s = new StatsTracker();
+    s.start(0);
+    s.recordChar(true, 500); // second 1: raw 12
+    s.recordChar(true, 1500); // second 2: raw 12
+    const r = s.build(2000);
+    // Two equal raw samples (12, 12) -> perfectly consistent.
+    expect(r.consistency).toBe(100);
+  });
+
+  it("has 0 consistency on a clean slate", () => {
+    expect(new StatsTracker().build(0).consistency).toBe(0);
+  });
+
   it("buckets samples per second with cumulative net WPM", () => {
     const s = new StatsTracker();
     s.start(0);

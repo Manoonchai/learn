@@ -35,6 +35,8 @@ export interface DrillResult {
   rawWpm: number;
   netWpm: number;
   accuracy: number;
+  /** Cadence evenness as a percentage (100 − CV of per-second raw WPM). */
+  consistency: number;
   /** Total correct characters typed (excludes spaces). */
   correctChars: number;
   /** Total characters typed (excludes spaces). */

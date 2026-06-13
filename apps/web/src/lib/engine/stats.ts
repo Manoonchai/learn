@@ -1,5 +1,5 @@
 import type { DrillResult, WpmSample } from "./types";
-import { CHARS_PER_WORD, wpm } from "./wpm";
+import { CHARS_PER_WORD, consistency, wpm } from "./wpm";
 
 interface CharRecord {
   correct: boolean;
@@ -75,16 +75,18 @@ export class StatsTracker {
     const correctChars = this.records.filter((r) => r.correct).length;
     const errors = totalChars - correctChars;
     const seconds = this.started ? Math.max((now - this.startedAt) / 1000, 0) : 0;
+    const samples = this.samples(now);
 
     return {
       rawWpm: wpm(totalChars, seconds),
       netWpm: wpm(correctChars, seconds),
       accuracy: totalChars ? (correctChars / totalChars) * 100 : 100,
+      consistency: consistency(samples.map((s) => s.raw)),
       correctChars,
       totalChars,
       errors,
       seconds,
-      samples: this.samples(now),
+      samples,
     };
   }
 }
