@@ -2,12 +2,16 @@
   import {
     StatsTracker,
     buildDrill,
+    buildTimeAttack,
     lessonByName,
     nextKey,
     resolveKey,
+    TIME_ATTACK_SECONDS,
+    TIME_ATTACK_BATCH,
+    TIME_ATTACK_REFILL_AT,
     type DrillResult,
   } from "$lib/engine";
-  import { settings } from "$lib/state/settings.svelte";
+  import { settings, type Mode } from "$lib/state/settings.svelte";
   import Logo from "$lib/components/Logo.svelte";
   import ThemeToggle from "$lib/components/ThemeToggle.svelte";
   import LiveReadout from "$lib/components/LiveReadout.svelte";
@@ -17,6 +21,7 @@
   import DrillSummary from "$lib/components/DrillSummary.svelte";
   import SettingsPanel from "$lib/components/SettingsPanel.svelte";
   import LessonPicker from "$lib/components/LessonPicker.svelte";
+  import ModeSwitch from "$lib/components/ModeSwitch.svelte";
 
   // --- Drill state ---
   let drill = $state<string[]>([]);
@@ -28,6 +33,8 @@
   let result = $state<DrillResult | null>(null);
   let liveWpm = $state(0);
   let liveAcc = $state(100);
+  let liveRemaining = $state<number | null>(null);
+  let deadline = 0;
 
   let stats = new StatsTracker();
   let tick: ReturnType<typeof setInterval> | undefined;
@@ -40,12 +47,13 @@
 
   // --- Derived view model ---
   const lesson = $derived(lessonByName(settings.currentLessonName));
+  const timeAttack = $derived(settings.mode === "timeAttack");
   const target = $derived(drill[wordIdx] ?? "");
   const nextChar = $derived(nextKey(target, input));
 
   function newDrill() {
     stopTick();
-    drill = buildDrill(lesson.words, settings.drillLength);
+    drill = timeAttack ? buildTimeAttack(TIME_ATTACK_BATCH) : buildDrill(lesson.words, settings.drillLength);
     wordIdx = 0;
     input = "";
     statuses = [];
@@ -54,6 +62,8 @@
     result = null;
     liveWpm = 0;
     liveAcc = 100;
+    liveRemaining = timeAttack ? TIME_ATTACK_SECONDS : null;
+    deadline = 0;
     stats = new StatsTracker();
     queueMicrotask(() => inputEl?.focus());
   }
@@ -61,9 +71,14 @@
   function startTick() {
     stopTick();
     tick = setInterval(() => {
-      const r = stats.build(performance.now());
+      const now = performance.now();
+      const r = stats.build(now);
       liveWpm = r.netWpm;
       liveAcc = r.accuracy;
+      if (timeAttack) {
+        liveRemaining = Math.max(0, Math.ceil((deadline - now) / 1000));
+        if (now >= deadline) finish();
+      }
     }, 250);
   }
   function stopTick() {
@@ -74,7 +89,9 @@
   function start() {
     if (started) return;
     started = true;
-    stats.start(performance.now());
+    const now = performance.now();
+    stats.start(now);
+    if (timeAttack) deadline = now + TIME_ATTACK_SECONDS * 1000;
     startTick();
   }
 
@@ -83,6 +100,12 @@
     statuses[wordIdx] = correct;
     wordIdx += 1;
     input = "";
+    if (timeAttack) {
+      if (drill.length - wordIdx <= TIME_ATTACK_REFILL_AT) {
+        drill = [...drill, ...buildTimeAttack(TIME_ATTACK_BATCH)];
+      }
+      return; // Time Attack ends on the clock, never on a word count.
+    }
     if (wordIdx >= drill.length) finish();
   }
 
@@ -91,6 +114,7 @@
     result = stats.build(performance.now());
     liveWpm = result.netWpm;
     liveAcc = result.accuracy;
+    liveRemaining = timeAttack ? 0 : null;
     finished = true;
   }
 
@@ -147,6 +171,12 @@
     newDrill();
   }
 
+  function setMode(mode: Mode) {
+    if (settings.mode === mode) return;
+    settings.mode = mode;
+    newDrill();
+  }
+
   // Keep the typing surface focused whenever a drill is live and no dialog is up.
   $effect(() => {
     if (!finished && !dialogsOpen && inputEl) inputEl.focus();
@@ -180,15 +210,18 @@
   <header class="flex items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
     <Logo />
     <div class="flex items-center gap-2">
-      <button
-        type="button"
-        onclick={() => (showLesson = true)}
-        class="font-thai max-w-[42vw] truncate rounded-lg border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-border-strong hover:text-ink sm:max-w-xs"
-        title="เลือกบทเรียน"
-      >
-        <span class="text-faint">บท:</span>
-        {lesson.name}
-      </button>
+      <ModeSwitch onchange={setMode} />
+      {#if !timeAttack}
+        <button
+          type="button"
+          onclick={() => (showLesson = true)}
+          class="font-thai max-w-[42vw] truncate rounded-lg border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-border-strong hover:text-ink sm:max-w-xs"
+          title="เลือกบทเรียน"
+        >
+          <span class="text-faint">บท:</span>
+          {lesson.name}
+        </button>
+      {/if}
       <ThemeToggle />
       <button
         type="button"
@@ -213,12 +246,13 @@
     {#if finished && result}
       <DrillSummary
         {result}
+        {timeAttack}
         lessonName={lesson.name}
         onRestart={newDrill}
         onChangeLesson={() => (showLesson = true)}
       />
     {:else}
-      <LiveReadout wpm={liveWpm} accuracy={liveAcc} dim={!started} />
+      <LiveReadout wpm={liveWpm} accuracy={liveAcc} remaining={liveRemaining} dim={!started} />
 
       <div class="relative w-full max-w-3xl">
         <!-- Transparent overlay captures focus + physical key codes; we draw our
@@ -243,12 +277,14 @@
             {input}
             caretStyle={settings.caretStyle}
           />
-          <DrillTrack {statuses} currentIdx={wordIdx} total={drill.length} />
+          {#if !timeAttack}
+            <DrillTrack {statuses} currentIdx={wordIdx} total={drill.length} />
+          {/if}
         </div>
       </div>
 
       {#if settings.showKeymap}
-        <Keymap {nextChar} glow={settings.glow} />
+        <Keymap {nextChar} glow={settings.glow && !timeAttack} />
       {/if}
 
       <p class="text-xs text-faint">
