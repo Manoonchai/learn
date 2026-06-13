@@ -2,6 +2,7 @@
   import { browser } from "$app/environment";
   import type { DrillResult } from "$lib/engine";
   import WpmChart from "./WpmChart.svelte";
+  import ResultShare from "./ResultShare.svelte";
 
   // Gate the chart's JS-driven draw on reduced-motion (CSS can't stop it).
   const animate =
@@ -10,21 +11,32 @@
   let {
     result,
     lessonName,
+    timeAttack = false,
     onRestart,
     onChangeLesson,
   }: {
     result: DrillResult;
     lessonName: string;
+    timeAttack?: boolean;
     onRestart: () => void;
     onChangeLesson: () => void;
   } = $props();
 
-  const secondary = $derived([
-    { label: "raw wpm", value: result.rawWpm.toFixed(0) },
-    { label: "ความแม่นยำ", value: `${result.accuracy.toFixed(0)}%` },
-    { label: "ผิดพลาด", value: result.errors.toFixed(0) },
-    { label: "เวลา", value: `${result.seconds.toFixed(0)}s` },
-  ]);
+  const secondary = $derived(
+    timeAttack
+      ? [
+          { label: "raw wpm", value: result.rawWpm.toFixed(0) },
+          { label: "ความแม่นยำ", value: `${result.accuracy.toFixed(0)}%` },
+          { label: "ความสม่ำเสมอ", value: `${result.consistency.toFixed(0)}%` },
+          { label: "เวลา", value: `${result.seconds.toFixed(0)}s` },
+        ]
+      : [
+          { label: "raw wpm", value: result.rawWpm.toFixed(0) },
+          { label: "ความแม่นยำ", value: `${result.accuracy.toFixed(0)}%` },
+          { label: "ผิดพลาด", value: result.errors.toFixed(0) },
+          { label: "เวลา", value: `${result.seconds.toFixed(0)}s` },
+        ],
+  );
 </script>
 
 <section
@@ -32,7 +44,9 @@
   class="animate-rise mx-auto flex w-full max-w-2xl flex-col items-center gap-8"
 >
   <div class="text-center">
-    <p class="font-thai text-sm text-muted">จบบท {lessonName}</p>
+    <p class="font-thai text-sm text-muted">
+      {timeAttack ? "จับเวลา · 60 วินาที" : `จบบท ${lessonName}`}
+    </p>
     <div class="mt-1 flex items-end justify-center gap-3">
       <span
         data-testid="net-wpm"
@@ -66,12 +80,21 @@
       พิมพ์อีกครั้ง
       <kbd class="ml-1.5 font-mono text-xs opacity-70">⏎</kbd>
     </button>
-    <button
-      type="button"
-      onclick={onChangeLesson}
-      class="rounded-xl border border-border px-6 py-2.5 text-sm font-medium text-ink transition-colors duration-150 hover:border-border-strong hover:bg-panel"
-    >
-      เปลี่ยนบท
-    </button>
+    {#if !timeAttack}
+      <button
+        type="button"
+        onclick={onChangeLesson}
+        class="rounded-xl border border-border px-6 py-2.5 text-sm font-medium text-ink transition-colors duration-150 hover:border-border-strong hover:bg-panel"
+      >
+        เปลี่ยนบท
+      </button>
+    {/if}
   </div>
+
+  {#if timeAttack}
+    <div class="flex flex-col items-center gap-2">
+      <p class="font-thai text-xs text-faint">บันทึกหรือคัดลอกรูปผลลัพธ์เพื่อแชร์ใน Discord</p>
+      <ResultShare {result} />
+    </div>
+  {/if}
 </section>
