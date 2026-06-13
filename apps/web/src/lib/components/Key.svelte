@@ -16,7 +16,7 @@
     {activeBase
     ? `border-primary bg-primary/12 -translate-y-px ${glow ? 'glow-primary' : ''}`
     : activeShift
-      ? `border-accent bg-accent/12 -translate-y-px ${glow ? 'glow-accent' : ''}`
+      ? `border-shift bg-shift/12 -translate-y-px ${glow ? 'glow-shift' : ''}`
       : 'border-border bg-panel'}"
   data-code={keyData.code}
   data-active={activeBase || activeShift ? "true" : undefined}
@@ -24,7 +24,7 @@
   {#if keyData.shift}
     <span
       class="absolute top-0.5 right-1 text-[0.62em] leading-none
-        {activeShift ? 'text-accent' : 'text-faint'}"
+        {activeShift ? 'text-shift' : 'text-faint'}"
     >
       {keyData.shift}
     </span>
