@@ -32,13 +32,14 @@ export function shareFilename(d: ShareData): string {
 }
 
 const W = 1200;
-const MARGIN = 72;
-const TOP_H = 560; // title + big wpm + chart + stats block
-const FOOTER_H = 64; // footer baseline sits at height − 36
-const HIST_TITLE_DY = 34; // input-history title baseline below TOP_H
-const HIST_FIRST_DY = 84; // first word line baseline below TOP_H
-const HIST_LINE_H = 44;
-const HIST_PAD_BOTTOM = 24;
+const MARGIN = 80;
+const FRAME = 28; // inset of the hairline border from the canvas edge
+const TOP_H = 600; // title + big wpm + chart + stats block
+const FOOTER_H = 84; // footer baseline sits at height − 48
+const HIST_TITLE_DY = 40; // input-history title baseline below TOP_H
+const HIST_FIRST_DY = 98; // first word line baseline below TOP_H
+const HIST_LINE_H = 48;
+const HIST_PAD_BOTTOM = 36;
 const HIST_FONT_PX = 30;
 const HIST_WORD_GAP = 16; // extra px between words (Thai has no word spaces)
 const MAX_HISTORY_WORDS = 240; // bound the card height for very fast runs
@@ -142,37 +143,67 @@ function buildLegend(thresholds: number[], bucket: string[]): LegendItem[] {
   });
 }
 
-/** Mini WPM chart: raw (primary) + net (accent) lines with error dots. */
-function drawChart(
-  ctx: CanvasRenderingContext2D,
-  samples: WpmSample[],
-  colors: { primary: string; accent: string; danger: string; border: string },
-): void {
+/** Mini WPM chart: raw (primary) + net (accent) lines with error dots, framed
+ * by a labelled y-axis ("wpm" + ticks) and a light seconds x-axis. */
+function drawChart(ctx: CanvasRenderingContext2D, samples: WpmSample[], colors: Colors): void {
   if (samples.length === 0) return;
-  const left = 560;
-  const right = 1128;
-  const top = 174;
-  const bottom = 430;
+  // Plot area; a 64px gutter on the left holds the y-axis ticks + title.
+  const left = 624;
+  const right = 1120;
+  const top = 150;
+  const bottom = 392;
   const w = right - left;
   const h = bottom - top;
 
   const n = samples.length;
   const lastSecond = samples[n - 1].second;
-  const maxY = Math.max(1, ...samples.map((s) => Math.max(s.raw, s.net)));
+  const dataMax = Math.max(1, ...samples.map((s) => Math.max(s.raw, s.net)));
+  // Round the axis up to a tidy multiple of 20 so peaks keep headroom and the
+  // tick labels read as round numbers.
+  const axisMax = Math.max(20, Math.ceil(dataMax / 20) * 20);
   const x = (second: number) => (n < 2 ? left + w / 2 : left + ((second - 1) / (lastSecond - 1)) * w);
-  const y = (v: number) => bottom - (v / maxY) * h;
+  const y = (v: number) => bottom - (v / axisMax) * h;
 
-  // Faint frame: baseline + top gridline.
-  ctx.strokeStyle = colors.border;
-  ctx.globalAlpha = 0.7;
-  ctx.lineWidth = 1;
-  for (const gy of [top, bottom]) {
+  // Horizontal gridlines + y-axis tick labels at 0 / mid / max.
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  ctx.font = `500 22px ${FONT}`;
+  for (const v of [0, axisMax / 2, axisMax]) {
+    const gy = y(v);
+    ctx.strokeStyle = colors.border;
+    ctx.globalAlpha = v === 0 ? 0.8 : 0.35;
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(left, gy);
     ctx.lineTo(right, gy);
     ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = colors.faint;
+    ctx.fillText(String(Math.round(v)), left - 16, gy);
   }
-  ctx.globalAlpha = 1;
+
+  // Rotated "wpm" y-axis title.
+  ctx.save();
+  ctx.translate(left - 56, (top + bottom) / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = colors.faint;
+  ctx.font = `600 22px ${FONT}`;
+  ctx.fillText("wpm", 0, 0);
+  ctx.restore();
+
+  // Seconds x-axis ticks (quarters of the run).
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.font = `500 22px ${FONT}`;
+  ctx.fillStyle = colors.faint;
+  const seconds = [...new Set([0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(f * lastSecond)))];
+  for (const sec of seconds) {
+    const px = sec <= 1 ? left : Math.min(right, x(sec));
+    const last = sec === seconds[seconds.length - 1];
+    ctx.fillText(last ? `${sec}s` : String(sec), px, bottom + 16);
+  }
 
   const line = (key: "raw" | "net", stroke: string, width: number, alpha: number) => {
     ctx.strokeStyle = stroke;
@@ -253,22 +284,22 @@ function drawCard(
   ctx.fillRect(0, 0, W, height);
   ctx.strokeStyle = colors.border;
   ctx.lineWidth = 2;
-  ctx.strokeRect(24, 24, W - 48, height - 48);
+  ctx.strokeRect(FRAME, FRAME, W - 2 * FRAME, height - 2 * FRAME);
 
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
 
   ctx.fillStyle = colors.muted;
   ctx.font = `600 30px ${FONT}`;
-  ctx.fillText("Learn Manoonchai · Time Attack", MARGIN, 110);
+  ctx.fillText("Learn Manoonchai · Time Attack", MARGIN, 108);
 
   ctx.fillStyle = colors.accent;
-  ctx.font = `700 210px ${FONT}`;
-  ctx.fillText(String(d.netWpm), 68, 360);
+  ctx.font = `700 188px ${FONT}`;
+  ctx.fillText(String(d.netWpm), MARGIN - 6, 360);
 
   ctx.fillStyle = colors.muted;
   ctx.font = `500 44px ${FONT}`;
-  ctx.fillText("net wpm", 76, 410);
+  ctx.fillText("net wpm", MARGIN, 414);
 
   drawChart(ctx, samples, colors);
 
@@ -278,15 +309,17 @@ function drawCard(
     ["consistency", `${d.consistency}%`],
     ["time", `${d.seconds}s`],
   ];
-  const colW = (W - 144) / stats.length;
+  const colW = (W - 2 * MARGIN) / stats.length;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
   stats.forEach(([label, value], i) => {
     const x = MARGIN + i * colW;
     ctx.fillStyle = colors.ink;
     ctx.font = `700 56px ${FONT}`;
-    ctx.fillText(value, x, 498);
+    ctx.fillText(value, x, 506);
     ctx.fillStyle = colors.muted;
     ctx.font = `500 28px ${FONT}`;
-    ctx.fillText(label, x, 536);
+    ctx.fillText(label, x, 544);
   });
 
   if (lines.length > 0) drawHistory(ctx, lines, legend, colors);
@@ -294,9 +327,10 @@ function drawCard(
   ctx.fillStyle = colors.muted;
   ctx.font = `500 28px ${FONT}`;
   ctx.textAlign = "left";
-  ctx.fillText(d.date, MARGIN, height - 36);
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText(d.date, MARGIN, height - 48);
   ctx.textAlign = "right";
-  ctx.fillText("learn.manoonchai.com", W - MARGIN, height - 36);
+  ctx.fillText("learn.manoonchai.com", W - MARGIN, height - 48);
 }
 
 /** Render the share card to a PNG blob (browser only). */

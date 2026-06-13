@@ -37,7 +37,7 @@
       >
         <Svg>
           <Grid y class="grid-line" />
-          <Axis placement="left" rule={false} label="WPM" />
+          <Axis placement="left" rule={false} label="wpm" labelProps={{ x: -36 }} />
           <Axis placement="bottom" rule={false} label="วินาที" />
           <Spline y="raw" class="line-raw" {draw} />
           <Spline y="net" class="line-net" {draw} />
@@ -96,6 +96,15 @@
     font-size: 0.66rem;
     font-weight: 500;
     letter-spacing: 0.02em;
+  }
+  /* LayerChart's Text wraps every tick/axis label in a nested <svg> and leans
+     on a `.overflow-visible` utility (svelte-ux) to stop the SVG default
+     `overflow: hidden` from clipping glyphs that sit at negative coords — the
+     left axis is anchored `end` at x=0 and the rotated "wpm" title sits at
+     negative x. That utility isn't generated here, so without this the whole
+     y-axis (ticks + title) gets clipped away. Pin overflow to our intent. */
+  .chart :global(svg) {
+    overflow: visible;
   }
   .chart :global(.grid-line line),
   .chart :global(.rule line),
