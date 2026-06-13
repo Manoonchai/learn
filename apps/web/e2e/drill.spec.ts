@@ -38,7 +38,14 @@ test("completes a drill and shows an honest summary", async ({ page }) => {
   const net = (await page.getByTestId("net-wpm").textContent())?.trim() ?? "";
   expect(Number(net)).toBeGreaterThanOrEqual(0);
   expect(Number.isNaN(Number(net))).toBe(false);
-  await expect(page.getByRole("button", { name: /พิมพ์อีกครั้ง/ })).toBeFocused();
+
+  // Space must NOT dismiss the result (a stray keystroke while still typing).
+  await page.keyboard.press("Space");
+  await expect(page.getByTestId("summary")).toBeVisible();
+  // Tab restarts into a fresh drill.
+  await page.keyboard.press("Tab");
+  await expect(page.getByTestId("summary")).toBeHidden();
+  await expect(page.getByTestId("progress")).toHaveText(/0\s*\/\s*10/);
 });
 
 test("flags a wrong keystroke without colour alone", async ({ page }) => {

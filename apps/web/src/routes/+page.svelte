@@ -153,8 +153,9 @@
       return;
     }
     if (finished) {
-      // Enter restarts; Tab is left to navigate the summary's buttons.
-      if (e.key === "Enter") {
+      // Tab (or Enter) restarts. Space is deliberately ignored so stray
+      // keystrokes while the typist is still going don't dismiss the result.
+      if (e.key === "Tab" || e.key === "Enter") {
         e.preventDefault();
         newDrill();
       }

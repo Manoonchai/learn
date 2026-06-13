@@ -70,15 +70,13 @@
   <WpmChart samples={result.samples} {animate} />
 
   <div class="flex flex-wrap items-center justify-center gap-3">
-    <!-- svelte-ignore a11y_autofocus -->
     <button
       type="button"
       onclick={onRestart}
-      autofocus
       class="rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-ink transition-[transform,filter] duration-150 hover:brightness-110 active:scale-[0.98]"
     >
       พิมพ์อีกครั้ง
-      <kbd class="ml-1.5 font-mono text-xs opacity-70">⏎</kbd>
+      <kbd class="ml-1.5 font-mono text-xs opacity-70">Tab</kbd>
     </button>
     {#if !timeAttack}
       <button
