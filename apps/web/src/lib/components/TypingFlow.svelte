@@ -274,6 +274,9 @@
     display: inline-block;
     position: relative;
     z-index: 1;
+    /* Thai has no inter-word spaces, so a bare " " reads as one word. Add a
+       little breathing room between tokens. */
+    margin-inline: 0.14em;
   }
 
   .caret-end {

@@ -40,6 +40,7 @@ const HIST_FIRST_DY = 84; // first word line baseline below TOP_H
 const HIST_LINE_H = 44;
 const HIST_PAD_BOTTOM = 24;
 const HIST_FONT_PX = 30;
+const HIST_WORD_GAP = 16; // extra px between words (Thai has no word spaces)
 const MAX_HISTORY_WORDS = 240; // bound the card height for very fast runs
 const FONT = "Sarabun, ui-sans-serif, system-ui, sans-serif";
 
@@ -114,7 +115,7 @@ function layoutWords(
     cells.push({ text: `+${words.length - MAX_HISTORY_WORDS}`, color: colors.faint, width: 0 });
   }
 
-  const spaceW = measure(" ");
+  const gap = measure(" ") + HIST_WORD_GAP;
   const lines: WordCell[][] = [[]];
   let curW = 0;
   for (const cell of cells) {
@@ -123,7 +124,7 @@ function layoutWords(
       curW = 0;
     }
     lines[lines.length - 1].push(cell);
-    curW += cell.width + spaceW;
+    curW += cell.width + gap;
   }
   return lines;
 }

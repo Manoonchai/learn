@@ -40,7 +40,7 @@
         </div>
       {/if}
     </div>
-    <div class="font-thai flex flex-wrap gap-x-2 gap-y-0.5 text-lg leading-relaxed">
+    <div class="font-thai flex flex-wrap gap-x-1 gap-y-0.5 text-lg leading-relaxed">
       {#each words as w, i (i)}
         <span class={wordClass(w)}>{w.text}</span>
       {/each}
