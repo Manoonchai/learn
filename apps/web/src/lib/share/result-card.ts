@@ -80,17 +80,17 @@ function drawCard(ctx: CanvasRenderingContext2D, d: ShareData): void {
     const x = 72 + i * colW;
     ctx.fillStyle = ink;
     ctx.font = `700 56px ${font}`;
-    ctx.fillText(value, x, 510);
+    ctx.fillText(value, x, 498);
     ctx.fillStyle = muted;
     ctx.font = `500 28px ${font}`;
-    ctx.fillText(label, x, 552);
+    ctx.fillText(label, x, 536);
   });
 
   ctx.fillStyle = muted;
   ctx.font = `500 28px ${font}`;
-  ctx.fillText(d.date, 72, H - 60);
+  ctx.fillText(d.date, 72, H - 36);
   ctx.textAlign = "right";
-  ctx.fillText("learn.manoonchai.com", W - 72, H - 60);
+  ctx.fillText("learn.manoonchai.com", W - 72, H - 36);
 }
 
 /** Render the share card to a PNG blob (browser only). */
