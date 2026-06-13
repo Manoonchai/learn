@@ -1,4 +1,4 @@
-import type { DrillResult } from "$lib/engine";
+import type { DrillResult, WpmSample } from "$lib/engine";
 
 export interface ShareData {
   netWpm: number;
@@ -40,11 +40,74 @@ function token(name: string, fallback: string): string {
   return v || fallback;
 }
 
-function drawCard(ctx: CanvasRenderingContext2D, d: ShareData): void {
+/** Mini WPM chart: raw (primary) + net (accent) lines with error dots. */
+function drawChart(
+  ctx: CanvasRenderingContext2D,
+  samples: WpmSample[],
+  colors: { primary: string; accent: string; danger: string; border: string },
+): void {
+  if (samples.length === 0) return;
+  const left = 560;
+  const right = 1128;
+  const top = 174;
+  const bottom = 430;
+  const w = right - left;
+  const h = bottom - top;
+
+  const n = samples.length;
+  const lastSecond = samples[n - 1].second;
+  const maxY = Math.max(1, ...samples.map((s) => Math.max(s.raw, s.net)));
+  const x = (second: number) => (n < 2 ? left + w / 2 : left + ((second - 1) / (lastSecond - 1)) * w);
+  const y = (v: number) => bottom - (v / maxY) * h;
+
+  // Faint frame: baseline + top gridline.
+  ctx.strokeStyle = colors.border;
+  ctx.globalAlpha = 0.7;
+  ctx.lineWidth = 1;
+  for (const gy of [top, bottom]) {
+    ctx.beginPath();
+    ctx.moveTo(left, gy);
+    ctx.lineTo(right, gy);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  const line = (key: "raw" | "net", stroke: string, width: number, alpha: number) => {
+    ctx.strokeStyle = stroke;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = width;
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    samples.forEach((s, i) => {
+      const px = x(s.second);
+      const py = y(s[key]);
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  };
+
+  line("raw", colors.primary, 3, 0.55);
+  line("net", colors.accent, 4, 1);
+
+  ctx.fillStyle = colors.danger;
+  for (const s of samples) {
+    if (s.errors > 0) {
+      ctx.beginPath();
+      ctx.arc(x(s.second), y(s.raw), 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function drawCard(ctx: CanvasRenderingContext2D, d: ShareData, samples: WpmSample[]): void {
   const bg = token("--bg", "#0f1210");
   const ink = token("--ink", "#e8eae6");
   const muted = token("--muted", "#9aa39a");
-  const accent = token("--accent", "#7bd88f");
+  const accent = token("--accent", "#e08a4c");
+  const primary = token("--primary", "#4aa6c8");
+  const danger = token("--danger", "#d96a5a");
   const border = token("--border", "#2a2f2a");
   const font = "Sarabun, ui-sans-serif, system-ui, sans-serif";
 
@@ -68,6 +131,8 @@ function drawCard(ctx: CanvasRenderingContext2D, d: ShareData): void {
   ctx.fillStyle = muted;
   ctx.font = `500 44px ${font}`;
   ctx.fillText("net wpm", 76, 410);
+
+  drawChart(ctx, samples, { primary, accent, danger, border });
 
   const stats: [string, string][] = [
     ["raw", String(d.rawWpm)],
@@ -94,7 +159,7 @@ function drawCard(ctx: CanvasRenderingContext2D, d: ShareData): void {
 }
 
 /** Render the share card to a PNG blob (browser only). */
-export async function renderResultBlob(d: ShareData): Promise<Blob> {
+export async function renderResultBlob(d: ShareData, samples: WpmSample[] = []): Promise<Blob> {
   const dpr = 2;
   const canvas = document.createElement("canvas");
   canvas.width = W * dpr;
@@ -103,7 +168,7 @@ export async function renderResultBlob(d: ShareData): Promise<Blob> {
   if (!ctx) throw new Error("2d canvas unavailable");
   ctx.scale(dpr, dpr);
   if (document.fonts?.ready) await document.fonts.ready;
-  drawCard(ctx, d);
+  drawCard(ctx, d, samples);
   return await new Promise<Blob>((resolve, reject) =>
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png"),
   );
