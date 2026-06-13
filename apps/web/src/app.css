@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* Manual theme switching: `.dark` on <html> wins; otherwise the :root values
+   (light) apply. The initial class is set from system preference + saved choice
+   by the inline script in app.html before first paint. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- Semantic palette (OKLCH). The mood lives in the brand colors, not the
+   surface: a cool graphite instrument with a teal "indicator" primary and a
+   terracotta "achievement" accent reserved for the climax of a drill. ---- */
+:root {
+  --bg: oklch(1 0 0);
+  --surface: oklch(0.976 0.003 240);
+  --panel: oklch(0.955 0.004 240);
+  --border: oklch(0.9 0.006 240);
+  --border-strong: oklch(0.82 0.008 240);
+  --ink: oklch(0.24 0.012 250);
+  --muted: oklch(0.5 0.012 250);
+  --faint: oklch(0.66 0.01 250);
+  --primary: oklch(0.52 0.12 215);
+  --primary-bright: oklch(0.6 0.13 215);
+  --primary-ink: oklch(0.99 0.005 215);
+  --accent: oklch(0.6 0.15 41);
+  --accent-ink: oklch(0.99 0.01 41);
+  --danger: oklch(0.54 0.2 25);
+  --danger-ink: oklch(0.99 0.01 25);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: oklch(0.165 0.006 250);
+  --surface: oklch(0.205 0.008 250);
+  --panel: oklch(0.248 0.009 250);
+  --border: oklch(0.3 0.01 250);
+  --border-strong: oklch(0.38 0.012 250);
+  --ink: oklch(0.93 0.004 250);
+  --muted: oklch(0.69 0.009 250);
+  --faint: oklch(0.5 0.009 250);
+  --primary: oklch(0.74 0.13 210);
+  --primary-bright: oklch(0.8 0.13 205);
+  --primary-ink: oklch(0.16 0.02 240);
+  --accent: oklch(0.74 0.15 46);
+  --accent-ink: oklch(0.18 0.03 46);
+  --danger: oklch(0.71 0.18 25);
+  --danger-ink: oklch(0.16 0.03 25);
+
+  color-scheme: dark;
+}
+
+/* Map semantic vars to Tailwind utilities. `inline` keeps them live, so the
+   same `bg-bg` / `text-ink` utility tracks the active theme. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-primary: var(--primary);
+  --color-primary-bright: var(--primary-bright);
+  --color-primary-ink: var(--primary-ink);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-danger: var(--danger);
+  --color-danger-ink: var(--danger-ink);
+
+  --font-thai: "Sarabun", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, monospace;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-thai);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+  }
+
+  ::selection {
+    background-color: color-mix(in oklch, var(--primary) 28%, transparent);
+    color: var(--ink);
+  }
+
+  /* Thin, themed scrollbars — the instrument shouldn't show OS chrome. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ---- The single moment of energy: the next-key glow. A focused ring, not
+   v1's neon stack. Tuned per accent so it reads as "this key, now". ---- */
+@layer utilities {
+  .glow-primary {
+    box-shadow:
+      0 0 0 1px var(--primary),
+      0 0 14px -2px var(--primary),
+      0 0 28px -8px var(--primary);
+  }
+  .glow-accent {
+    box-shadow:
+      0 0 0 1px var(--accent),
+      0 0 14px -2px var(--accent),
+      0 0 26px -8px var(--accent);
+  }
+
+  /* A slow breathing pulse on the live cursor so the eye finds it. */
+  @keyframes cursor-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+  .animate-cursor {
+    animation: cursor-pulse 1.1s var(--ease-out-quint) infinite;
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-rise {
+    animation: rise-in 0.45s var(--ease-out-quint) both;
+  }
+}
+
+/* Reduced motion is not optional: collapse every animation to a crossfade or
+   instant state. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-cursor {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}

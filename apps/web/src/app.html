@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="ฝึกพิมพ์แป้นพิมพ์ภาษาไทยมนูญชัยแบบทีละบท พร้อมคีย์แมปและสถิติความเร็ว"
+    />
+    <meta name="theme-color" content="#101418" />
+    <script>
+      // Set the theme before first paint so there is no flash. Mirrors the
+      // resolution in settings.svelte.ts: an explicit saved choice wins, else system.
+      try {
+        const saved = JSON.parse(localStorage.getItem("learn-manoonchai:v2") || "{}");
+        const theme = saved.theme ?? "system";
+        const dark =
+          theme === "dark" ||
+          (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+      } catch (_) {}
+    </script>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>
