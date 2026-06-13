@@ -6,8 +6,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---- Semantic palette (OKLCH). The mood lives in the brand colors, not the
-   surface: a cool graphite instrument with a teal "indicator" primary and a
-   terracotta "achievement" accent reserved for the climax of a drill. ---- */
+   surface: a cool graphite instrument with a teal "indicator" primary, a
+   terracotta "achievement" accent reserved for the climax of a drill, and a
+   violet "shift" cue for keys that need the Shift modifier. ---- */
 :root {
   --bg: oklch(1 0 0);
   --surface: oklch(0.976 0.003 240);
@@ -22,6 +23,7 @@
   --primary-ink: oklch(0.99 0.005 215);
   --accent: oklch(0.6 0.15 41);
   --accent-ink: oklch(0.99 0.01 41);
+  --shift: oklch(0.55 0.16 293);
   --danger: oklch(0.54 0.2 25);
   --danger-ink: oklch(0.99 0.01 25);
 
@@ -42,6 +44,7 @@
   --primary-ink: oklch(0.16 0.02 240);
   --accent: oklch(0.74 0.15 46);
   --accent-ink: oklch(0.18 0.03 46);
+  --shift: oklch(0.76 0.16 295);
   --danger: oklch(0.71 0.18 25);
   --danger-ink: oklch(0.16 0.03 25);
 
@@ -64,6 +67,7 @@
   --color-primary-ink: var(--primary-ink);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
+  --color-shift: var(--shift);
   --color-danger: var(--danger);
   --color-danger-ink: var(--danger-ink);
 
@@ -119,6 +123,12 @@
       0 0 0 1px var(--accent),
       0 0 14px -2px var(--accent),
       0 0 26px -8px var(--accent);
+  }
+  .glow-shift {
+    box-shadow:
+      0 0 0 1px var(--shift),
+      0 0 14px -2px var(--shift),
+      0 0 26px -8px var(--shift);
   }
 
   /* A slow breathing pulse on the live cursor so the eye finds it. */
