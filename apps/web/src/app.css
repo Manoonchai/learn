@@ -121,20 +121,6 @@
       0 0 26px -8px var(--accent);
   }
 
-  /* A slow breathing pulse on the live cursor so the eye finds it. */
-  @keyframes cursor-pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.35;
-    }
-  }
-  .animate-cursor {
-    animation: cursor-pulse 1.1s var(--ease-out-quint) infinite;
-  }
-
   @keyframes rise-in {
     from {
       opacity: 0;
@@ -160,9 +146,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .animate-cursor {
-    animation: none !important;
-    opacity: 1 !important;
   }
 }

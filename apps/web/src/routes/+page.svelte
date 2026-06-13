@@ -11,7 +11,7 @@
   import Logo from "$lib/components/Logo.svelte";
   import ThemeToggle from "$lib/components/ThemeToggle.svelte";
   import LiveReadout from "$lib/components/LiveReadout.svelte";
-  import FocusLens from "$lib/components/FocusLens.svelte";
+  import TypingFlow from "$lib/components/TypingFlow.svelte";
   import DrillTrack from "$lib/components/DrillTrack.svelte";
   import Keymap from "$lib/components/Keymap.svelte";
   import DrillSummary from "$lib/components/DrillSummary.svelte";
@@ -41,8 +41,6 @@
   // --- Derived view model ---
   const lesson = $derived(lessonByName(settings.currentLessonName));
   const target = $derived(drill[wordIdx] ?? "");
-  const prevWord = $derived(wordIdx > 0 ? (drill[wordIdx - 1] ?? "") : "");
-  const nextWord = $derived(drill[wordIdx + 1] ?? "");
   const nextChar = $derived(nextKey(target, input));
 
   function newDrill() {
@@ -238,12 +236,12 @@
           spellcheck="false"
         />
         <div class="flex flex-col gap-6">
-          <FocusLens
-            {prevWord}
-            {target}
+          <TypingFlow
+            words={drill}
+            {statuses}
+            currentIdx={wordIdx}
             {input}
-            {nextWord}
-            showAdjacent={settings.showAdjacentWords}
+            caretStyle={settings.caretStyle}
           />
           <DrillTrack {statuses} currentIdx={wordIdx} total={drill.length} />
         </div>

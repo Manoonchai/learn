@@ -1,6 +1,6 @@
 <script lang="ts">
   import { DRILL_LENGTHS, type DrillLength } from "$lib/engine";
-  import { settings, type Theme } from "$lib/state/settings.svelte";
+  import { settings, type CaretStyle, type Theme } from "$lib/state/settings.svelte";
   import Dialog from "./Dialog.svelte";
 
   let { open = $bindable(false) }: { open: boolean } = $props();
@@ -11,10 +11,16 @@
     { value: "dark", label: "มืด" },
   ];
 
+  const caretStyles: { value: CaretStyle; label: string }[] = [
+    { value: "line", label: "เส้น" },
+    { value: "block", label: "บล็อก" },
+    { value: "underline", label: "ขีดล่าง" },
+    { value: "off", label: "ปิด" },
+  ];
+
   const toggles = $derived([
     { key: "showKeymap", label: "แสดงคีย์แมป", hint: "คีย์บอร์ดมนูญชัยบนหน้าจอ" },
     { key: "glow", label: "เรืองแสงปุ่มถัดไป", hint: "ไฮไลต์ปุ่มที่ต้องกดต่อไป" },
-    { key: "showAdjacentWords", label: "แสดงคำข้างเคียง", hint: "คำก่อนหน้าและคำถัดไป" },
   ] as const);
 </script>
 
@@ -55,6 +61,26 @@
             aria-pressed={settings.theme === t.value}
           >
             {t.label}
+          </button>
+        {/each}
+      </div>
+    </div>
+
+    <!-- Caret style -->
+    <div class="flex flex-col gap-2">
+      <span class="text-sm font-medium">เคอร์เซอร์</span>
+      <div class="grid grid-cols-4 gap-1.5 rounded-xl border border-border bg-bg p-1">
+        {#each caretStyles as c (c.value)}
+          <button
+            type="button"
+            onclick={() => (settings.caretStyle = c.value)}
+            class="rounded-lg py-1.5 text-sm transition-colors duration-150 {settings.caretStyle ===
+            c.value
+              ? 'bg-primary text-primary-ink'
+              : 'text-muted hover:bg-panel hover:text-ink'}"
+            aria-pressed={settings.caretStyle === c.value}
+          >
+            {c.label}
           </button>
         {/each}
       </div>
