@@ -9,25 +9,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x]
+    defaults:
+      run:
+        working-directory: apps/web
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: yarn
+          bun-version: latest
 
-      - name: Build & test
-        run: |
-          yarn install --frozen-lockfile
-          npx playwright install
-          yarn build
-          yarn test
-          yarn dev &
-          yarn test:e2e
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        working-directory: .
+
+      - name: Type check
+        run: bun run check
+
+      - name: Unit & component tests
+        run: bun run test
+
+      - name: Build
+        run: bun run build
+
+      - name: Install Playwright browser
+        run: bunx playwright install --with-deps chromium
+
+      - name: E2E tests
+        run: bun run test:e2e
