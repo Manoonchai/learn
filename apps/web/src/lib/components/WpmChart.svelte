@@ -31,14 +31,14 @@
         x="second"
         y={["raw", "net"]}
         yNice
-        padding={{ left: 34, bottom: 26, top: 8, right: 10 }}
+        padding={{ left: 48, bottom: 40, top: 8, right: 10 }}
         let:xScale
         let:yScale
       >
         <Svg>
           <Grid y class="grid-line" />
-          <Axis placement="left" rule={false} />
-          <Axis placement="bottom" rule={false} />
+          <Axis placement="left" rule={false} label="WPM" />
+          <Axis placement="bottom" rule={false} label="วินาที" />
           <Spline y="raw" class="line-raw" {draw} />
           <Spline y="net" class="line-net" {draw} />
           {#each errorPoints as p (p.second)}
@@ -84,6 +84,18 @@
     font-family: var(--font-mono);
     font-size: 0.68rem;
     font-weight: 400;
+  }
+  /* Axis titles ("WPM" / "วินาที"). LayerChart's default `.label` class pulls
+     svelte-ux utilities (`stroke-surface-100`, …) that don't exist here, so
+     pin them to our tokens — otherwise they render with a stray halo / wrong
+     colour. */
+  .chart :global(.label) {
+    fill: var(--faint);
+    stroke: none;
+    font-family: var(--font-thai);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
   }
   .chart :global(.grid-line line),
   .chart :global(.rule line),
