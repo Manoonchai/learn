@@ -3,12 +3,15 @@ import type { DrillLength } from "$lib/engine";
 
 export type Theme = "light" | "dark" | "system";
 
+/** How the live caret is drawn in the typing flow (Monkeytype-style options). */
+export type CaretStyle = "line" | "block" | "underline" | "off";
+
 const KEY = "learn-manoonchai:v2";
 
 interface Persisted {
   showKeymap: boolean;
   glow: boolean;
-  showAdjacentWords: boolean;
+  caretStyle: CaretStyle;
   theme: Theme;
   drillLength: DrillLength;
   currentLessonName?: string;
@@ -17,7 +20,7 @@ interface Persisted {
 const DEFAULTS: Persisted = {
   showKeymap: true,
   glow: true,
-  showAdjacentWords: true,
+  caretStyle: "line",
   theme: "system",
   drillLength: 25,
   currentLessonName: undefined,
@@ -34,13 +37,13 @@ function load(): Persisted {
 
 /**
  * App settings, persisted to localStorage and reactive via runes. Only the
- * controls the redesign keeps: keymap + glow, adjacent-word hints, theme, and
- * drill length. (v1's logo / Esc / Tab toggles became fixed behaviours.)
+ * controls the redesign keeps: keymap + glow, caret style, theme, and drill
+ * length. (v1's logo / Esc / Tab toggles became fixed behaviours.)
  */
 class Settings {
   showKeymap = $state(true);
   glow = $state(true);
-  showAdjacentWords = $state(true);
+  caretStyle = $state<CaretStyle>("line");
   theme = $state<Theme>("system");
   drillLength = $state<DrillLength>(25);
   currentLessonName = $state<string | undefined>(undefined);
@@ -61,7 +64,7 @@ class Settings {
     const p = load();
     this.showKeymap = p.showKeymap;
     this.glow = p.glow;
-    this.showAdjacentWords = p.showAdjacentWords;
+    this.caretStyle = p.caretStyle;
     this.theme = p.theme;
     this.drillLength = p.drillLength;
     this.currentLessonName = p.currentLessonName;
@@ -77,7 +80,7 @@ class Settings {
         const data: Persisted = {
           showKeymap: this.showKeymap,
           glow: this.glow,
-          showAdjacentWords: this.showAdjacentWords,
+          caretStyle: this.caretStyle,
           theme: this.theme,
           drillLength: this.drillLength,
           currentLessonName: this.currentLessonName,
