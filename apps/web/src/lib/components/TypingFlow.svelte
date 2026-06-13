@@ -109,21 +109,31 @@
     if (!wrapperEl || caretStyle === "off") return;
     const wrap = wrapperEl.getBoundingClientRect();
 
+    // rect = horizontal anchor (caret's left edge); vrect = vertical anchor (a
+    // glyph box giving the line's centre + height).
     let rect: DOMRect | undefined;
+    let vrect: DOMRect | undefined;
     let atEnd = false;
     const next = activeEls[caretAfter];
     if (caretAfter < activeCells.length && next) {
       rect = next.getBoundingClientRect();
+      vrect = rect;
     } else if (endEl) {
       rect = endEl.getBoundingClientRect();
       atEnd = true;
+      // endEl is an empty inline-block (width 0, ~0 height) that sits on the
+      // baseline — well below the glyph centre. Taking vertical metrics from it
+      // makes the caret drop ("fall") at word end, so anchor vertically to the
+      // last typed glyph instead and only borrow endEl's horizontal position.
+      vrect = (activeEls[caretAfter - 1] ?? activeEls[activeEls.length - 1])?.getBoundingClientRect();
     }
     if (!rect) return;
+    if (!vrect || !vrect.height) vrect = rect;
 
-    if (!atEnd && rect.height) glyphH = rect.height;
-    const h = glyphH || rect.height || 0;
+    if (vrect.height) glyphH = vrect.height;
+    const h = glyphH || vrect.height || 0;
     const left = rect.left - wrap.left;
-    const centerY = rect.top + rect.height / 2 - wrap.top;
+    const centerY = vrect.top + vrect.height / 2 - wrap.top;
     const w = atEnd ? Math.max(h * 0.5, 4) : rect.width;
 
     let top: number;
