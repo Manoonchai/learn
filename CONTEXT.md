@@ -23,9 +23,23 @@ lesson's pool. The learner picks the length (e.g. 10 / 25 / 50 words). A drill
 has a clear start (first keystroke) and end (last word committed).
 _Avoid_: sentence, test, round, session.
 
+**Time Attack**:
+A clock-boxed speed run (e.g. 60 seconds) over the full word set, not tied to a
+lesson. Ends when the timer expires, not when a word count is reached. A sibling
+of the Drill: same keystroke recording and stats, but a speed test rather than
+lesson practice. Its result is meant to be captured and shared as proof of speed.
+_Avoid_: test, round, session.
+
+**Full word set**:
+The frequency-ordered list of common Thai words that Time Attack samples from,
+sourced from the Manoonchai project's own corpus (manoontype's `thai.json`,
+~1000 words). Distinct from a Lesson's pool, which is scoped to one character
+group. Every word is typeable on the Manoonchai layout.
+_Avoid_: dictionary, corpus (in UI copy), vocabulary.
+
 **Word**:
-A single Thai token within a drill, committed by pressing space. The learner's
-input is compared against the target word to decide correctness.
+A single Thai token within a drill or time attack, committed by pressing space.
+The learner's input is compared against the target word to decide correctness.
 
 **Keystroke**:
 One Manoonchai character produced by the learner, recorded with its timestamp and
@@ -44,6 +58,20 @@ _Avoid_: adjusted WPM, real WPM.
 **Accuracy**:
 Share of keystrokes that matched the expected character, as a percentage over the
 whole drill.
+
+**Consistency**:
+How even the typing cadence was, as a percentage derived from the spread of the
+per-second raw WPM samples (100 − coefficient of variation, floored at 0). A
+flat, steady pace scores high; bursts and stalls score low. Shown on the Time
+Attack result so scores compare to the wider Monkeytype-style community.
+_Avoid_: stability, evenness, variance.
+
+**Input history**:
+The list of every word committed during a run, shown on the result and on the
+share card after the run ends. Each word is coloured by the speed it was typed,
+bucketed relative to that run (slowest to fastest), with mistyped words flagged.
+A retrospective record, distinct from the live typing line during the run.
+_Avoid_: replay, log, transcript.
 
 **Keymap**:
 The on-screen rendering of the Manoonchai layout. Highlights and glows the next key
