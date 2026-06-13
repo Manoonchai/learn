@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "dev"],
       "cwd": "apps/web",
       "port": 5173
+    },
+    {
+      "name": "web-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "5188", "--directory", "apps/web/build"],
+      "cwd": ".",
+      "port": 5188
     }
   ]
 }
