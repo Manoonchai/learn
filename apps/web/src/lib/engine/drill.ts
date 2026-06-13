@@ -15,3 +15,10 @@ export function buildDrill(
   if (pool.length === 0) return [];
   return Array.from({ length }, () => pool[Math.floor(rng() * pool.length)] ?? "");
 }
+
+/** Duration of one Time Attack run, in seconds. */
+export const TIME_ATTACK_SECONDS = 60;
+/** Words appended per refill so the typist never runs out of buffer. */
+export const TIME_ATTACK_BATCH = 60;
+/** Refill once this few words remain ahead of the caret. */
+export const TIME_ATTACK_REFILL_AT = 25;

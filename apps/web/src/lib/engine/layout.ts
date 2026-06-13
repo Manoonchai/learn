@@ -50,6 +50,21 @@ export function resolveKey(code: string, shift: boolean): string {
   return pair[shift ? 1 : 0] ?? "";
 }
 
+/** Every character the Manoonchai layout can produce (base + shifted). */
+export const typeableChars: Set<string> = new Set(
+  Object.values(manoonchai as Record<string, string[]>)
+    .flat()
+    .filter((c) => c !== ""),
+);
+
+/** True if every character of `word` can be typed on the Manoonchai layout. */
+export function isTypeable(word: string): boolean {
+  for (const ch of word) {
+    if (!typeableChars.has(ch)) return false;
+  }
+  return true;
+}
+
 /** True if `char` is reachable only via Shift on this layout. */
 export function isShifted(char: string): boolean {
   if (!char) return false;
