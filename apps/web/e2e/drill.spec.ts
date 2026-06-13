@@ -38,6 +38,8 @@ test("completes a drill and shows an honest summary", async ({ page }) => {
   const net = (await page.getByTestId("net-wpm").textContent())?.trim() ?? "";
   expect(Number(net)).toBeGreaterThanOrEqual(0);
   expect(Number.isNaN(Number(net))).toBe(false);
+  // The result shows the input history of the words just typed.
+  await expect(page.getByTestId("input-history")).toBeVisible();
 
   // Space must NOT dismiss the result (a stray keystroke while still typing).
   await page.keyboard.press("Space");

@@ -12,6 +12,7 @@ const result: DrillResult = {
   errors: 20,
   seconds: 60.1,
   samples: [],
+  words: [],
 };
 
 describe("shareData", () => {

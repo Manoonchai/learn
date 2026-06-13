@@ -18,6 +18,17 @@ export interface Keystroke {
   t: number;
 }
 
+/** One committed word, with the speed it was typed at — the raw material for
+ * the Monkeytype-style input history. */
+export interface WordStat {
+  /** The target word the learner was typing. */
+  text: string;
+  /** Whether the committed input matched the target exactly. */
+  correct: boolean;
+  /** Speed for this word alone (chars ÷ 5 ÷ its seconds × 60). 0 if untimed. */
+  wpm: number;
+}
+
 /** Per-second sample for the performance chart. */
 export interface WpmSample {
   /** Second index (1-based, for display). */
@@ -44,4 +55,6 @@ export interface DrillResult {
   errors: number;
   seconds: number;
   samples: WpmSample[];
+  /** Every committed word in order, with its per-word speed. */
+  words: WordStat[];
 }

@@ -6,4 +6,5 @@ export * from "./next-key";
 export * from "./wpm";
 export * from "./drill";
 export * from "./full-word-set";
+export * from "./word-history";
 export { StatsTracker } from "./stats";

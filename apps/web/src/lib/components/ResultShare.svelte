@@ -17,7 +17,7 @@
     busy = true;
     try {
       const d = shareData(result, new Date());
-      const blob = await renderResultBlob(d, result.samples);
+      const blob = await renderResultBlob(d, result.samples, result.words);
       downloadBlob(blob, shareFilename(d));
     } finally {
       busy = false;
@@ -27,14 +27,14 @@
   async function onCopy() {
     busy = true;
     try {
-      const blob = await renderResultBlob(shareData(result, new Date()), result.samples);
+      const blob = await renderResultBlob(shareData(result, new Date()), result.samples, result.words);
       await copyBlob(blob);
       copied = true;
       setTimeout(() => (copied = false), 1500);
     } catch {
       // Clipboard image unsupported (e.g. Firefox) — fall back to download.
       const d = shareData(result, new Date());
-      downloadBlob(await renderResultBlob(d, result.samples), shareFilename(d));
+      downloadBlob(await renderResultBlob(d, result.samples, result.words), shareFilename(d));
     } finally {
       busy = false;
     }

@@ -49,6 +49,21 @@ describe("StatsTracker", () => {
     expect(new StatsTracker().build(0).consistency).toBe(0);
   });
 
+  it("records per-word speed from commit timings", () => {
+    const s = new StatsTracker();
+    s.start(0);
+    // "นม" = 2 chars committed 1s in: 2/5/1*60 = 24 wpm.
+    s.recordWord("นม", true, 1000);
+    // "กา" = 2 chars committed 0.5s after the first: 2/5/0.5*60 = 48 wpm.
+    s.recordWord("กา", false, 1500);
+    const r = s.build(1500);
+
+    expect(r.words).toEqual([
+      { text: "นม", correct: true, wpm: 24 },
+      { text: "กา", correct: false, wpm: 48 },
+    ]);
+  });
+
   it("buckets samples per second with cumulative net WPM", () => {
     const s = new StatsTracker();
     s.start(0);

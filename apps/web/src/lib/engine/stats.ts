@@ -1,9 +1,16 @@
-import type { DrillResult, WpmSample } from "./types";
+import type { DrillResult, WordStat, WpmSample } from "./types";
 import { CHARS_PER_WORD, consistency, wpm } from "./wpm";
 
 interface CharRecord {
   correct: boolean;
   /** Milliseconds since the drill started. */
+  t: number;
+}
+
+interface WordRecord {
+  text: string;
+  correct: boolean;
+  /** Milliseconds since the drill started, at the moment the word committed. */
   t: number;
 }
 
@@ -22,6 +29,7 @@ export class StatsTracker {
   private startedAt = 0;
   private started = false;
   private records: CharRecord[] = [];
+  private wordRecords: WordRecord[] = [];
 
   start(now: number): void {
     if (this.started) return;
@@ -37,6 +45,27 @@ export class StatsTracker {
   recordChar(correct: boolean, now: number): void {
     if (!this.started) return;
     this.records.push({ correct, t: now - this.startedAt });
+  }
+
+  /** Record a committed word (its target text + correctness). Ignored before `start()`. */
+  recordWord(text: string, correct: boolean, now: number): void {
+    if (!this.started) return;
+    this.wordRecords.push({ text, correct, t: now - this.startedAt });
+  }
+
+  /** Per-word speeds, in commit order. Each word's time is measured from the
+   * previous commit (or the drill start for the first word). */
+  private words(): WordStat[] {
+    return this.wordRecords.map((wr, i) => {
+      const prevT = i > 0 ? this.wordRecords[i - 1].t : 0;
+      const seconds = Math.max((wr.t - prevT) / 1000, 0);
+      const chars = [...wr.text].length;
+      return {
+        text: wr.text,
+        correct: wr.correct,
+        wpm: seconds > 0 ? (chars / CHARS_PER_WORD / seconds) * 60 : 0,
+      };
+    });
   }
 
   /** Per-second samples for the live and end-of-drill chart. */
@@ -87,6 +116,7 @@ export class StatsTracker {
       errors,
       seconds,
       samples,
+      words: this.words(),
     };
   }
 }

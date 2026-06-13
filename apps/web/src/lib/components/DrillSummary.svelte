@@ -3,6 +3,7 @@
   import type { DrillResult } from "$lib/engine";
   import WpmChart from "./WpmChart.svelte";
   import ResultShare from "./ResultShare.svelte";
+  import InputHistory from "./InputHistory.svelte";
 
   // Gate the chart's JS-driven draw on reduced-motion (CSS can't stop it).
   const animate =
@@ -68,6 +69,8 @@
   </dl>
 
   <WpmChart samples={result.samples} {animate} />
+
+  <InputHistory words={result.words} />
 
   <div class="flex flex-wrap items-center justify-center gap-3">
     <button

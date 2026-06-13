@@ -98,6 +98,7 @@
   function commitWord() {
     const correct = input === target;
     statuses[wordIdx] = correct;
+    stats.recordWord(target, correct, performance.now());
     wordIdx += 1;
     input = "";
     if (timeAttack) {
