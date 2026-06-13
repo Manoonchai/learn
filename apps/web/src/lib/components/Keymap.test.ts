@@ -13,7 +13,8 @@ describe("Keymap", () => {
     // ช is the shift layer of KeyF.
     const { container } = render(Keymap, { props: { nextChar: "ช", glow: false } });
     expect(container.querySelector("[data-code=KeyF]")?.getAttribute("data-active")).toBe("true");
-    expect(container.textContent).toContain("SHIFT");
+    // The cap label is "Shift" (displayed uppercase via CSS).
+    expect(container.textContent).toContain("Shift");
   });
 
   it("activates no letter key when the next key is space", () => {
