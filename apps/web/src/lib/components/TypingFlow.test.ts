@@ -19,12 +19,13 @@ describe("TypingFlow", () => {
     expect(words(container)).toHaveLength(3);
   });
 
-  it("keeps Thai combining marks attached by colouring the active word per cluster", () => {
+  it("splits the active word into one cell per code point (so the caret can sit between a base and its marks)", () => {
     const { container } = render(TypingFlow, {
       props: { words: ["น่า"], currentIdx: 0, input: "" },
     });
-    // "น่า" = [น + tone ่] + [า] -> two cells, the tone stays with its base.
-    expect(currentCells(container).map((c) => c.textContent)).toEqual(["น่", "า"]);
+    // "น่า" = น + tone ่ + า -> three cells. The marks stay inline so they shape
+    // onto their base (attached, and a tone stacks above a vowel: ที่ not ที).
+    expect(currentCells(container).map((c) => c.textContent)).toEqual(["น", "่", "า"]);
   });
 
   it("marks the active word's typed-correct, wrong, and pending cells distinctly", () => {
@@ -35,6 +36,26 @@ describe("TypingFlow", () => {
     expect(cells[0].className).toContain("text-ink"); // น correct
     expect(cells[1].className).toContain("text-danger"); // ก != ม
     expect(cells[1].className).toContain("underline"); // non-colour cue
+  });
+
+  it("keeps a partly-typed cluster muted, then lights it once fully typed", () => {
+    // A combining mark shares its base's colour (it shapes onto it), so a cluster
+    // may not light until every code point in it is typed — otherwise a tone mark /
+    // vowel would look typed the instant its base was pressed.
+    const partial = render(TypingFlow, {
+      props: { words: ["น่า"], currentIdx: 0, input: "น" }, // base typed, tone not
+    });
+    const pc = currentCells(partial.container);
+    expect(pc[0].className).toContain("text-muted"); // น held muted (cluster น่ unfinished)
+    expect(pc[1].className).toContain("text-muted"); // tone ่ stays muted
+
+    const done = render(TypingFlow, {
+      props: { words: ["น่า"], currentIdx: 0, input: "น่" }, // cluster น่ complete
+    });
+    const dc = currentCells(done.container);
+    expect(dc[0].className).toContain("text-ink"); // น now lit
+    expect(dc[1].className).toContain("text-ink"); // tone ่ lit with it
+    expect(dc[2].className).toContain("text-muted"); // า still pending
   });
 
   it("renders the active word's untyped characters as muted", () => {

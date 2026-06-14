@@ -15,9 +15,10 @@
     caretStyle?: CaretStyle;
   } = $props();
 
-  // Thai tone marks and above/below vowels are combining: they must stay in the
-  // same text run as their base consonant or they render on a dotted circle. So
-  // we segment (and colour) per *grapheme cluster*, never per code point.
+  // Committed and upcoming words colour uniformly (one whole-word verdict), so we
+  // split them per *grapheme cluster* — a combining mark always rides with its base
+  // in one text run, never landing on a dotted circle. The active word is different:
+  // it needs per-keystroke feedback, so it splits per code point instead (see below).
   const segmenter =
     typeof Intl !== "undefined" && "Segmenter" in Intl
       ? new Intl.Segmenter("th", { granularity: "grapheme" })
@@ -60,40 +61,49 @@
   const target = $derived(words[currentIdx] ?? "");
   const activeClusters = $derived(clustersOf(target));
 
-  // The active word, coloured per cluster like the old focus lens: typed-correct
-  // is ink, a mismatch is danger + underline (a non-colour cue), untyped is muted.
+  // The active word emits one cell per *code point* (so the caret can sit between a
+  // base and its marks), but colours by *grapheme cluster*: every code point in a
+  // cluster shares one colour. Two reasons, both rooted in how Thai shapes:
+  //   1. A combining mark drawn over a base in a sibling cell adopts that base's
+  //      colour anyway, so per-code-point colours can't actually disagree within a
+  //      cluster — uniform colour is the honest model.
+  //   2. A cluster lights (CORRECT) only once *fully* typed; a partially typed
+  //      cluster stays muted. That keeps a tone mark / vowel from looking typed the
+  //      instant its base is pressed, yet — because the cells stay `display: inline`
+  //      and shape as one run — a tone still stacks above its vowel (ที่, not ที).
   const activeCells = $derived.by<Cell[]>(() => {
     const out: Cell[] = [];
+    const inLen = input.length;
     for (const c of activeClusters) {
       const len = c.end - c.start;
-      const typed = Math.min(Math.max(input.length - c.start, 0), len);
+      const typed = Math.min(Math.max(inLen - c.start, 0), len);
       let cls: string;
-      if (typed === 0) cls = CURRENT_PENDING;
-      else {
-        const ok = input.slice(c.start, c.start + typed) === target.slice(c.start, c.start + typed);
-        cls = ok ? CORRECT : WRONG;
-      }
-      out.push({ seg: c.seg, cls });
+      if (typed === 0) cls = CURRENT_PENDING; // untouched
+      else if (input.slice(c.start, c.start + typed) !== target.slice(c.start, c.start + typed))
+        cls = WRONG; // a wrong keystroke somewhere in this cluster
+      else if (typed < len) cls = CURRENT_PENDING; // correct so far, but the cluster isn't finished
+      else cls = CORRECT; // whole cluster typed correctly
+      for (const ch of c.seg) out.push({ seg: ch, cls });
     }
-    // Characters typed past the end of the word are surplus errors.
-    if (input.length > target.length) {
+    // Keystrokes past the end of the word are surplus errors.
+    if (inLen > target.length) {
       out.push({ seg: input.slice(target.length), cls: WRONG });
     }
     return out;
   });
 
-  // Caret sits before the first cluster not yet fully begun.
-  const caretAfter = $derived(activeClusters.filter((c) => c.start < input.length).length);
+  // Caret sits before the first code point not yet typed (or at the word's end).
+  const caretAfter = $derived(Math.min(input.length, activeCells.length));
 
   // --- Caret geometry (measured from the DOM so it glides between positions) ---
   let viewportEl = $state<HTMLDivElement>();
   let wrapperEl = $state<HTMLDivElement>();
+  let currentWordEl = $state<HTMLElement>();
   let activeEls = $state<HTMLElement[]>([]);
   let endEl = $state<HTMLElement>();
 
   let caretCss = $state("");
   let measured = $state(false);
-  let glyphH = 0;
   let scrollY = $state(0);
 
   const MAX_LINES = 3;
@@ -109,32 +119,30 @@
     if (!wrapperEl || caretStyle === "off") return;
     const wrap = wrapperEl.getBoundingClientRect();
 
-    // rect = horizontal anchor (caret's left edge); vrect = vertical anchor (a
-    // glyph box giving the line's centre + height).
+    // Horizontal anchor: the cell the caret sits before, or the word-end marker.
     let rect: DOMRect | undefined;
-    let vrect: DOMRect | undefined;
     let atEnd = false;
     const next = activeEls[caretAfter];
     if (caretAfter < activeCells.length && next) {
       rect = next.getBoundingClientRect();
-      vrect = rect;
     } else if (endEl) {
       rect = endEl.getBoundingClientRect();
       atEnd = true;
-      // endEl is an empty inline-block (width 0, ~0 height) that sits on the
-      // baseline — well below the glyph centre. Taking vertical metrics from it
-      // makes the caret drop ("fall") at word end, so anchor vertically to the
-      // last typed glyph instead and only borrow endEl's horizontal position.
-      vrect = (activeEls[caretAfter - 1] ?? activeEls[activeEls.length - 1])?.getBoundingClientRect();
     }
     if (!rect) return;
-    if (!vrect || !vrect.height) vrect = rect;
 
-    if (vrect.height) glyphH = vrect.height;
-    const h = glyphH || vrect.height || 0;
+    // Vertical anchor: the whole active-word box, which always spans the full glyph
+    // height on a single line. An individual cell won't do — one holding only an
+    // above/below combining mark (e.g. ิ, ุ) collapses to the mark's height and
+    // would shrink the caret; the word box stays full height.
+    const wordRect = currentWordEl?.getBoundingClientRect();
+    const vrect = wordRect && wordRect.height ? wordRect : rect;
+    const h = vrect.height || 0;
     const left = rect.left - wrap.left;
     const centerY = vrect.top + vrect.height / 2 - wrap.top;
-    const w = atEnd ? Math.max(h * 0.5, 4) : rect.width;
+    // Width matters only for block/underline; floor it so a zero-width combining
+    // cell still yields a visible box.
+    const w = atEnd || rect.width <= 1 ? Math.max(h * 0.5, 4) : rect.width;
 
     let top: number;
     let boxW: number;
@@ -252,7 +260,7 @@
     {/if}
 
     {#each words as word, wi (wi)}
-      {#if wi === currentIdx}<span data-testid="current-word" class="word"
+      {#if wi === currentIdx}<span bind:this={currentWordEl} data-testid="current-word" class="word"
           >{#each activeCells as cell, i (i)}<span bind:this={activeEls[i]} class={cell.cls}
               >{cell.seg}</span
             >{/each}<span bind:this={endEl} class="caret-end" aria-hidden="true"></span></span
