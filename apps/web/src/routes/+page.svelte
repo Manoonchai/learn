@@ -210,7 +210,9 @@
 
 <div class="flex min-h-svh flex-col">
   <header class="flex items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-    <Logo />
+    <button type="button" onclick={newDrill} class="cursor-pointer" aria-label="กลับหน้าหลัก">
+      <Logo />
+    </button>
     <div class="flex items-center gap-2">
       <ModeSwitch onchange={setMode} />
       {#if !timeAttack}
