@@ -146,6 +146,24 @@
   }
 }
 
+/* ---- Thai per-code-point letter rendering (shared by TypingFlow + /kitchen-sink).
+   One inline-block box per code point: each paints its own colour, and combining marks
+   are zero-width boxes that overflow back onto their base. Tone marks get a small nudge
+   to clear whatever shares their slot — `toneClass()` in $lib/engine/thai-marks decides
+   which classes apply. The amounts are CSS vars so /kitchen-sink can tune them live. ---- */
+.letter {
+  display: inline-block;
+}
+.letter.tone {
+  transform: translate(var(--tone-x, 0em), var(--tone-y, 0em));
+}
+.letter.tone-raise {
+  --tone-y: var(--tone-raise-y, -0.3em); /* lift clear of an above-vowel / นิคหิต */
+}
+.letter.tone-shift {
+  --tone-x: var(--tone-shift-x, -0.1em); /* nudge left, clear of a tall ascender */
+}
+
 /* Reduced motion is not optional: collapse every animation to a crossfade or
    instant state. */
 @media (prefers-reduced-motion: reduce) {
