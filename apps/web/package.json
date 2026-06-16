@@ -15,7 +15,6 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@fontsource/sarabun": "^5.2.8",
     "@v2/env": "workspace:*",
     "dotenv": "catalog:",
     "layerchart": "^1.0.13",

@@ -43,7 +43,7 @@ const HIST_PAD_BOTTOM = 36;
 const HIST_FONT_PX = 30;
 const HIST_WORD_GAP = 16; // extra px between words (Thai has no word spaces)
 const MAX_HISTORY_WORDS = 240; // bound the card height for very fast runs
-const FONT = "Sarabun, ui-sans-serif, system-ui, sans-serif";
+const FONT = "Boon, ui-sans-serif, system-ui, sans-serif";
 
 interface Colors {
   bg: string;
@@ -161,7 +161,8 @@ function drawChart(ctx: CanvasRenderingContext2D, samples: WpmSample[], colors: 
   // Round the axis up to a tidy multiple of 20 so peaks keep headroom and the
   // tick labels read as round numbers.
   const axisMax = Math.max(20, Math.ceil(dataMax / 20) * 20);
-  const x = (second: number) => (n < 2 ? left + w / 2 : left + ((second - 1) / (lastSecond - 1)) * w);
+  const x = (second: number) =>
+    n < 2 ? left + w / 2 : left + ((second - 1) / (lastSecond - 1)) * w;
   const y = (v: number) => bottom - (v / axisMax) * h;
 
   // Horizontal gridlines + y-axis tick labels at 0 / mid / max.

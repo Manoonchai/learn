@@ -59,33 +59,29 @@
   }
 
   const target = $derived(words[currentIdx] ?? "");
-  const activeClusters = $derived(clustersOf(target));
 
-  // The active word emits one cell per *code point* (so the caret can sit between a
-  // base and its marks), but colours by *grapheme cluster*: every code point in a
-  // cluster shares one colour. Two reasons, both rooted in how Thai shapes:
-  //   1. A combining mark drawn over a base in a sibling cell adopts that base's
-  //      colour anyway, so per-code-point colours can't actually disagree within a
-  //      cluster — uniform colour is the honest model.
-  //   2. A cluster lights (CORRECT) only once *fully* typed; a partially typed
-  //      cluster stays muted. That keeps a tone mark / vowel from looking typed the
-  //      instant its base is pressed, yet — because the cells stay `display: inline`
-  //      and shape as one run — a tone still stacks above its vowel (ที่, not ที).
+  // The active word colours one cell per *code point*, exactly like manoontype: each
+  // code point lights the instant it is typed — correct (ink), wrong (danger), or
+  // still pending (muted) — and the caret sits between code points. Thai combining
+  // marks (tone marks, above/below vowels) are their own cells, yet because every
+  // cell stays `display: inline` the Boon font shapes the whole word as one run and
+  // positions each mark onto its base via GPOS. So a mark stacks above its base even
+  // when the two carry different colours (ที่, not ที), and a mark only lights once
+  // *its own* keystroke lands — pressing a base never lights its vowel early.
   const activeCells = $derived.by<Cell[]>(() => {
     const out: Cell[] = [];
     const inLen = input.length;
-    for (const c of activeClusters) {
-      const len = c.end - c.start;
-      const typed = Math.min(Math.max(inLen - c.start, 0), len);
+    let i = 0;
+    for (const ch of target) {
+      const end = i + ch.length;
       let cls: string;
-      if (typed === 0) cls = CURRENT_PENDING; // untouched
-      else if (input.slice(c.start, c.start + typed) !== target.slice(c.start, c.start + typed))
-        cls = WRONG; // a wrong keystroke somewhere in this cluster
-      else if (typed < len) cls = CURRENT_PENDING; // correct so far, but the cluster isn't finished
-      else cls = CORRECT; // whole cluster typed correctly
-      for (const ch of c.seg) out.push({ seg: ch, cls });
+      if (i >= inLen) cls = CURRENT_PENDING; // not reached yet
+      else if (input.slice(i, end) === ch) cls = CORRECT; // typed, matches
+      else cls = WRONG; // typed, but the wrong key (the expected char is shown)
+      out.push({ seg: ch, cls });
+      i = end;
     }
-    // Keystrokes past the end of the word are surplus errors.
+    // Keystrokes past the end of the word are surplus errors (the typed text shows).
     if (inLen > target.length) {
       out.push({ seg: input.slice(target.length), cls: WRONG });
     }

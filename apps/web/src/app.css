@@ -5,6 +5,19 @@
    by the inline script in app.html before first paint. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Self-hosted Boon — the modified Thai face manoonchai/manoontype ships (a single
+   400 weight; heavier UI text synthesises bold from it, exactly as manoontype does).
+   Boon carries full GPOS mark positioning, so Thai tone marks and vowels stack onto
+   their base consonant even when each character sits in its own inline <span> for
+   per-keystroke highlighting — which is what makes the typing line shape correctly. */
+@font-face {
+  font-family: "Boon";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/Boon-400.woff2") format("woff2");
+}
+
 /* ---- Semantic palette (OKLCH). The mood lives in the brand colors, not the
    surface: a cool graphite instrument with a teal "indicator" primary, a
    terracotta "achievement" accent reserved for the climax of a drill, and a
@@ -71,7 +84,7 @@
   --color-danger: var(--danger);
   --color-danger-ink: var(--danger-ink);
 
-  --font-thai: "Sarabun", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-thai: "Boon", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, monospace;
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);

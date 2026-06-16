@@ -11,7 +11,7 @@ layout without reconfiguring your OS. A full rewrite of v1 on a modern stack.
 ## Stack
 
 SvelteKit 2 · Svelte 5 (runes) · Tailwind v4 · TypeScript · Bun workspace ·
-Oxlint + Oxfmt · Vite+ (Vitest) · self-hosted Sarabun · LayerChart.
+Oxlint + Oxfmt · Vite+ (Vitest) · self-hosted Boon (Thai) · LayerChart.
 
 ## What it does
 
