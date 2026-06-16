@@ -71,6 +71,27 @@ describe("TypingFlow", () => {
     expect(cells[2].className).toContain("text-muted"); // า still pending
   });
 
+  it("nudges above marks: tones raise over a vowel/สระอำ; vowels+tones shift left on tall consonants", () => {
+    // [word, cell index, expected char, expect tone-raise?, expect tone-shift?]
+    const cases: [string, number, string, boolean, boolean][] = [
+      ["ทื่อ", 2, "่", true, false], // tone on above-vowel ื -> raise; base ท not tall
+      ["ต่ำ", 1, "่", true, false], // tone before สระอำ (นิคหิต) -> raise; base ต not tall
+      ["ท่อ", 1, "่", false, false], // bare consonant -> natural height
+      ["ปุ่น", 2, "่", false, true], // below-vowel ุ (no raise); base ป tall -> shift
+      ["ฟ้า", 1, "้", false, true], // tone; base ฟ tall -> shift
+      ["ปี่", 1, "ี", false, true], // above-vowel on tall ป -> shift left (no raise)
+      ["ปี่", 2, "่", true, true], // tone: raise (over ี) + shift (ป tall)
+      ["กี่", 1, "ี", false, false], // above-vowel on non-tall ก -> no shift
+    ];
+    for (const [word, idx, ch, raise, shift] of cases) {
+      const { container } = render(TypingFlow, { props: { words: [word], currentIdx: 0, input: "" } });
+      const cell = currentCells(container)[idx];
+      expect(cell.textContent).toBe(ch); // sanity: indexed the intended cell
+      expect(cell.classList.contains("tone-raise")).toBe(raise);
+      expect(cell.classList.contains("tone-shift")).toBe(shift);
+    }
+  });
+
   it("renders the active word's untyped characters as muted", () => {
     const { container } = render(TypingFlow, {
       props: { words: ["นม"], currentIdx: 0, input: "" },

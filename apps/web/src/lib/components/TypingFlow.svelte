@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { CaretStyle } from "$lib/state/settings.svelte"
+  import { toneClass } from "$lib/engine/thai-marks"
 
   let {
     words = [],
@@ -15,16 +16,17 @@
     caretStyle?: CaretStyle
   } = $props()
 
-  // Every word renders one `.letter` box per *code point* (`display: inline-block`),
-  // and the active word colours each box independently — per code point, manoontype
-  // style. Two Thai shaping facts drive the box-per-code-point choice:
+  // Every word renders one `.letter` box per *code point* (`display: inline-block`; see
+  // app.css), and the active word colours each box independently — per code point,
+  // manoontype style. Two Thai shaping facts drive the box-per-code-point choice:
   //   1. A combining mark in its OWN box paints in its own colour; an inline mark would
   //      inherit its base's colour instead, so a wrong vowel could never show red.
   //      Independent boxes → honest per-letter colour and live per-keystroke feedback.
-  //   2. Tone marks (`.tone`, ่ ้ ๊ ๋ ์) need a box to take translateY, which lifts them
-  //      clear of the above-vowel they would otherwise collide with (สิ้น, ที่ in
-  //      Sarabun). See the style block + TONE_RE below.
-  type Cell = { seg: string; cls: string }
+  //   2. Tone marks shaped alone in a box can collide with an above-vowel / นิคหิต / a
+  //      tall ascender; `toneClass()` ($lib/engine/thai-marks) gives them the nudge
+  //      classes (`tone-raise` / `tone-shift`) that app.css translates.
+  // `pos` carries those nudge classes (or "") for each cell.
+  type Cell = { seg: string; cls: string; pos: string }
 
   const PENDING = "text-faint"
   const CURRENT_PENDING = "text-muted"
@@ -32,20 +34,13 @@
   const WRONG =
     "text-danger underline decoration-danger decoration-2 underline-offset-4"
 
-  // Thai tone marks + thanthakhat (่ ้ ๊ ๋ ์). These stack above an above-vowel and, in
-  // a single run, pack tight onto it (สิ้น, ที่ collide). They get the `.tone` class,
-  // which the style block lifts with translateY so they clear the vowel below.
-  const TONE_RE = /[่-์]/ // ่ ้ ๊ ๋ ์
-  function letterCls(seg: string, cls: string): string {
-    return TONE_RE.test(seg) ? `letter tone ${cls}` : `letter ${cls}`
-  }
-
   // Committed and upcoming words only carry a whole-word verdict (the per-word status
   // the drill records), so every code point colours uniformly. One `.letter` box each,
   // same as the active word.
   function staticCells(word: string, done: boolean, correct: boolean): Cell[] {
     const cls = !done ? PENDING : correct ? CORRECT : WRONG
-    return [...word].map((seg) => ({ seg, cls }))
+    const segs = [...word]
+    return segs.map((seg, i) => ({ seg, cls, pos: toneClass(segs, i) }))
   }
 
   const target = $derived(words[currentIdx] ?? "")
@@ -55,22 +50,19 @@
   // it is mistyped, and stays muted until reached. Each `.letter` is its own box, so a
   // mark shows its own colour rather than inheriting its base's (a wrong vowel reds).
   const activeCells = $derived.by<Cell[]>(() => {
-    const out: Cell[] = []
-    let i = 0 // UTF-16 index into target; Thai code points are all single units
-    for (const ch of target) {
-      const end = i + ch.length
+    const segs = [...target] // Thai code points are all single UTF-16 units
+    const out: Cell[] = segs.map((seg, i) => {
       let cls: string
       if (input.length <= i)
         cls = CURRENT_PENDING // not reached yet
-      else if (input.slice(i, end) === ch)
+      else if (input[i] === seg)
         cls = CORRECT // typed correctly
       else cls = WRONG // mistyped
-      out.push({ seg: ch, cls })
-      i = end
-    }
+      return { seg, cls, pos: toneClass(segs, i) }
+    })
     // Keystrokes past the end of the word are surplus errors.
     if (input.length > target.length) {
-      out.push({ seg: input.slice(target.length), cls: WRONG })
+      out.push({ seg: input.slice(target.length), cls: WRONG, pos: "" })
     }
     return out
   })
@@ -256,12 +248,12 @@
           class="word"
           >{#each activeCells as cell, i (i)}<span
               bind:this={activeEls[i]}
-              class={letterCls(cell.seg, cell.cls)}>{cell.seg}</span
+              class="letter {cell.pos} {cell.cls}">{cell.seg}</span
             >{/each}<span bind:this={endEl} class="caret-end" aria-hidden="true"
           ></span></span
         >{:else}{@const correct = statuses[wi] === true}<span class="word"
           >{#each staticCells(word, wi < currentIdx, correct) as cell, i (i)}<span
-              class={letterCls(cell.seg, cell.cls)}>{cell.seg}</span
+              class="letter {cell.pos} {cell.cls}">{cell.seg}</span
             >{/each}</span
         >{/if}{" "}
     {/each}
@@ -280,27 +272,13 @@
     /* Thai has no inter-word spaces, so a bare " " reads as one word. Add a
        little breathing room between tokens. */
     margin-inline: 0.14em;
-    /* A tone mark is inline-block (below); keep a word from breaking at one. */
+    /* Letters are inline-block (.letter, in app.css); keep a word from breaking
+       between them. */
     white-space: nowrap;
   }
 
-  /* One inline-block box per code point. Each box paints in its OWN colour — an inline
-     combining mark instead inherits its base's colour, which defeats per-letter
-     highlighting (a wrong vowel could never show red). The mark glyphs are zero-width
-     and overflow back onto their base, so they still attach; there is no whitespace
-     between letter spans in the markup, so no inter-letter gap; `.word` is
-     `white-space: nowrap` so a word never breaks between boxes. */
-  .letter {
-    display: inline-block;
-  }
-
-  /* Tone marks (่ ้ ๊ ๋ ์) sit above an above-vowel and, in a single run, pack tight
-     onto it (สิ้น, ที่ collide in Sarabun). In their own box they can't stack tight;
-     translateY lifts them clear of the vowel below. (transform needs the inline-block
-     from .letter above — it has no effect on an inline box.) */
-  .letter.tone {
-    transform: translateY(-0.3em);
-  }
+  /* `.letter` and the tone nudges (`.tone` / `.tone-raise` / `.tone-shift`) live in
+     app.css so /kitchen-sink shares them. */
 
   .caret-end {
     display: inline-block;
