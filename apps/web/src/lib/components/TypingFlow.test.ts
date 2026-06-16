@@ -23,8 +23,8 @@ describe("TypingFlow", () => {
     const { container } = render(TypingFlow, {
       props: { words: ["น่า"], currentIdx: 0, input: "" },
     });
-    // "น่า" = น + tone ่ + า -> three cells. The marks stay inline so they shape
-    // onto their base (attached, and a tone stacks above a vowel: ที่ not ที).
+    // "น่า" = น + tone ่ + า -> three cells (one inline-block box per code point;
+    // marks are zero-width and overflow back onto their base, so they still attach).
     expect(currentCells(container).map((c) => c.textContent)).toEqual(["น", "่", "า"]);
   });
 
@@ -38,24 +38,37 @@ describe("TypingFlow", () => {
     expect(cells[1].className).toContain("underline"); // non-colour cue
   });
 
-  it("keeps a partly-typed cluster muted, then lights it once fully typed", () => {
-    // A combining mark shares its base's colour (it shapes onto it), so a cluster
-    // may not light until every code point in it is typed — otherwise a tone mark /
-    // vowel would look typed the instant its base was pressed.
+  it("lights each code point independently the instant it is typed", () => {
+    // Per-letter (manoontype style): a code point lights as soon as it is typed, rather
+    // than waiting for its whole grapheme cluster. Each cell is its own inline-block box
+    // so a mark shows its own colour instead of inheriting its base's.
     const partial = render(TypingFlow, {
       props: { words: ["น่า"], currentIdx: 0, input: "น" }, // base typed, tone not
     });
     const pc = currentCells(partial.container);
-    expect(pc[0].className).toContain("text-muted"); // น held muted (cluster น่ unfinished)
-    expect(pc[1].className).toContain("text-muted"); // tone ่ stays muted
+    expect(pc[0].className).toContain("text-ink"); // น lit immediately
+    expect(pc[1].className).toContain("text-muted"); // tone ่ still pending
+    expect(pc[2].className).toContain("text-muted"); // า still pending
 
     const done = render(TypingFlow, {
-      props: { words: ["น่า"], currentIdx: 0, input: "น่" }, // cluster น่ complete
+      props: { words: ["น่า"], currentIdx: 0, input: "น่" }, // tone now typed
     });
     const dc = currentCells(done.container);
-    expect(dc[0].className).toContain("text-ink"); // น now lit
-    expect(dc[1].className).toContain("text-ink"); // tone ่ lit with it
+    expect(dc[0].className).toContain("text-ink"); // น lit
+    expect(dc[1].className).toContain("text-ink"); // tone ่ now lit
     expect(dc[2].className).toContain("text-muted"); // า still pending
+  });
+
+  it("reds a mistyped mark independently of its correctly-typed base", () => {
+    // Only possible because each cell is its own box: an inline mark would inherit the
+    // base's colour and a wrong vowel/tone could never show red.
+    const { container } = render(TypingFlow, {
+      props: { words: ["น่า"], currentIdx: 0, input: "นม" }, // น ok, ม typed where ่ expected
+    });
+    const cells = currentCells(container);
+    expect(cells[0].className).toContain("text-ink"); // น correct
+    expect(cells[1].className).toContain("text-danger"); // ่ position mistyped -> red
+    expect(cells[2].className).toContain("text-muted"); // า still pending
   });
 
   it("renders the active word's untyped characters as muted", () => {
